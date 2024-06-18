@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="pacmanfx.jnlp">
+  <information>
+    <title>pacmanfx</title>
+    <vendor>ongzh</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="pacmanfx.jar" size="889260" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="800" height="600" main-class="pacmanfx.Model"  name="pacmanfx" />
+  <update check="always"/>
+</jnlp>
