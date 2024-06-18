@@ -1,5 +1,5 @@
 package pacmanfx;
-
+//ok
 import com.sun.javafx.sg.prism.NGCanvas;
 import java.net.URL;
 import javafx.animation.AnimationTimer;
