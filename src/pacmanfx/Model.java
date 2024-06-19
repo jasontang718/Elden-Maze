@@ -48,7 +48,7 @@ public class Model extends Application {
     private static final int PACMAN_SPEED = 2;
     private static final int[] VALID_SPEEDS = {1, 2, 3, 4, 6, 8};
     private static final int MAX_SPEED = 6;
-    private Timeline countdownTimer;
+    
     private int countdownValue;
     private boolean showCountdown;
     private double countdownY;
@@ -61,7 +61,7 @@ public class Model extends Application {
 
     private Image heart, spider, floor3, floor2, coin, sword;
     private Image up, down, left, right, enhanced, background;
-    private Timeline powerupTimer;
+    private Timeline powerupTimer,countdownTimer,soundTimer;
 
     private int pacmanX, pacmanY, pacmanDx, pacmanDy;
     private int reqDx, reqDy;
@@ -97,7 +97,7 @@ public class Model extends Application {
     @Override
     public void start(Stage primaryStage) {
     
-        playSound("powerup.mp3");
+         playSound("powerup.mp3",Duration.ZERO);
         primaryStage.setTitle("League of Legends");
 
         // Create the intro scene
@@ -194,19 +194,40 @@ public class Model extends Application {
             enhanced = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
             background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
     }
-    private void playSound(String soundFileName) {
-    URL soundURL = getClass().getResource("/sound/" + soundFileName);
-    if (soundURL != null) {
-        Media sound = new Media(soundURL.toString());
-        if (mediaPlayer != null) {
-            mediaPlayer.stop(); // Stop any currently playing sound
+   private void playSound(String soundFileName, Duration delay) {
+        try {
+            // Load sound using a more robust approach:
+            URL soundURL = getClass().getResource("/sound/" + soundFileName);
+            if (soundURL == null) {
+                System.out.println("Sound file not found: " + soundFileName);
+                return; // Exit early if not found
+            }
+
+            Media sound = new Media(soundURL.toString());
+
+            // Initialize MediaPlayer and stop any currently playing sound
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.dispose(); // Dispose the old MediaPlayer
+            }
+
+            mediaPlayer = new MediaPlayer(sound);
+
+            // Play immediately if delay is zero or null
+            if (delay == null || delay.equals(Duration.ZERO)) {
+                mediaPlayer.play();
+            } else {
+             soundTimer = new Timeline(new KeyFrame(delay, event -> {
+                mediaPlayer.play();
+               }));
+                 soundTimer.play();
+            }
+
+        } catch (Exception e) {
+            // Catch general exceptions:
+            System.out.println("Unexpected error playing sound: " + e.getMessage());
         }
-        mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play(); // Play the specified sound
-    } else {
-        System.out.println("Sound file not found: " + soundFileName);
     }
-}
     
     private void initVariables() {
         screenData = new short[N_BLOCKS * N_BLOCKS];
@@ -359,7 +380,7 @@ public class Model extends Application {
             ghostDy[i] = ghostDy[i + 1];
             ghostSpeed[i] = ghostSpeed[i + 1];
         }
-         playSound("kill.mp3");
+         playSound("kill.mp3",Duration.seconds(0));
         nGhosts--; // Decrease the count of ghosts
     }
 
@@ -415,8 +436,7 @@ public class Model extends Application {
  private void checkPowerUp() {
     if (!powerup) {
         powerup = true;
-        showCountdown = true;
-        startCountdown();
+        
         startTimer();
     } else {
         resetTimer();
@@ -424,17 +444,18 @@ public class Model extends Application {
 }
 private void startCountdown() {
     countdownValue = 4;
+    
     countdownY = 0; // Initial position above the screen
     countdownTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+
         @Override
         public void handle(ActionEvent event) {
+              
             if (countdownValue >0) {
                 countdownValue--;
                 countdownY = 0; // Reset position for next drop
                 startDropAnimation();
-                if(countdownValue == 3){
-                    playSound("countdown.mp3");
-                }
+               
             } else {
                 showCountdown = false;
                 countdownTimer.stop();
@@ -447,22 +468,34 @@ private void startCountdown() {
 
 private void startDropAnimation() {
     Timeline dropTimeline = new Timeline(
-        new KeyFrame(Duration.millis(10), e -> countdownY += 10) // Adjust the drop speed as needed
+        new KeyFrame(Duration.millis(10), e -> countdownY += 20) // Adjust the drop speed as needed
     );
-    dropTimeline.setCycleCount(30); // Adjust the cycle count to control the drop duration
+    dropTimeline.setCycleCount(20);
     dropTimeline.play();
 }
 
     private void startTimer() {
-        powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
+        powerupTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
+            
             public void handle(ActionEvent event){
                 powerup = false;
             }
         }));
-        powerupTimer.play();   
-    }
-    
+        
+        powerupTimer.play();
+         powerupTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(6), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                showCountdown = true;
+                startCountdown();
+                 playSound("countdown",Duration.seconds(1));
+                
+            }
+
+            
+    }));
+                 }
     private void resetTimer() {
         if (powerupTimer != null) {
             powerupTimer.stop();
