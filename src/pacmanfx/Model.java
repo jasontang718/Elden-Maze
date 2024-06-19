@@ -195,7 +195,7 @@ public class Model extends Application {
             background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
     }
    private void playSound(String soundFileName, Duration delay) {
-        try {
+       
             // Load sound using a more robust approach:
             URL soundURL = getClass().getResource("/sound/" + soundFileName);
             if (soundURL == null) {
@@ -206,10 +206,7 @@ public class Model extends Application {
             Media sound = new Media(soundURL.toString());
 
             // Initialize MediaPlayer and stop any currently playing sound
-            if (mediaPlayer != null) {
-                mediaPlayer.stop();
-                mediaPlayer.dispose(); // Dispose the old MediaPlayer
-            }
+            
 
             mediaPlayer = new MediaPlayer(sound);
 
@@ -223,10 +220,7 @@ public class Model extends Application {
                  soundTimer.play();
             }
 
-        } catch (Exception e) {
-            // Catch general exceptions:
-            System.out.println("Unexpected error playing sound: " + e.getMessage());
-        }
+       
     }
     
     private void initVariables() {
@@ -399,7 +393,7 @@ public class Model extends Application {
         if ((ch & 16) != 0) {
             // Pac-Man eats a dot
             screenData[pos] = (short) (ch & 15); // Remove the dot
-        
+            playSound("gold.mp3",Duration.ZERO);
             score++;
         }
         
