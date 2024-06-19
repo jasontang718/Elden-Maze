@@ -432,6 +432,9 @@ private void startCountdown() {
                 countdownValue--;
                 countdownY = 0; // Reset position for next drop
                 startDropAnimation();
+                if(countdownValue == 3){
+                    playSound("countdown.mp3");
+                }
             } else {
                 showCountdown = false;
                 countdownTimer.stop();
