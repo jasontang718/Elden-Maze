@@ -48,6 +48,11 @@ public class Model extends Application {
     private static final int PACMAN_SPEED = 2;
     private static final int[] VALID_SPEEDS = {1, 2, 3, 4, 6, 8};
     private static final int MAX_SPEED = 6;
+    private Timeline countdownTimer;
+    private int countdownValue;
+    private boolean showCountdown;
+    private double countdownY;
+
 
     private int nGhosts = 6;
     private int lives, score;
@@ -407,14 +412,43 @@ public class Model extends Application {
     pacmanY += PACMAN_SPEED * pacmanDy;
 }
 
-  private void checkPowerUp() {
+ private void checkPowerUp() {
     if (!powerup) {
         powerup = true;
+        showCountdown = true;
+        startCountdown();
         startTimer();
     } else {
         resetTimer();
     }
-  }
+}
+private void startCountdown() {
+    countdownValue = 4;
+    countdownY = 0; // Initial position above the screen
+    countdownTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            if (countdownValue >0) {
+                countdownValue--;
+                countdownY = 0; // Reset position for next drop
+                startDropAnimation();
+            } else {
+                showCountdown = false;
+                countdownTimer.stop();
+            }
+        }
+    }));
+    countdownTimer.setCycleCount(5); // To count from 3 to 0
+    countdownTimer.play();
+}
+
+private void startDropAnimation() {
+    Timeline dropTimeline = new Timeline(
+        new KeyFrame(Duration.millis(10), e -> countdownY += 10) // Adjust the drop speed as needed
+    );
+    dropTimeline.setCycleCount(30); // Adjust the cycle count to control the drop duration
+    dropTimeline.play();
+}
 
     private void startTimer() {
         powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
@@ -429,6 +463,7 @@ public class Model extends Application {
     private void resetTimer() {
         if (powerupTimer != null) {
             powerupTimer.stop();
+           
         }
         startTimer();
     }
@@ -546,18 +581,30 @@ public class Model extends Application {
         reqDy = 0;
         dying = false;
     }
+private void draw(GraphicsContext g2d) {
+    g2d.drawImage(floor3, 0, 0, SCREEN_SIZE, SCREEN_SIZE + 50);
 
-    private void draw(GraphicsContext g2d) {
-        g2d.drawImage(floor3, 0, 0, SCREEN_SIZE, SCREEN_SIZE+50);
+    drawMaze(g2d);
+    drawScore(g2d);
 
-        drawMaze(g2d);
-        drawScore(g2d);
-
-        if (inGame) {
-            playGame(g2d);
-        } else {
-            showStartingScreen(g2d);
-        }
+    if (showCountdown) {
+        drawCountdown(g2d);
     }
+
+    if (inGame) {
+        playGame(g2d);
+    } else {
+        showStartingScreen(g2d);
+    }
+}
+
+private void drawCountdown(GraphicsContext g2d) {
+    g2d.setFill(Color.RED);
+    g2d.setFont(Font.font("Times New Roman", FontWeight.BOLD, 80));
+    String text = String.valueOf(countdownValue);
+    double textWidth = g2d.getFont().getSize() * text.length() / 2.0;
+    double textHeight = g2d.getFont().getSize();
+    g2d.fillText(text, (SCREEN_SIZE - textWidth) / 2, countdownY);
+}
 
 }
