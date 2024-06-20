@@ -60,7 +60,7 @@ public class Model extends Application {
     private int[] ghostX, ghostY, ghostDx, ghostDy, ghostSpeed;
 
     private Image heart, spider, floor3, floor2, coin, sword;
-    private Image up, down, left, right, enhanced, background;
+    private Image up, down, left, right, enhanced,background,fire;
     private Timeline powerupTimer,countdownTimer,soundTimer;
 
     private int pacmanX, pacmanY, pacmanDx, pacmanDy;
@@ -96,8 +96,9 @@ public class Model extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-    
-         playSound("powerup.mp3",Duration.ZERO);
+        
+         playSound("powerup.mp3");
+         
         primaryStage.setTitle("League of Legends");
 
         // Create the intro scene
@@ -193,8 +194,9 @@ public class Model extends Application {
             sword = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
             enhanced = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
             background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
+            fire = new Image(getClass().getResourceAsStream("/images/fire torch.jpeg"));
     }
-   private void playSound(String soundFileName, Duration delay) {
+   private void playSound(String soundFileName) {
        
             // Load sound using a more robust approach:
             URL soundURL = getClass().getResource("/sound/" + soundFileName);
@@ -204,22 +206,13 @@ public class Model extends Application {
             }
 
             Media sound = new Media(soundURL.toString());
-
-            // Initialize MediaPlayer and stop any currently playing sound
             
-
             mediaPlayer = new MediaPlayer(sound);
 
-            // Play immediately if delay is zero or null
-            if (delay == null || delay.equals(Duration.ZERO)) {
-                mediaPlayer.play();
-            } else {
-             soundTimer = new Timeline(new KeyFrame(delay, event -> {
-                mediaPlayer.play();
-               }));
-                 soundTimer.play();
-            }
-
+    
+            
+            mediaPlayer.play();
+           
        
     }
     
@@ -374,7 +367,7 @@ public class Model extends Application {
             ghostDy[i] = ghostDy[i + 1];
             ghostSpeed[i] = ghostSpeed[i + 1];
         }
-         playSound("kill.mp3",Duration.seconds(0));
+         playSound("kill.mp3");
         nGhosts--; // Decrease the count of ghosts
     }
 
@@ -393,7 +386,7 @@ public class Model extends Application {
         if ((ch & 16) != 0) {
             // Pac-Man eats a dot
             screenData[pos] = (short) (ch & 15); // Remove the dot
-            playSound("gold.mp3",Duration.ZERO);
+            playSound("gold.mp3");
             score++;
         }
         
@@ -437,7 +430,7 @@ public class Model extends Application {
     }
 }
 private void startCountdown() {
-    countdownValue = 4;
+    countdownValue = 3;
     
     countdownY = 0; // Initial position above the screen
     countdownTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
@@ -445,7 +438,7 @@ private void startCountdown() {
         @Override
         public void handle(ActionEvent event) {
               
-            if (countdownValue >0) {
+            if (countdownValue > 1) {
                 countdownValue--;
                 countdownY = 0; // Reset position for next drop
                 startDropAnimation();
@@ -453,10 +446,11 @@ private void startCountdown() {
             } else {
                 showCountdown = false;
                 countdownTimer.stop();
+              
             }
         }
     }));
-    countdownTimer.setCycleCount(5); // To count from 3 to 0
+    countdownTimer.setCycleCount(4); // To count from 3 to 0
     countdownTimer.play();
 }
 
@@ -464,7 +458,7 @@ private void startDropAnimation() {
     Timeline dropTimeline = new Timeline(
         new KeyFrame(Duration.millis(10), e -> countdownY += 20) // Adjust the drop speed as needed
     );
-    dropTimeline.setCycleCount(20);
+
     dropTimeline.play();
 }
 
@@ -478,12 +472,12 @@ private void startDropAnimation() {
         }));
         
         powerupTimer.play();
-         powerupTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(6), new EventHandler<ActionEvent>() {
+         powerupTimer.getKeyFrames().add(new KeyFrame(Duration.seconds(7), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 showCountdown = true;
                 startCountdown();
-                 playSound("countdown",Duration.seconds(1));
+                playSound("countdown.mp3");
                 
             }
 
@@ -634,7 +628,7 @@ private void drawCountdown(GraphicsContext g2d) {
     String text = String.valueOf(countdownValue);
     double textWidth = g2d.getFont().getSize() * text.length() / 2.0;
     double textHeight = g2d.getFont().getSize();
-    g2d.fillText(text, (SCREEN_SIZE - textWidth) / 2, countdownY);
+    g2d.fillText(text, (SCREEN_SIZE - textWidth) / 2, (SCREEN_SIZE)/2);
 }
 
 }
