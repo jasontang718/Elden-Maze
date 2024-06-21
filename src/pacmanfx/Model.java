@@ -28,6 +28,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -72,9 +73,20 @@ public class Model extends Application {
         startButton.setFont(smallFont);
         startButton.setOnAction(e -> primaryStage.setScene(gameScene));
         
+        Button settingsButton = new Button("Settings");
+        settingsButton.setFont(smallFont);
+        
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
         exitButton.setOnAction(e -> exit());        
+        
+        double width = 250;
+        double height = 50;
+        
+        startButton.setPrefSize(width, height);
+        settingsButton.setPrefSize(width, height);
+        exitButton.setPrefSize(width, height);
+
         
         Label title = new Label("LOL");
         title.setStyle("-fx-font: normal bold 50px 'serif';" + "-fx-text-fill: maroon;");
@@ -85,17 +97,18 @@ public class Model extends Application {
         introLayout.setAlignment(Pos.CENTER);
         introLayout.getChildren().add(title);
         introLayout.getChildren().add(startButton);
+        introLayout.getChildren().add(settingsButton);
         introLayout.getChildren().add(exitButton);        
 
         introScene = new Scene(introLayout);
 
         // Create the game scene
         StackPane root = new StackPane();
-        Canvas canvas = new Canvas(SCREEN_SIZE, SCREEN_SIZE + 50);
+        Canvas canvas = new Canvas(SCREEN_SIZE, SCREEN_SIZE);
         GraphicsContext g2d = canvas.getGraphicsContext2D();
 
         root.getChildren().add(canvas);
-        gameScene = new Scene(root, SCREEN_SIZE, SCREEN_SIZE + 50, Color.BLACK);
+        gameScene = new Scene(root, SCREEN_SIZE, SCREEN_SIZE, Color.BLACK);
 
         gameScene.setOnKeyPressed(event -> {
             KeyCode key = event.getCode();
@@ -235,21 +248,32 @@ public class Model extends Application {
         }
     }
 
-    private void showStartingScreen(GraphicsContext g2d) {
+    private void showStartingText(GraphicsContext g2d) {
         String start = "Press SPACE to start";
-        g2d.setFill(Color.YELLOW);
-        g2d.setFont(smallFont);
-        g2d.fillText(start, SCREEN_SIZE / 2, 150);
+        g2d.setFill(Color.WHITESMOKE);
+        g2d.setFont(smallFont); 
+        
+        Text text = new Text(start);
+        text.setFont(smallFont);
+        double textWidth = text.getLayoutBounds().getWidth();
+        double textHeight = text.getLayoutBounds().getHeight();
+
+        // Calculate the coordinates to center the text
+        double textX = (SCREEN_SIZE - textWidth) / 2;
+        double textY = (SCREEN_SIZE + textHeight) / 2; // Adjust this to vertically center the text
+
+        g2d.fillText(start, textX, textY);
     }
 
     private void drawScore(GraphicsContext g2d) {
         g2d.setFont(smallFont);
         g2d.setFill(new Color(5 / 255.0, 181 / 255.0, 79 / 255.0, 1));
         String s = "Score: " + score;
-        g2d.fillText(s, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
+        double textWidth = smallFont.getSize() * s.length() / 2;
+        g2d.fillText(s, SCREEN_SIZE - textWidth - 10, SCREEN_SIZE - 10);
 
         for (int i = 0; i < lives; i++) {
-            g2d.drawImage(heart, i * 28 + 8, SCREEN_SIZE + 1);
+            g2d.drawImage(heart, i * 28 + 8, SCREEN_SIZE - 30);
         }
     }
 
@@ -312,7 +336,7 @@ public class Model extends Application {
     }
 
     private void draw(GraphicsContext g2d) {
-        g2d.drawImage(floor3, 0, 0, SCREEN_SIZE, SCREEN_SIZE+50);
+        g2d.drawImage(floor3, 0, 0, SCREEN_SIZE, SCREEN_SIZE);
 
         maze.drawMaze(g2d);
         drawScore(g2d);
@@ -320,7 +344,7 @@ public class Model extends Application {
         if (inGame) {
             playGame(g2d);
         } else {
-            showStartingScreen(g2d);
+            showStartingText(g2d);
         }
     }
 }
