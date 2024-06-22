@@ -12,12 +12,12 @@ public class Player {
     private Maze maze;
     private int score = 0;
         
-    public int playerX, playerY, playerDx, playerDy;
-    public int playerSpeed = 1;
+    private int playerX, playerY, playerDx, playerDy;
+    private int playerSpeed = 1;
     private Timeline powerupTimer;
     private boolean powerup = false;
-    public int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
-    public int[] dx, dy;
+    private int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
+    private int[] dx, dy;
 
     // Constructor to receive Model instance
     public Player(Model model) {
@@ -26,6 +26,54 @@ public class Player {
     }
     
 
+    public void setEnemyX(int[] i){
+        this.enemyX = i;
+    }
+    
+    public void setEnemyX(int index, int value){
+        this.enemyX[index] = value;
+    }
+    
+    public void setEnemyY(int[] i){
+        this.enemyY = i;
+    }
+    
+    public void setEnemyY(int index, int value){
+        this.enemyY[index] = value;
+    }
+    
+    public void setEnemyDx(int[] i){
+        this.enemyDx = i;
+    }
+    
+    public void setEnemyDx(int index, int value){
+        this.enemyDx[index] = value;
+    }
+    
+    public void setEnemyDy(int[] i){
+        this.enemyDy = i;
+    }
+    
+    public void setEnemyDy(int index, int value){
+        this.enemyDy[index] = value;
+    }
+    
+    public void setEnemySpeed(int[] i){
+        this.enemySpeed = i;
+    }
+    
+    public void setEnemySpeed(int index, int value){
+        this.enemySpeed[index] = value;
+    }
+    
+    public void setDx(int[] i){
+        this.dx = i;
+    }
+    
+    public void setDy(int[] i){
+        this.dy = i;
+    }
+    
     public int getPlayerX(){
         return playerX;
     }
