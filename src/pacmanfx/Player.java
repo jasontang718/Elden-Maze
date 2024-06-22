@@ -12,11 +12,11 @@ public class Player {
     private Maze maze;
     private int score = 0;
         
-    public int pacmanX, pacmanY, pacmanDx, pacmanDy;
-    public int PACMAN_SPEED = 1;
+    public int playerX, playerY, playerDx, playerDy;
+    public int playerSpeed = 1;
     private Timeline powerupTimer;
     private boolean powerup = false;
-    public int[] ghostX, ghostY, ghostDx, ghostDy, ghostSpeed;
+    public int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
     public int[] dx, dy;
 
     // Constructor to receive Model instance
@@ -26,28 +26,28 @@ public class Player {
     }
     
 
-    public int getPacmanX(){
-        return pacmanX;
+    public int getPlayerX(){
+        return playerX;
     }
     
-    public int getPacmanY(){
-        return pacmanY;
+    public int getPlayerY(){
+        return playerY;
     }
 
-    public void setPacmanX(int x) {
-        this.pacmanX = x;
+    public void setPlayerX(int x) {
+        this.playerX = x;
     }
     
-    public void setPacmanY(int y) {
-        this.pacmanY = y;
+    public void setPlayerY(int y) {
+        this.playerY = y;
     }
     
-    public void setPacmanDx(int dx) {
-        this.pacmanDx = dx;
+    public void setPlayerDx(int dx) {
+        this.playerDx = dx;
     }
 
-    public void setPacmanDy(int dy) {
-        this.pacmanDy = dy;
+    public void setPlayerDy(int dy) {
+        this.playerDy = dy;
     }
     
     public boolean getPowerUp() {
@@ -58,7 +58,7 @@ public class Player {
         this.powerup = value;
     }
     
-   public void movePacman() {
+   public void movePlayer() {
         int pos;
         short ch;
         int BLOCK_SIZE = model.getBlockSize();
@@ -66,8 +66,8 @@ public class Player {
         int reqDy = model.getReqDy();
 
         
-        if (pacmanX % BLOCK_SIZE == 0 && pacmanY % BLOCK_SIZE == 0) {
-            pos = pacmanX / BLOCK_SIZE + maze.getNBlocks() * (pacmanY / BLOCK_SIZE);
+        if (playerX % BLOCK_SIZE == 0 && playerY % BLOCK_SIZE == 0) {
+            pos = playerX / BLOCK_SIZE + maze.getNBlocks() * (playerY / BLOCK_SIZE);
             ch = model.getScreenData()[pos];
 
             if ((ch & 16) != 0) {
@@ -93,32 +93,32 @@ public class Player {
                         || (reqDx == 1 && reqDy == 0 && (ch & 4) != 0)
                         || (reqDx == 0 && reqDy == -1 && (ch & 2) != 0)
                         || (reqDx == 0 && reqDy == 1 && (ch & 8) != 0))) {
-                    pacmanDx = reqDx;
-                    pacmanDy = reqDy;
+                    playerDx = reqDx;
+                    playerDy = reqDy;
                 }
             }
 
             // Check for collisions with walls
-            if ((pacmanDx == -1 && pacmanDy == 0 && (ch & 1) != 0)
-                    || (pacmanDx == 1 && pacmanDy == 0 && (ch & 4) != 0)
-                    || (pacmanDx == 0 && pacmanDy == -1 && (ch & 2) != 0)
-                    || (pacmanDx == 0 && pacmanDy == 1 && (ch & 8) != 0)) {
-                pacmanDx = 0;
-                pacmanDy = 0;
+            if ((playerDx == -1 && playerDy == 0 && (ch & 1) != 0)
+                    || (playerDx == 1 && playerDy == 0 && (ch & 4) != 0)
+                    || (playerDx == 0 && playerDy == -1 && (ch & 2) != 0)
+                    || (playerDx == 0 && playerDy == 1 && (ch & 8) != 0)) {
+                playerDx = 0;
+                playerDy = 0;
             }
         }
-        pacmanX += PACMAN_SPEED * pacmanDx;
-        pacmanY += PACMAN_SPEED * pacmanDy;
+        playerX += playerSpeed * playerDx;
+        playerY += playerSpeed * playerDy;
         
-        System.out.println("Before movement - PacmanX: " + pacmanX + ", PacmanY: " + pacmanY);
-        System.out.println("Dx: " + pacmanDx + ", Dy: " + pacmanDy);
+        System.out.println("Before movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
+        System.out.println("Dx: " + playerDx + ", Dy: " + playerDy);
 
         // Movement logic
-        pacmanX += PACMAN_SPEED * pacmanDx;
-        pacmanY += PACMAN_SPEED * pacmanDy;
+        playerX += playerSpeed * playerDx;
+        playerY += playerSpeed * playerDy;
 
         // Debugging output after movement
-        System.out.println("After movement - PacmanX: " + pacmanX + ", PacmanY: " + pacmanY);
+        System.out.println("After movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
     }
 
 
@@ -131,29 +131,29 @@ public class Player {
         }
     }
     
-    public void drawPacman(GraphicsContext g2d) {
+    public void drawPlayer(GraphicsContext g2d) {
         int reqDx = model.getReqDx();
         int reqDy = model.getReqDy();
         if (!powerup) {
             if (reqDx == -1) {
-                g2d.drawImage(model.left, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.left, playerX + 1, playerY + 1);
             } else if (reqDx == 1) {
-                g2d.drawImage(model.right, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.right, playerX + 1, playerY + 1);
             } else if (reqDy == -1) {
-                g2d.drawImage(model.up, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.up, playerX + 1, playerY + 1);
             } else {
-                g2d.drawImage(model.down, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.down, playerX + 1, playerY + 1);
             }
         }
         else {
             if (reqDx == -1) {
-                g2d.drawImage(model.enhanced, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
             } else if (reqDx == 1) {
-                g2d.drawImage(model.enhanced, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
             } else if (reqDy == -1) {
-                g2d.drawImage(model.enhanced, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
             } else {
-                g2d.drawImage(model.enhanced, pacmanX + 1, pacmanY + 1);
+                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
             }        
         }
     }
@@ -175,37 +175,37 @@ public class Player {
         startTimer();
     }
     
-    public void moveGhosts(GraphicsContext g2d) {
+    public void moveEnemy(GraphicsContext g2d) {
         int pos;
         int count;
         int BLOCK_SIZE = model.getBlockSize();
             
-        for (int i = 0; i < model.getNGhosts(); i++) {
-            if (ghostX[i] % BLOCK_SIZE == 0 && ghostY[i] % BLOCK_SIZE == 0) {
-                pos = ghostX[i] / BLOCK_SIZE + maze.getNBlocks() * (ghostY[i] / BLOCK_SIZE);
+        for (int i = 0; i < maze.getEnemyCount(); i++) {
+            if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
+                pos = enemyX[i] / BLOCK_SIZE + maze.getNBlocks() * (enemyY[i] / BLOCK_SIZE);
 
                 short ch = model.getScreenData()[pos];
                 count = 0;
 
-                if ((ch & 1) == 0 && ghostDx[i] != 1) {
+                if ((ch & 1) == 0 && enemyDx[i] != 1) {
                     dx[count] = -1;
                     dy[count] = 0;
                     count++;
                 }
 
-                if ((ch & 2) == 0 && ghostDy[i] != 1) {
+                if ((ch & 2) == 0 && enemyDy[i] != 1) {
                     dx[count] = 0;
                     dy[count] = -1;
                     count++;
                 }
 
-                if ((ch & 4) == 0 && ghostDx[i] != -1) {
+                if ((ch & 4) == 0 && enemyDx[i] != -1) {
                     dx[count] = 1;
                     dy[count] = 0;
                     count++;
                 }
 
-                if ((ch & 8) == 0 && ghostDy[i] != -1) {
+                if ((ch & 8) == 0 && enemyDy[i] != -1) {
                     dx[count] = 0;
                     dy[count] = 1;
                     count++;
@@ -213,11 +213,11 @@ public class Player {
 
                 if (count == 0) {
                     if ((ch & 15) == 15) {
-                        ghostDx[i] = 0;
-                        ghostDy[i] = 0;
+                        enemyDx[i] = 0;
+                        enemyDy[i] = 0;
                     } else {
-                        ghostDx[i] = -ghostDx[i];
-                        ghostDy[i] = -ghostDy[i];
+                        enemyDx[i] = -enemyDx[i];
+                        enemyDy[i] = -enemyDy[i];
                     }
                 } else {
                     count = (int) (Math.random() * count);
@@ -226,42 +226,46 @@ public class Player {
                         count = 3;
                     }
 
-                    ghostDx[i] = dx[count];
-                    ghostDy[i] = dy[count];
+                    enemyDx[i] = dx[count];
+                    enemyDy[i] = dy[count];
                 }
             }
 
-            ghostX[i] += ghostDx[i] * ghostSpeed[i];
-            ghostY[i] += ghostDy[i] * ghostSpeed[i];
-            model.drawGhost(g2d, ghostX[i] + 1, ghostY[i] + 1);
+            enemyX[i] += enemyDx[i] * enemySpeed[i];
+            enemyY[i] += enemyDy[i] * enemySpeed[i];
+            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
 
 
             boolean inGame = model.getInGame();
 
             
-            if (pacmanX > (ghostX[i] - 12) && pacmanX < (ghostX[i] + 12) && pacmanY > (ghostY[i] - 12) && pacmanY < (ghostY[i] + 12) && inGame) {
+            if (playerX > (enemyX[i] - 12) && playerX < (enemyX[i] + 12) && playerY > (enemyY[i] - 12) && playerY < (enemyY[i] + 12) && inGame) {
                 if (!powerup) {
                     model.setDying(true);
                 }
                 else {
-                    removeGhost(i);
+                    removeEnemy(i);
                 }
             }
         }
     }
     
-    private void removeGhost(int index) {
-        int nGhosts = model.getNGhosts();
+    private void removeEnemy(int index) {
+        int enemyCount = maze.getEnemyCount();
         // Shift elements to the left to remove the ghost at indexToRemove
-        for (int i = index; i < model.getNGhosts() - 1; i++) {
-            ghostX[i] = ghostX[i + 1];
-            ghostY[i] = ghostY[i + 1];
-            ghostDx[i] = ghostDx[i + 1];
-            ghostDy[i] = ghostDy[i + 1];
-            ghostSpeed[i] = ghostSpeed[i + 1];
+        for (int i = index; i < maze.getEnemyCount() - 1; i++) {
+            enemyX[i] = enemyX[i + 1];
+            enemyY[i] = enemyY[i + 1];
+            enemyDx[i] = enemyDx[i + 1];
+            enemyDy[i] = enemyDy[i + 1];
+            enemySpeed[i] = enemySpeed[i + 1];
         }
         model.playSound("kill.mp3");
-        nGhosts--; // Decrease the count of ghosts
-        model.setNGhosts(nGhosts);
+        enemyCount--; // Decrease the count of ghosts
+        maze.setEnemyCount(enemyCount);
+    }
+    
+    public void drawEnemy(GraphicsContext g2d, int x, int y) {
+        g2d.drawImage(model.spider, x, y);
     }
 }

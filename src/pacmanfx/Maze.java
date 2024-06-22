@@ -8,17 +8,20 @@ public class Maze {
     private Player player;
     private final int N_BLOCKS = 17;
     private static final int BLOCK_SIZE = 40;
-     short[] screenData;
-     private final int SCREEN_SIZE = getNBlocks() * BLOCK_SIZE;
-     private int score;
- private int nGhosts = 6;
-    private static final int MAX_GHOSTS = 12;
-     private int currentSpeed = 1;
-    private static final int MAX_SPEED = 6;
+    short[] screenData;
+    private final int SCREEN_SIZE = getNBlocks() * BLOCK_SIZE;
+    private int enemyCount = 2;
+    
     public Maze(Model model) {
         this.model = model;
-       
-      
+    }
+    
+    public int getEnemyCount(){
+        return enemyCount;
+    }
+    
+    public void setEnemyCount(int enemyCount){
+        this.enemyCount = enemyCount;
     }
     
     public int getNBlocks() {
@@ -99,27 +102,6 @@ public class Maze {
         }
     }
 }
-     void checkMaze() {
-        int i = 0;
-        boolean finished = true;
 
-        while (i < getNBlocks() * getNBlocks() && finished) {
-            if ((model.screenData[i]) != 0) {
-                finished = false;
-            }
-            i++;
-        }
-
-        if (finished) {
-            score += 50;
-            if (nGhosts < MAX_GHOSTS) {
-                nGhosts++;
-            }
-            if (currentSpeed < MAX_SPEED) {
-                currentSpeed++;
-            }
-            model.initLevel();
-        }
-    }
 }
 

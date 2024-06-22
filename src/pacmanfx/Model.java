@@ -42,11 +42,10 @@ public class Model extends Application {
 
     private static final int BLOCK_SIZE = 40;
     private final int SCREEN_SIZE = maze.getNBlocks() * BLOCK_SIZE;
-    private static final int MAX_GHOSTS = 12;
+    private static final int MAX_ENEMY = 12;
     private static final int[] VALID_SPEEDS = {1, 2, 3, 4, 6, 8};
     private static final int MAX_SPEED = 6;
 
-    private int nGhosts = 6;
     int lives;
     private int score;
 
@@ -168,14 +167,7 @@ public class Model extends Application {
         this.dying = dying;
     }
     
-    public int getNGhosts(){
-        return nGhosts;
-    }
-    
-    public void setNGhosts(int nGhosts){
-        this.nGhosts = nGhosts;
-    }
-    
+
     public int getBlockSize(){
         return BLOCK_SIZE;
     }
@@ -228,11 +220,11 @@ public class Model extends Application {
     
     private void initVariables() {
         screenData = new short[maze.getNBlocks() * maze.getNBlocks()];
-        player.ghostX = new int[MAX_GHOSTS];
-        player.ghostDx = new int[MAX_GHOSTS];
-        player.ghostY = new int[MAX_GHOSTS];
-        player.ghostDy = new int[MAX_GHOSTS];
-        player.ghostSpeed = new int[MAX_GHOSTS];
+        player.enemyX = new int[MAX_ENEMY];
+        player.enemyDx = new int[MAX_ENEMY];
+        player.enemyY = new int[MAX_ENEMY];
+        player.enemyDy = new int[MAX_ENEMY];
+        player.enemySpeed = new int[MAX_ENEMY];
         player.dx = new int[4];
         player.dy = new int[4];
     }
@@ -241,10 +233,10 @@ public class Model extends Application {
         if (dying) {
             death();
         } else {
-            player.movePacman();
-            player.drawPacman(g2d);
-            player.moveGhosts(g2d);
-            maze.checkMaze();
+            player.movePlayer();
+            player.drawPlayer(g2d);
+            player.moveEnemy(g2d);
+            checkMaze();
         }
     }
 
@@ -289,9 +281,7 @@ public class Model extends Application {
     
     
 
-    public void drawGhost(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(spider, x, y);
-    }
+
 
 
 
@@ -299,7 +289,7 @@ public class Model extends Application {
         lives = 3;
         score = 0;
         initLevel();
-        nGhosts = 2;
+        maze.setEnemyCount(2);
         currentSpeed = 1;
     }
 
@@ -311,11 +301,11 @@ public class Model extends Application {
     private void continueLevel() {
         int dx = 1;
 
-        for (int i = 0; i < nGhosts; i++) {
-            player.ghostY[i] = 4 * BLOCK_SIZE;
-            player.ghostX[i] = 4 * BLOCK_SIZE;
-            player.ghostDy[i] = 0;
-            player.ghostDx[i] = dx;
+        for (int i = 0; i < maze.getEnemyCount(); i++) {
+            player.enemyY[i] = 4 * BLOCK_SIZE;
+            player.enemyX[i] = 4 * BLOCK_SIZE;
+            player.enemyDy[i] = 0;
+            player.enemyDx[i] = dx;
             dx = -dx;
             int random = (int) (Math.random() * (currentSpeed + 1));
 
@@ -323,18 +313,43 @@ public class Model extends Application {
                 random = currentSpeed;
             }
 
-            player.ghostSpeed[i] = VALID_SPEEDS[random];
+            player.enemySpeed[i] = VALID_SPEEDS[random];
         }
 
-        player.setPacmanX(9 * BLOCK_SIZE);
-        player.setPacmanY(12 * BLOCK_SIZE);
-        player.setPacmanDx(0);
-        player.setPacmanDy(0);
+        player.setPlayerX(9 * BLOCK_SIZE);
+        player.setPlayerY(12 * BLOCK_SIZE);
+        player.setPlayerDx(0);
+        player.setPlayerDy(0);
         reqDx = 0;
         reqDy = 0;
         dying = false;
     }
+    
+     void checkMaze() {
+        int i = 0;
+        boolean finished = true;
 
+        while (i < maze.getNBlocks() * maze.getNBlocks() && finished) {
+            if ((screenData[i]) != 0) {
+                finished = false;
+            }
+            i++;
+        }
+
+        if (finished) {
+            score += 50;
+            int enemyCount = maze.getEnemyCount();
+            if (enemyCount < MAX_ENEMY) {
+                enemyCount--;
+                maze.setEnemyCount(enemyCount);
+            }
+            if (currentSpeed < MAX_SPEED) {
+                currentSpeed++;
+            }
+            initLevel();
+        }
+    }
+     
     private void draw(GraphicsContext g2d) {
         g2d.drawImage(floor3, 0, 0, SCREEN_SIZE, SCREEN_SIZE);
 
