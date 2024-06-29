@@ -11,11 +11,12 @@ public class Player {
     private Model model;
     private Maze maze;
     private int score = 0;
-        
+    private int stamina = 100;
+    private boolean running = false;
     private int playerX, playerY, playerDx, playerDy;
     private int playerSpeed = 1;
     private Timeline powerupTimer;
-    private boolean powerup = false;
+    private boolean powerUp = false;
     private int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
     private int[] dx, dy;
 
@@ -25,7 +26,14 @@ public class Player {
         this.maze = new Maze(model);
     }
     
-
+    public void setRunning(boolean value){
+        this.running = value;
+    }
+    
+    public int getStamina(){
+        return stamina;
+    }
+    
     public void setEnemyX(int[] i){
         this.enemyX = i;
     }
@@ -99,11 +107,19 @@ public class Player {
     }
     
     public boolean getPowerUp() {
-        return powerup;
+        return powerUp;
     }
     
     public void setPowerUp(boolean value){
-        this.powerup = value;
+        this.powerUp = value;
+    }
+    
+    public void setPlayerSpeed(int speed){
+        this.playerSpeed = speed;
+    }
+    
+    public int getPlayerSpeed(){
+        return playerSpeed;
     }
     
    public void movePlayer() {
@@ -161,9 +177,6 @@ public class Player {
         System.out.println("Before movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
         System.out.println("Dx: " + playerDx + ", Dy: " + playerDy);
 
-        // Movement logic
-        playerX += playerSpeed * playerDx;
-        playerY += playerSpeed * playerDy;
 
         // Debugging output after movement
         System.out.println("After movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
@@ -171,8 +184,8 @@ public class Player {
 
 
     public void checkPowerUp() {
-        if (!powerup) {
-            powerup = true;
+        if (!powerUp) {
+            powerUp = true;
             startTimer();
         } else {
             resetTimer();
@@ -182,7 +195,7 @@ public class Player {
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = model.getReqDx();
         int reqDy = model.getReqDy();
-        if (!powerup) {
+        if (!powerUp) {
             if (reqDx == -1) {
                 g2d.drawImage(model.left, playerX + 1, playerY + 1);
             } else if (reqDx == 1) {
@@ -210,7 +223,7 @@ public class Player {
         powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                powerup = false;
+                powerUp = false;
             }
         }));
         powerupTimer.play();   
@@ -288,7 +301,7 @@ public class Player {
 
             
             if (playerX > (enemyX[i] - 12) && playerX < (enemyX[i] + 12) && playerY > (enemyY[i] - 12) && playerY < (enemyY[i] + 12) && inGame) {
-                if (!powerup) {
+                if (!powerUp) {
                     model.setDying(true);
                 }
                 else {
@@ -315,5 +328,23 @@ public class Player {
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(model.spider, x, y);
+    }
+    
+    
+    public void updateStamina() {
+        if (running) {
+            if (stamina > 0) {
+                playerSpeed = 2;
+                stamina--;
+            } else {
+                running = false;
+                playerSpeed = 1;
+            }
+        } else {
+            playerSpeed = 1;
+            if (stamina < 100) {
+                stamina++;
+            }
+        }
     }
 }
