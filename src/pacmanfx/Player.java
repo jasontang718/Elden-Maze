@@ -11,7 +11,7 @@ public class Player {
     private Model model;
     private Maze maze;
     private int score = 0;
-    private int stamina = 100;
+    private int stamina = 500;
     private boolean running = false;
     private int playerX, playerY, playerDx, playerDy;
     private int playerSpeed = 1;
@@ -29,7 +29,9 @@ public class Player {
     public void setRunning(boolean value){
         this.running = value;
     }
-    
+        public boolean getRunning(){
+        return running;
+    }
     public int getStamina(){
         return stamina;
     }
@@ -153,23 +155,23 @@ public class Player {
 
             // Check if the requested direction is valid
             if (reqDx != 0 || reqDy != 0) {
-                if (!((reqDx == -1 && reqDy == 0 && (ch & 1) != 0)
-                        || (reqDx == 1 && reqDy == 0 && (ch & 4) != 0)
-                        || (reqDx == 0 && reqDy == -1 && (ch & 2) != 0)
-                        || (reqDx == 0 && reqDy == 1 && (ch & 8) != 0))) {
+                if (!((reqDx <= -1 && reqDy == 0 && (ch & 1) != 0)
+                        || (reqDx >= 1 && reqDy == 0 && (ch & 4) != 0)
+                        || (reqDx == 0 && reqDy <= -1 && (ch & 2) != 0)
+                        || (reqDx == 0 && reqDy >= 1 && (ch & 8) != 0))) {
                     playerDx = reqDx;
                     playerDy = reqDy;
                 }
             }
 
             // Check for collisions with walls
-            if ((playerDx == -1 && playerDy == 0 && (ch & 1) != 0)
-                    || (playerDx == 1 && playerDy == 0 && (ch & 4) != 0)
-                    || (playerDx == 0 && playerDy == -1 && (ch & 2) != 0)
-                    || (playerDx == 0 && playerDy == 1 && (ch & 8) != 0)) {
-                playerDx = 0;
-                playerDy = 0;
-            }
+        if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
+                || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
+                || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)
+                || (playerDx == 0 && playerDy >= 1 && (ch & 8) != 0) && (ch & 0) == 0) {
+            playerDx = 0;
+            playerDy = 0;
+        }
         }
         playerX += playerSpeed * playerDx;
         playerY += playerSpeed * playerDy;
@@ -196,22 +198,22 @@ public class Player {
         int reqDx = model.getReqDx();
         int reqDy = model.getReqDy();
         if (!powerUp) {
-            if (reqDx == -1) {
+            if (reqDx <= -1) {
                 g2d.drawImage(model.left, playerX + 1, playerY + 1);
-            } else if (reqDx == 1) {
+            } else if (reqDx >= 1) {
                 g2d.drawImage(model.right, playerX + 1, playerY + 1);
-            } else if (reqDy == -1) {
+            } else if (reqDy <= -1) {
                 g2d.drawImage(model.up, playerX + 1, playerY + 1);
             } else {
                 g2d.drawImage(model.down, playerX + 1, playerY + 1);
             }
         }
         else {
-            if (reqDx == -1) {
+            if (reqDx <= -1) {
                 g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
-            } else if (reqDx == 1) {
+            } else if (reqDx >= 1) {
                 g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
-            } else if (reqDy == -1) {
+            } else if (reqDy <= -1) {
                 g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
             } else {
                 g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
@@ -334,15 +336,11 @@ public class Player {
     public void updateStamina() {
         if (running) {
             if (stamina > 0) {
-                playerSpeed = 2;
                 stamina--;
-            } else {
-                running = false;
-                playerSpeed = 1;
             }
         } else {
-            playerSpeed = 1;
-            if (stamina < 100) {
+            running = false;
+            if (stamina < 500) {
                 stamina++;
             }
         }
