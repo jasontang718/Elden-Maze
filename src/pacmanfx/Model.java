@@ -36,6 +36,7 @@ import javafx.util.Duration;
 public class Model extends Application {
     private Player player = new Player(this);
     private Maze maze = new Maze(this);
+    private Enemy enemy = new Enemy(this,player);
     
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
@@ -253,13 +254,13 @@ public class Model extends Application {
     
     private void initVariables() {
         screenData = new short[maze.getNBlocks() * maze.getNBlocks()];
-        player.setEnemyX(new int[MAX_ENEMY]);
-        player.setEnemyDx(new int[MAX_ENEMY]);
-        player.setEnemyY(new int[MAX_ENEMY]);
-        player.setEnemyDy(new int[MAX_ENEMY]);
-        player.setEnemySpeed(new int[MAX_ENEMY]);
-        player.setDx(new int[4]);
-        player.setDy(new int[4]);
+        enemy.setEnemyX(new int[MAX_ENEMY]);
+        enemy.setEnemyDx(new int[MAX_ENEMY]);
+        enemy.setEnemyY(new int[MAX_ENEMY]);
+        enemy.setEnemyDy(new int[MAX_ENEMY]);
+        enemy.setEnemySpeed(new int[MAX_ENEMY]);
+        enemy.setDx(new int[4]);
+        enemy.setDy(new int[4]);
     }
 
     private void playGame(GraphicsContext g2d) {
@@ -269,7 +270,7 @@ public class Model extends Application {
             player.updateStamina();
             player.movePlayer();
             player.drawPlayer(g2d);
-            player.moveEnemy(g2d);
+            enemy.moveEnemy(g2d);
             checkMaze();
         }
     }
@@ -293,7 +294,7 @@ public class Model extends Application {
 
     private void drawScore(GraphicsContext g2d) {
         g2d.setFont(smallFont);
-        g2d.setFill(new Color(5 / 255.0, 181 / 255.0, 79 / 255.0, 1));
+        g2d.setFill(Color.GREEN);
         String s = "Score: " + score;
         double textWidth = smallFont.getSize() * s.length() / 2;
         g2d.fillText(s, screenSize - textWidth - 10, screenSize - 10);
@@ -303,9 +304,9 @@ public class Model extends Application {
         }
         
         g2d.setFill(Color.GREEN);
-        g2d.fillRect(10, screenSize - 30, player.getStamina()/5, 10);
+        g2d.fillRect(100, screenSize - 30, player.getStamina()/5, 10);
         g2d.setStroke(Color.BLACK);
-        g2d.strokeRect(10, screenSize - 30, 100, 10);
+        g2d.strokeRect(100, screenSize - 30, 100, 10);
     }
 
    
@@ -333,13 +334,13 @@ public class Model extends Application {
         int dx = 1;
 
         for (int i = 0; i < maze.getEnemyCount(); i++) {
-            player.setEnemyY(i, 4 * BLOCK_SIZE);
-            player.setEnemyX(i, 4 * BLOCK_SIZE);
-            player.setEnemyDy(i,0);
-            player.setEnemyDx(i, dx);
+            enemy.setEnemyY(i, 4 * BLOCK_SIZE);
+            enemy.setEnemyX(i, 4 * BLOCK_SIZE);
+            enemy.setEnemyDy(i,0);
+            enemy.setEnemyDx(i, dx);
             dx = -dx;
 
-            player.setEnemySpeed(i, validSpeed);
+            enemy.setEnemySpeed(i, validSpeed);
         }
 
         player.setPlayerX(8 * BLOCK_SIZE);
