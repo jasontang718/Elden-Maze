@@ -338,6 +338,9 @@ public class Player {
             if (stamina > 0) {
                 stamina--;
             }
+            else if (stamina == 0){
+                running = false;
+            }
         } else {
             running = false;
             if (stamina < 500) {
