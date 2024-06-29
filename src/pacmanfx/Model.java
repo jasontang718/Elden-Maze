@@ -43,7 +43,7 @@ public class Model extends Application {
     private static final int BLOCK_SIZE = 40;
     private int screenSize = maze.getNBlocks() * BLOCK_SIZE;
     private static final int MAX_ENEMY = 12;
-    private static final int[] VALID_SPEEDS = {1, 2, 3, 4, 6, 8};
+    private static int validSpeed = 1;
     private static final int MAX_SPEED = 6;
 
     private int lives;
@@ -57,6 +57,7 @@ public class Model extends Application {
    
 
     private int currentSpeed = 1;
+
     short[] screenData;
     private Scene gameScene, introScene;
     
@@ -87,7 +88,7 @@ public class Model extends Application {
         exitButton.setPrefSize(width, height);
 
         
-        Label title = new Label("LOL");
+        Label title = new Label("Elden Maze");
         title.setStyle("-fx-font: normal bold 50px 'serif';" + "-fx-text-fill: maroon;");
 
         VBox introLayout = new VBox(20);
@@ -133,6 +134,9 @@ public class Model extends Application {
                     case ESCAPE:
                         inGame = false;
                         break;
+                    case SHIFT:
+                        player.setRunning(true);
+                        break;
                     default:
                         break;
                 }
@@ -141,6 +145,12 @@ public class Model extends Application {
                     inGame = true;
                     initGame();
                 }
+            }
+        });
+
+        gameScene.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                player.setRunning(false);
             }
         });
 
@@ -241,6 +251,7 @@ public class Model extends Application {
             player.drawPlayer(g2d);
             player.moveEnemy(g2d);
             checkMaze();
+            player.updateStamina();
         }
     }
 
@@ -271,6 +282,11 @@ public class Model extends Application {
         for (int i = 0; i < lives; i++) {
             g2d.drawImage(heart, i * 28 + 8, screenSize - 30);
         }
+        
+        g2d.setFill(Color.GREEN);
+        g2d.fillRect(10, screenSize - 30, player.getStamina(), 10);
+        g2d.setStroke(Color.BLACK);
+        g2d.strokeRect(10, screenSize - 30, 100, 10);
     }
 
    
@@ -281,13 +297,6 @@ public class Model extends Application {
         }
         continueLevel();
     }
-
-    
-    
-
-
-
-
 
     private void initGame() {
         lives = 3;
@@ -311,16 +320,11 @@ public class Model extends Application {
             player.setEnemyDy(i,0);
             player.setEnemyDx(i, dx);
             dx = -dx;
-            int random = (int) (Math.random() * (currentSpeed + 1));
 
-            if (random > currentSpeed) {
-                random = currentSpeed;
-            }
-
-            player.setEnemySpeed(i, VALID_SPEEDS[random]);
+            player.setEnemySpeed(i, validSpeed);
         }
 
-        player.setPlayerX(9 * BLOCK_SIZE);
+        player.setPlayerX(8 * BLOCK_SIZE);
         player.setPlayerY(12 * BLOCK_SIZE);
         player.setPlayerDx(0);
         player.setPlayerDy(0);
@@ -366,4 +370,5 @@ public class Model extends Application {
             showStartingText(g2d);
         }
     }
+
 }
