@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 
 public class Maze {
     private Model model;
-    private Player player;
     private final int N_BLOCKS = 17;
     private static final int BLOCK_SIZE = 40;
     private int enemyCount = 2;

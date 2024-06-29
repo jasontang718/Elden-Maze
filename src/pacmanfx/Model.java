@@ -20,6 +20,7 @@ import static javafx.scene.input.KeyCode.A;
 import static javafx.scene.input.KeyCode.D;
 import static javafx.scene.input.KeyCode.ESCAPE;
 import static javafx.scene.input.KeyCode.S;
+import static javafx.scene.input.KeyCode.SHIFT;
 import static javafx.scene.input.KeyCode.W;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -56,7 +57,7 @@ public class Model extends Application {
     private int reqDy = 0;
    
 
-    private int currentSpeed = 1;
+    private int currentSpeed;
 
     short[] screenData;
     private Scene gameScene, introScene;
@@ -116,20 +117,38 @@ public class Model extends Application {
             if (inGame) {
                 switch (key) {
                     case A:
-                        reqDx = -1;
+                        reqDx = -2;
                         reqDy = 0;
+                        
+                            if (!player.getRunning()){
+                                reqDx=-1;
+                                reqDy=0;
+                            }
+                        
                         break;
                     case D:
-                        reqDx = 1;
+                        reqDx = 2;
                         reqDy = 0;
+                            if (!player.getRunning()){
+                                reqDx=1;
+                                reqDy=0;
+                            }
                         break;
                     case W:
                         reqDx = 0;
-                        reqDy = -1;
+                        reqDy = -2;
+                            if (!player.getRunning()){
+                                reqDx=0;
+                                reqDy=-1;
+                            }
                         break;
                     case S:
                         reqDx = 0;
-                        reqDy = 1;
+                        reqDy = 2;
+                            if (!player.getRunning()){
+                                reqDx=0;
+                                reqDy=1;
+                            }
                         break;
                     case ESCAPE:
                         inGame = false;
@@ -247,11 +266,11 @@ public class Model extends Application {
         if (dying) {
             death();
         } else {
+            player.updateStamina();
             player.movePlayer();
             player.drawPlayer(g2d);
             player.moveEnemy(g2d);
             checkMaze();
-            player.updateStamina();
         }
     }
 
@@ -284,7 +303,7 @@ public class Model extends Application {
         }
         
         g2d.setFill(Color.GREEN);
-        g2d.fillRect(10, screenSize - 30, player.getStamina(), 10);
+        g2d.fillRect(10, screenSize - 30, player.getStamina()/5, 10);
         g2d.setStroke(Color.BLACK);
         g2d.strokeRect(10, screenSize - 30, 100, 10);
     }
@@ -303,7 +322,6 @@ public class Model extends Application {
         score = 0;
         initLevel();
         maze.setEnemyCount(2);
-        currentSpeed = 1;
     }
 
     private void initLevel() {
@@ -351,9 +369,7 @@ public class Model extends Application {
                 enemyCount--;
                 maze.setEnemyCount(enemyCount);
             }
-            if (currentSpeed < MAX_SPEED) {
-                currentSpeed++;
-            }
+
             initLevel();
         }
     }
