@@ -37,6 +37,7 @@ public class Model extends Application {
     private Player player = new Player(this);
     private Maze maze = new Maze(this);
     private Enemy enemy = new Enemy(this,player);
+    private Phantom phantom = new Phantom(this, player);
     
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
@@ -254,13 +255,13 @@ public class Model extends Application {
     
     private void initVariables() {
         screenData = new short[maze.getNBlocks() * maze.getNBlocks()];
-        enemy.setEnemyX(new int[MAX_ENEMY]);
-        enemy.setEnemyDx(new int[MAX_ENEMY]);
-        enemy.setEnemyY(new int[MAX_ENEMY]);
-        enemy.setEnemyDy(new int[MAX_ENEMY]);
-        enemy.setEnemySpeed(new int[MAX_ENEMY]);
-        enemy.setDx(new int[4]);
-        enemy.setDy(new int[4]);
+        phantom.setEnemyX(new int[MAX_ENEMY]);
+        phantom.setEnemyDx(new int[MAX_ENEMY]);
+        phantom.setEnemyY(new int[MAX_ENEMY]);
+        phantom.setEnemyDy(new int[MAX_ENEMY]);
+        phantom.setEnemySpeed(new int[MAX_ENEMY]);
+        phantom.setDx(new int[4]);
+        phantom.setDy(new int[4]);
     }
 
     private void playGame(GraphicsContext g2d) {
@@ -270,7 +271,7 @@ public class Model extends Application {
             player.updateStamina();
             player.movePlayer();
             player.drawPlayer(g2d);
-            enemy.moveEnemy(g2d);
+            phantom.moveEnemy(g2d);
             checkMaze();
         }
     }
@@ -334,13 +335,13 @@ public class Model extends Application {
         int dx = 1;
 
         for (int i = 0; i < maze.getEnemyCount(); i++) {
-            enemy.setEnemyY(i, 4 * BLOCK_SIZE);
-            enemy.setEnemyX(i, 4 * BLOCK_SIZE);
-            enemy.setEnemyDy(i,0);
-            enemy.setEnemyDx(i, dx);
+            phantom.setEnemyY(i, 4 * BLOCK_SIZE);
+            phantom.setEnemyX(i, 4 * BLOCK_SIZE);
+            phantom.setEnemyDy(i,0);
+            phantom.setEnemyDx(i, dx);
             dx = -dx;
 
-            enemy.setEnemySpeed(i, validSpeed);
+            phantom.setEnemySpeed(i, validSpeed);
         }
 
         player.setPlayerX(8 * BLOCK_SIZE);

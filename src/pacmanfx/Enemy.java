@@ -82,6 +82,7 @@ public class Enemy {
         int pos;
         int count;
         int BLOCK_SIZE = model.getBlockSize();
+        Phantom enemyDrawer = new Phantom(model, player);
             
         for (int i = 0; i < maze.getEnemyCount(); i++) {
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
@@ -136,7 +137,7 @@ public class Enemy {
 
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
-            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            enemyDrawer.drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
 
 
             boolean inGame = model.getInGame();
@@ -168,8 +169,43 @@ public class Enemy {
         maze.setEnemyCount(enemyCount);
     }
     
-    public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.spider, x, y);
-    }
     
+}
+
+class Spider extends Enemy {
+    private Model model;
+    private Player player;
+    private Maze maze;
+    
+    public Spider(Model model, Player player) {
+        super(model, player);
+        this.model = model;
+        this.player = player;
+        this.maze = new Maze(model);
+        
+    }
+
+    // Move the drawEnemy method here
+    public void drawEnemy(GraphicsContext g2d, int x, int y) {
+        g2d.drawImage(model.heart, x, y);
+    }
+}
+
+class Phantom extends Enemy {
+    private Model model;
+    private Player player;
+    private Maze maze;
+    
+    public Phantom(Model model, Player player) {
+        super(model, player);
+        this.model = model;
+        this.player = player;
+        this.maze = new Maze(model);
+        
+    }
+
+    // Move the drawEnemy method here
+    public void drawEnemy(GraphicsContext g2d, int x, int y) {
+        g2d.drawImage(model.heart, x, y);
+    }
 }
