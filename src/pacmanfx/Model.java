@@ -39,12 +39,13 @@ import javafx.util.Duration;
 
 public class Model extends Application {
     private Player player = new Player(this);
-    private Enemy enemy = new Enemy(this,player);
     private Maze1 maze1 = new Maze1(this);
     private Maze2 maze2 = new Maze2(this);
+    private Spider spider = new Spider(this, player);
+    private Phantom phantom = new Phantom(this, player);
     
     private Maze[] mazes = new Maze[]{maze1,maze2};
-    
+    private Enemy[] enemies = new Enemy[]{spider};
     
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
@@ -63,7 +64,7 @@ public class Model extends Application {
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
     
-    public Image heart, spider, floor3, floor2, coin, sword;
+    public Image heart, spiderImage, floor3, floor2, coin, sword;
     public Image up, down, left, right, enhanced, background;
 
     private int reqDx = 0;
@@ -270,7 +271,7 @@ public class Model extends Application {
         up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
         left = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
         right = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
-        spider = new Image(getClass().getResourceAsStream("/images/spider.gif"));
+        spiderImage = new Image(getClass().getResourceAsStream("/images/spider.gif"));
         heart = new Image(getClass().getResourceAsStream("/images/heart.png"));
         floor3 = new Image(getClass().getResourceAsStream("/images/floor3.jpg"));
         floor2 = new Image(getClass().getResourceAsStream("/images/floor2.jpg"));
@@ -296,13 +297,20 @@ public class Model extends Application {
     
     private void initVariables() {
         screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
-        enemy.setEnemyX(new int[MAX_ENEMY]);
-        enemy.setEnemyDx(new int[MAX_ENEMY]);
-        enemy.setEnemyY(new int[MAX_ENEMY]);
-        enemy.setEnemyDy(new int[MAX_ENEMY]);
-        enemy.setEnemySpeed(new int[MAX_ENEMY]);
-        enemy.setDx(new int[4]);
-        enemy.setDy(new int[4]);
+        spider.setEnemyX(new int[MAX_ENEMY]);
+        spider.setEnemyDx(new int[MAX_ENEMY]);
+        spider.setEnemyY(new int[MAX_ENEMY]);
+        spider.setEnemyDy(new int[MAX_ENEMY]);
+        spider.setEnemySpeed(new int[MAX_ENEMY]);
+        spider.setDx(new int[4]);
+        spider.setDy(new int[4]);
+        phantom.setEnemyX(new int[MAX_ENEMY]);
+        phantom.setEnemyDx(new int[MAX_ENEMY]);
+        phantom.setEnemyY(new int[MAX_ENEMY]);
+        phantom.setEnemyDy(new int[MAX_ENEMY]);
+        phantom.setEnemySpeed(new int[MAX_ENEMY]);
+        phantom.setDx(new int[4]);
+        phantom.setDy(new int[4]);
     }
 
     private void playGame(GraphicsContext g2d) {
@@ -312,7 +320,8 @@ public class Model extends Application {
             player.updateStamina();
             player.movePlayer();
             player.drawPlayer(g2d);
-            enemy.moveEnemy(g2d);
+            spider.moveEnemy(g2d);
+            phantom.moveEnemy(g2d);
             checkMaze();
         }
     }
@@ -377,14 +386,19 @@ public class Model extends Application {
         int dx = 1;
 
         for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
-            enemy.setEnemyY(i, 4 * BLOCK_SIZE);
-            enemy.setEnemyX(i, 4 * BLOCK_SIZE);
-            enemy.setEnemyDy(i,0);
-            enemy.setEnemyDx(i, dx);
+            spider.setEnemyY(i, 4 * BLOCK_SIZE);
+            spider.setEnemyX(i, 4 * BLOCK_SIZE);
+            spider.setEnemyDy(i,0);
+            spider.setEnemyDx(i, dx);
+            phantom.setEnemyY(i, 4 * BLOCK_SIZE);
+            phantom.setEnemyX(i, 4 * BLOCK_SIZE);
+            phantom.setEnemyDy(i,0);
+            phantom.setEnemyDx(i, dx);
 
             dx = -dx;
 
-            enemy.setEnemySpeed(i, validSpeed);
+            spider.setEnemySpeed(i, validSpeed);
+            phantom.setEnemySpeed(i, validSpeed);
         }
 
         player.setPlayerX(8 * BLOCK_SIZE);
