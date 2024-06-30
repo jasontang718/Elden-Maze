@@ -103,7 +103,7 @@ public class Player {
             }
 
             if ((ch & 32) != 0) {
-                model.getScreenData()[pos] = (short) (ch & 31); // Remove the dot
+                model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
                 score += 50;
                 model.setScore(score);
                 model.playSound("powerup.mp3");

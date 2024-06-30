@@ -86,7 +86,7 @@ public class Enemy {
         
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
-                pos = enemyX[i] / BLOCK_SIZE + maze1.getHBlocks() * (enemyY[i] / BLOCK_SIZE);
+                pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
                 short ch = model.getScreenData()[pos];
                 count = 0;
@@ -155,9 +155,10 @@ public class Enemy {
     }
     
     private void removeEnemy(int index) {
-        int enemyCount = maze1.getEnemyCount();
+        int level = model.getCurrentLevel();
+        int enemyCount = mazes[level].getEnemyCount();
         // Shift elements to the left to remove the ghost at indexToRemove
-        for (int i = index; i < maze1.getEnemyCount() - 1; i++) {
+        for (int i = index; i < mazes[level].getEnemyCount() - 1; i++) {
             enemyX[i] = enemyX[i + 1];
             enemyY[i] = enemyY[i + 1];
             enemyDx[i] = enemyDx[i + 1];
@@ -166,7 +167,7 @@ public class Enemy {
         }
         model.playSound("kill.mp3");
         enemyCount--; // Decrease the count of ghosts
-        maze1.setEnemyCount(enemyCount);
+        mazes[level].setEnemyCount(enemyCount);
     }
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {

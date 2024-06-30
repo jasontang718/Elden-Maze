@@ -6,10 +6,6 @@ package pacmanfx;
 
 import javafx.scene.canvas.GraphicsContext;
 
-/**
- *
- * @author ongzh
- */
 public interface Maze {
     short[] getLevelData();
     int getEnemyCount();

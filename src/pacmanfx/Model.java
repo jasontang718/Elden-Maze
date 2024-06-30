@@ -345,13 +345,13 @@ public class Model extends Application {
     private void initGame() {
         lives = 3;
         score = 0;
+        currentLevel = 0;
         initLevel();
         mazes[currentLevel].setEnemyCount(4);
     }
 
     private void initLevel() {
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
-        currentLevel = 1;
         continueLevel();
     }
 
@@ -378,28 +378,29 @@ public class Model extends Application {
         dying = false;
     }
     
-    private void checkMaze() {
-        int i = 0;
-        boolean finished = true;
+private void checkMaze() {
+    boolean finished = true;
 
-        while (i < mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks() && finished) {
-            if ((screenData[i]) != 0) {
-                finished = false;
-            }
-            i++;
-        }
-
-        if (finished) {
-            score += 50;
-            int enemyCount = mazes[currentLevel].getEnemyCount();
-            if (enemyCount < MAX_ENEMY) {
-                enemyCount--;
-                mazes[currentLevel].setEnemyCount(enemyCount);
-            }
-
-            initLevel();
+    // Iterate through screenData to check for remaining coins
+    for (int i = 0; i < screenData.length; i++) {
+        if ((screenData[i] & 16) != 0) {
+            finished = false;
+            break;
         }
     }
+
+    // If no coins are left, the level is completed
+    if (finished) {
+        score += 50;
+
+        currentLevel++;
+        if (currentLevel >= mazes.length) {
+            currentLevel = 0; // Reset to first maze if there are no more levels
+        }
+        initLevel();
+    }
+}
+
      
     private void draw(GraphicsContext g2d) {
         g2d.drawImage(floor3, 0, 0, screenHSize, screenVSize);
