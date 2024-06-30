@@ -4,12 +4,7 @@
  */
 package pacmanfx;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.util.Duration;
 
 /**
  *
@@ -17,18 +12,23 @@ import javafx.util.Duration;
  */
 public class Enemy {
     private Model model;
-    private Maze maze;
     private Player player;
-    
+    private Maze1 maze1;
+    private Maze2 maze2;
+    private Maze[] mazes;
+
     private int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
     private int[] dx, dy;
 
+    
     // Constructor to receive Model instance
     public Enemy(Model model, Player player) {
         this.model = model;
-        this.maze = new Maze(model);
         this.player = player;
-    }
+        this.maze1 = new Maze1(model);
+        this.maze2 = new Maze2(model);
+        
+        mazes = new Maze[]{maze1, maze2};    }
     
     public void setEnemyX(int[] i){
         this.enemyX = i;
@@ -82,11 +82,11 @@ public class Enemy {
         int pos;
         int count;
         int BLOCK_SIZE = model.getBlockSize();
-        Phantom enemyDrawer = new Phantom(model, player);
-            
-        for (int i = 0; i < maze.getEnemyCount(); i++) {
+        int level = model.getCurrentLevel();
+        
+        for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
-                pos = enemyX[i] / BLOCK_SIZE + maze.getNBlocks() * (enemyY[i] / BLOCK_SIZE);
+                pos = enemyX[i] / BLOCK_SIZE + maze1.getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
                 short ch = model.getScreenData()[pos];
                 count = 0;
@@ -137,7 +137,7 @@ public class Enemy {
 
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
-            enemyDrawer.drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
 
 
             boolean inGame = model.getInGame();
@@ -155,9 +155,9 @@ public class Enemy {
     }
     
     private void removeEnemy(int index) {
-        int enemyCount = maze.getEnemyCount();
+        int enemyCount = maze1.getEnemyCount();
         // Shift elements to the left to remove the ghost at indexToRemove
-        for (int i = index; i < maze.getEnemyCount() - 1; i++) {
+        for (int i = index; i < maze1.getEnemyCount() - 1; i++) {
             enemyX[i] = enemyX[i + 1];
             enemyY[i] = enemyY[i + 1];
             enemyDx[i] = enemyDx[i + 1];
@@ -166,41 +166,41 @@ public class Enemy {
         }
         model.playSound("kill.mp3");
         enemyCount--; // Decrease the count of ghosts
-        maze.setEnemyCount(enemyCount);
+        maze1.setEnemyCount(enemyCount);
     }
     
-    
+    public void drawEnemy(GraphicsContext g2d, int x, int y) {
+        g2d.drawImage(model.spider, x, y);
+    }
 }
 
 class Spider extends Enemy {
     private Model model;
     private Player player;
-    private Maze maze;
+    private Maze1 maze;
     
     public Spider(Model model, Player player) {
         super(model, player);
         this.model = model;
         this.player = player;
-        this.maze = new Maze(model);
+        this.maze = new Maze1(model);
         
     }
 
     // Move the drawEnemy method here
-    public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.heart, x, y);
-    }
+
 }
 
 class Phantom extends Enemy {
     private Model model;
     private Player player;
-    private Maze maze;
+    private Maze1 maze;
     
     public Phantom(Model model, Player player) {
         super(model, player);
         this.model = model;
         this.player = player;
-        this.maze = new Maze(model);
+        this.maze = new Maze1(model);
         
     }
 

@@ -35,32 +35,35 @@ import javafx.util.Duration;
 
 public class Model extends Application {
     private Player player = new Player(this);
-    private Maze maze = new Maze(this);
     private Enemy enemy = new Enemy(this,player);
-    private Phantom phantom = new Phantom(this, player);
+    private Maze1 maze1 = new Maze1(this);
+    private Maze2 maze2 = new Maze2(this);
+    
+    private Maze[] mazes = new Maze[]{maze1,maze2};
     
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
     private boolean dying = false;
 
     private static final int BLOCK_SIZE = 40;
-    private int screenSize = maze.getNBlocks() * BLOCK_SIZE;
+
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
-    private static final int MAX_SPEED = 6;
 
     private int lives;
     private int score;
-
+    private int currentLevel;
+    
+    private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
+    private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
+    private int screenSize = screenHSize*screenVSize;
+    
     public Image heart, spider, floor3, floor2, coin, sword;
     public Image up, down, left, right, enhanced, background;
 
     private int reqDx = 0;
     private int reqDy = 0;
    
-
-    private int currentSpeed;
-
     short[] screenData;
     private Scene gameScene, introScene;
     
@@ -107,11 +110,11 @@ public class Model extends Application {
 
         // Create the game scene
         StackPane root = new StackPane();
-        Canvas canvas = new Canvas(screenSize, screenSize);
+        Canvas canvas = new Canvas(screenHSize, screenVSize);
         GraphicsContext g2d = canvas.getGraphicsContext2D();
 
         root.getChildren().add(canvas);
-        gameScene = new Scene(root, screenSize, screenSize, Color.BLACK);
+        gameScene = new Scene(root, screenHSize, screenVSize, Color.BLACK);
 
         gameScene.setOnKeyPressed(event -> {
             KeyCode key = event.getCode();
@@ -126,38 +129,46 @@ public class Model extends Application {
                                 reqDx=-1;
                                 reqDy=0;
                             }
-                        
                         break;
+                        
                     case D:
                         reqDx = 2;
                         reqDy = 0;
+                        
                             if (!player.getRunning()){
                                 reqDx=1;
                                 reqDy=0;
                             }
                         break;
+                        
                     case W:
                         reqDx = 0;
                         reqDy = -2;
+                        
                             if (!player.getRunning()){
                                 reqDx=0;
                                 reqDy=-1;
                             }
                         break;
+                        
                     case S:
                         reqDx = 0;
                         reqDy = 2;
+                        
                             if (!player.getRunning()){
                                 reqDx=0;
                                 reqDy=1;
                             }
                         break;
+                        
                     case ESCAPE:
                         inGame = false;
                         break;
+                        
                     case SHIFT:
                         player.setRunning(true);
                         break;
+                        
                     default:
                         break;
                 }
@@ -190,6 +201,10 @@ public class Model extends Application {
         primaryStage.show();
     }
 
+    public int getCurrentLevel(){
+        return currentLevel;
+    }
+    
     public boolean getInGame(){
         return inGame;
     }
@@ -205,6 +220,14 @@ public class Model extends Application {
     
     public short[] getScreenData() {
         return screenData;
+    }
+    
+    public int getScreenHSize() {
+        return screenHSize;
+    }
+    
+    public int getScreenVSize() {
+        return screenVSize;
     }
     
     public int getScreenSize() {
@@ -254,14 +277,14 @@ public class Model extends Application {
     }
     
     private void initVariables() {
-        screenData = new short[maze.getNBlocks() * maze.getNBlocks()];
-        phantom.setEnemyX(new int[MAX_ENEMY]);
-        phantom.setEnemyDx(new int[MAX_ENEMY]);
-        phantom.setEnemyY(new int[MAX_ENEMY]);
-        phantom.setEnemyDy(new int[MAX_ENEMY]);
-        phantom.setEnemySpeed(new int[MAX_ENEMY]);
-        phantom.setDx(new int[4]);
-        phantom.setDy(new int[4]);
+        screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
+        enemy.setEnemyX(new int[MAX_ENEMY]);
+        enemy.setEnemyDx(new int[MAX_ENEMY]);
+        enemy.setEnemyY(new int[MAX_ENEMY]);
+        enemy.setEnemyDy(new int[MAX_ENEMY]);
+        enemy.setEnemySpeed(new int[MAX_ENEMY]);
+        enemy.setDx(new int[4]);
+        enemy.setDy(new int[4]);
     }
 
     private void playGame(GraphicsContext g2d) {
@@ -271,7 +294,7 @@ public class Model extends Application {
             player.updateStamina();
             player.movePlayer();
             player.drawPlayer(g2d);
-            phantom.moveEnemy(g2d);
+            enemy.moveEnemy(g2d);
             checkMaze();
         }
     }
@@ -287,8 +310,8 @@ public class Model extends Application {
         double textHeight = text.getLayoutBounds().getHeight();
 
         // Calculate the coordinates to center the text
-        double textX = (screenSize - textWidth) / 2;
-        double textY = (screenSize + textHeight) / 2; // Adjust this to vertically center the text
+        double textX = (screenHSize - textWidth) / 2;
+        double textY = (screenVSize + textHeight) / 2; // Adjust this to vertically center the text
 
         g2d.fillText(start, textX, textY);
     }
@@ -298,16 +321,16 @@ public class Model extends Application {
         g2d.setFill(Color.GREEN);
         String s = "Score: " + score;
         double textWidth = smallFont.getSize() * s.length() / 2;
-        g2d.fillText(s, screenSize - textWidth - 10, screenSize - 10);
+        g2d.fillText(s, screenHSize - textWidth - 10, screenVSize - 10);
 
         for (int i = 0; i < lives; i++) {
-            g2d.drawImage(heart, i * 28 + 8, screenSize - 30);
+            g2d.drawImage(heart, i * 28 + 8, screenVSize - 30);
         }
         
         g2d.setFill(Color.GREEN);
-        g2d.fillRect(100, screenSize - 30, player.getStamina()/5, 10);
+        g2d.fillRect(100, screenVSize - 30, player.getStamina()/5, 10);
         g2d.setStroke(Color.BLACK);
-        g2d.strokeRect(100, screenSize - 30, 100, 10);
+        g2d.strokeRect(100, screenVSize - 30, 100, 10);
     }
 
    
@@ -323,25 +346,27 @@ public class Model extends Application {
         lives = 3;
         score = 0;
         initLevel();
-        maze.setEnemyCount(2);
+        mazes[currentLevel].setEnemyCount(4);
     }
 
     private void initLevel() {
-        System.arraycopy(maze.getLevelData(), 0, screenData, 0, maze.getNBlocks() * maze.getNBlocks());
+        System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
+        currentLevel = 1;
         continueLevel();
     }
 
     private void continueLevel() {
         int dx = 1;
 
-        for (int i = 0; i < maze.getEnemyCount(); i++) {
-            phantom.setEnemyY(i, 4 * BLOCK_SIZE);
-            phantom.setEnemyX(i, 4 * BLOCK_SIZE);
-            phantom.setEnemyDy(i,0);
-            phantom.setEnemyDx(i, dx);
+        for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
+            enemy.setEnemyY(i, 4 * BLOCK_SIZE);
+            enemy.setEnemyX(i, 4 * BLOCK_SIZE);
+            enemy.setEnemyDy(i,0);
+            enemy.setEnemyDx(i, dx);
+
             dx = -dx;
 
-            phantom.setEnemySpeed(i, validSpeed);
+            enemy.setEnemySpeed(i, validSpeed);
         }
 
         player.setPlayerX(8 * BLOCK_SIZE);
@@ -357,7 +382,7 @@ public class Model extends Application {
         int i = 0;
         boolean finished = true;
 
-        while (i < maze.getNBlocks() * maze.getNBlocks() && finished) {
+        while (i < mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks() && finished) {
             if ((screenData[i]) != 0) {
                 finished = false;
             }
@@ -366,10 +391,10 @@ public class Model extends Application {
 
         if (finished) {
             score += 50;
-            int enemyCount = maze.getEnemyCount();
+            int enemyCount = mazes[currentLevel].getEnemyCount();
             if (enemyCount < MAX_ENEMY) {
                 enemyCount--;
-                maze.setEnemyCount(enemyCount);
+                mazes[currentLevel].setEnemyCount(enemyCount);
             }
 
             initLevel();
@@ -377,9 +402,9 @@ public class Model extends Application {
     }
      
     private void draw(GraphicsContext g2d) {
-        g2d.drawImage(floor3, 0, 0, screenSize, screenSize);
+        g2d.drawImage(floor3, 0, 0, screenHSize, screenVSize);
 
-        maze.drawMaze(g2d);
+        mazes[currentLevel].drawMaze(g2d);
         drawScore(g2d);
 
         if (inGame) {

@@ -9,7 +9,10 @@ import javafx.util.Duration;
 
 public class Player {
     private Model model;
-    private Maze maze;
+    private Maze1 maze1;
+    private Maze2 maze2;
+    private Maze[] mazes;
+    
     private int score = 0;
     private int stamina = 500;
     private boolean running = false;
@@ -18,10 +21,14 @@ public class Player {
     private Timeline powerupTimer;
     private boolean powerUp = false;
 
+    
     // Constructor to receive Model instance
     public Player(Model model) {
         this.model = model;
-        this.maze = new Maze(model);
+        this.maze1 = new Maze1(model);
+        this.maze2 = new Maze2(model);
+        
+        mazes = new Maze[]{maze1, maze2};
     }
     
     public void setRunning(boolean value){
@@ -80,10 +87,10 @@ public class Player {
         int BLOCK_SIZE = model.getBlockSize();
         int reqDx = model.getReqDx();
         int reqDy = model.getReqDy();
-
+        int level = model.getCurrentLevel();
         
         if (playerX % BLOCK_SIZE == 0 && playerY % BLOCK_SIZE == 0) {
-            pos = playerX / BLOCK_SIZE + maze.getNBlocks() * (playerY / BLOCK_SIZE);
+            pos = playerX / BLOCK_SIZE + mazes[level].getHBlocks() * (playerY / BLOCK_SIZE);
             ch = model.getScreenData()[pos];
 
             if ((ch & 16) != 0) {
