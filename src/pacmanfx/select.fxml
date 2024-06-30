@@ -72,7 +72,7 @@
                </stops>
             </LinearGradient>
          </fill></Rectangle>
-      <Button layoutX="269.0" onAction="#handleNextScene" layoutY="278.0" mnemonicParsing="false" text="Confirm" />
+      <Button layoutX="269.0"  onAction="#startGame"  layoutY="278.0" mnemonicParsing="false" text="Confirm" />
       <Text layoutX="191.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Knight" />
       <Text layoutX="276.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assasin" />
       <Text layoutX="365.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mage" />
