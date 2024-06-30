@@ -34,7 +34,7 @@ public class Player {
     public void setRunning(boolean value){
         this.running = value;
     }
-        public boolean getRunning(){
+    public boolean getRunning(){
         return running;
     }
     public int getStamina(){

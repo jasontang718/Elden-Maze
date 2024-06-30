@@ -1,5 +1,6 @@
 package pacmanfx;
 
+import java.io.IOException;
 import java.net.URL;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -8,7 +9,10 @@ import javafx.application.Application;
 import static javafx.application.Platform.exit;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -41,9 +45,10 @@ public class Model extends Application {
     
     private Maze[] mazes = new Maze[]{maze1,maze2};
     
+    
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
-    private boolean dying = false;
+    boolean dying = false;
 
     private static final int BLOCK_SIZE = 40;
 
@@ -64,27 +69,36 @@ public class Model extends Application {
     private int reqDx = 0;
     private int reqDy = 0;
    
+   Stage stage;
+
+    private int currentSpeed;
+
     short[] screenData;
-    private Scene gameScene, introScene;
+    Scene gameScene;
+   
+    private Scene introScene,selectScene;
     
     private MediaPlayer mediaPlayer;
 
+   
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
+         stage = primaryStage;
         primaryStage.setTitle("League of Legends");
 
         // Create the intro scene
         Button startButton = new Button("Start Game");
         startButton.setFont(smallFont);
-        startButton.setOnAction(e -> primaryStage.setScene(gameScene));
+        startButton.setOnAction(this::selectCharacter);   
         
         Button settingsButton = new Button("Settings");
         settingsButton.setFont(smallFont);
+        //settingsButton.setOnAction(this::setting);  
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
-        exitButton.setOnAction(e -> exit());        
+            
         
         double width = 250;
         double height = 50;
@@ -197,8 +211,12 @@ public class Model extends Application {
             }
         }.start();
 
-        primaryStage.setScene(introScene);
-        primaryStage.show();
+        setScene(introScene);
+   
+
+    }
+  public Scene getGameScene() {
+        return gameScene;
     }
 
     public int getCurrentLevel(){
@@ -246,7 +264,7 @@ public class Model extends Application {
         return reqDy;
     }
     
-    
+   
     public void loadImages() {
         down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
         up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
@@ -414,5 +432,29 @@ private void checkMaze() {
             showStartingText(g2d);
         }
     }
+     @FXML
+     private void selectCharacter(ActionEvent event) {
+      try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("select.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
 
-}
+            SelectController controller = loader.getController();
+            controller.select(this);  // Pass the current instance of Model to the controller
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+     
+     void setScene(Scene scene){
+         stage.setScene(scene);
+         stage.show();
+         
+     }
+     public void myMainMethod() {
+        System.out.println("Main method called!");
+    }
+    }
