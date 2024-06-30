@@ -284,9 +284,7 @@ public class Model extends Application {
         URL soundURL = getClass().getResource("/sound/" + soundFileName);
         if (soundURL != null) {
             Media sound = new Media(soundURL.toString());
-            if (mediaPlayer != null) {
-                mediaPlayer.stop(); // Stop any currently playing sound
-            }
+           
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.play(); // Play the specified sound
         } else {
@@ -410,7 +408,7 @@ private void checkMaze() {
     // If no coins are left, the level is completed
     if (finished) {
         score += 50;
-
+        scoreBoard();
         currentLevel++;
         if (currentLevel >= mazes.length) {
             currentLevel = 0; // Reset to first maze if there are no more levels
@@ -448,7 +446,21 @@ private void checkMaze() {
             e.printStackTrace();
         }
     }
-     
+     @FXML 
+     private void scoreBoard(){
+      try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreboard.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            ScoreboardController controller = loader.getController();
+            controller.scoreBoard(this);  // Pass the current instance of Model to the controller
+
+            Stage stage = (Stage) this.stage;
+            stage.setScene(scene);
+     }catch (IOException e){
+         e.printStackTrace();
+     }}
      void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();
