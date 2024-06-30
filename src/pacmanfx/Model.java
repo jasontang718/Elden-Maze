@@ -1,5 +1,6 @@
 package pacmanfx;
 
+import java.io.IOException;
 import java.net.URL;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -8,7 +9,10 @@ import javafx.application.Application;
 import static javafx.application.Platform.exit;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -60,7 +64,7 @@ public class Model extends Application {
     private int currentSpeed;
 
     short[] screenData;
-    private Scene gameScene, introScene;
+    private Scene gameScene, introScene,selectScene;
     
     private MediaPlayer mediaPlayer;
 
@@ -79,7 +83,7 @@ public class Model extends Application {
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
-        exitButton.setOnAction(e -> exit());        
+        exitButton.setOnAction(this::selectCharacter);       
         
         double width = 250;
         double height = 50;
@@ -386,5 +390,21 @@ public class Model extends Application {
             showStartingText(g2d);
         }
     }
+     @FXML
+     private void selectCharacter(ActionEvent event) {
+        try {
+            // Load the next scene
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("select.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
 
-}
+            // Get the stage from the event's source (the button)
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene on the stage
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    }
