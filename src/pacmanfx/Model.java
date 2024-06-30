@@ -42,9 +42,10 @@ public class Model extends Application {
     private Maze maze = new Maze(this);
     private Enemy enemy = new Enemy(this,player);
     
+    
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
-    private boolean dying = false;
+    boolean dying = false;
 
     private static final int BLOCK_SIZE = 40;
     private int screenSize = maze.getNBlocks() * BLOCK_SIZE;
@@ -60,31 +61,36 @@ public class Model extends Application {
 
     private int reqDx = 0;
     private int reqDy = 0;
-   
+   Stage stage;
 
     private int currentSpeed;
 
     short[] screenData;
-    private Scene gameScene, introScene,selectScene;
+    Scene gameScene;
+   
+    private Scene introScene,selectScene;
     
     private MediaPlayer mediaPlayer;
 
+   
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
+         stage = primaryStage;
         primaryStage.setTitle("League of Legends");
 
         // Create the intro scene
         Button startButton = new Button("Start Game");
         startButton.setFont(smallFont);
-        startButton.setOnAction(e -> primaryStage.setScene(gameScene));
+        startButton.setOnAction(this::selectCharacter);   
         
         Button settingsButton = new Button("Settings");
         settingsButton.setFont(smallFont);
+        //settingsButton.setOnAction(this::setting);  
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
-        exitButton.setOnAction(this::selectCharacter);       
+            
         
         double width = 250;
         double height = 50;
@@ -189,8 +195,12 @@ public class Model extends Application {
             }
         }.start();
 
-        primaryStage.setScene(introScene);
-        primaryStage.show();
+        setScene(introScene);
+   
+
+    }
+  public Scene getGameScene() {
+        return gameScene;
     }
 
     public boolean getInGame(){
@@ -226,7 +236,7 @@ public class Model extends Application {
         return reqDy;
     }
     
-    
+   
     public void loadImages() {
         down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
         up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
@@ -393,19 +403,27 @@ public class Model extends Application {
     }
      @FXML
      private void selectCharacter(ActionEvent event) {
-        try {
-            // Load the next scene
+      try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("select.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            // Get the stage from the event's source (the button)
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            SelectController controller = loader.getController();
+            controller.select(this);  // Pass the current instance of Model to the controller
 
-            // Set the new scene on the stage
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+     
+     void setScene(Scene scene){
+         stage.setScene(scene);
+         stage.show();
+         
+     }
+     public void myMainMethod() {
+        System.out.println("Main method called!");
     }
     }
