@@ -496,7 +496,8 @@ class Phantom implements Enemy {
             
             if (player.getPlayerX() > (enemyX[i] - 12) && player.getPlayerX() < (enemyX[i] + 12) && player.getPlayerY() > (enemyY[i] - 12) && player.getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
-                    model.setDying(true);
+                    player.checkBlinded();
+                    removeEnemy(i);
                 }
                 else {
                     removeEnemy(i);

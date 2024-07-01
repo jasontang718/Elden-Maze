@@ -380,7 +380,7 @@ public class Model extends Application {
     private void initGame() {
         lives = 3;
         score = 0;
-        currentLevel = 0;
+        currentLevel = 1;
         initLevel();
         mazes[currentLevel].setEnemyCount(4);
     }
