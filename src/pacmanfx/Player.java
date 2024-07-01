@@ -11,6 +11,7 @@ public class Player {
     private Model model;
     private Maze1 maze1;
     private Maze2 maze2;
+    private Maze3 maze3;
     private Maze[] mazes;
     
     private int score = 0;
@@ -27,8 +28,9 @@ public class Player {
         this.model = model;
         this.maze1 = new Maze1(model);
         this.maze2 = new Maze2(model);
+        this.maze3 = new Maze3(model);
         
-        mazes = new Maze[]{maze1, maze2};
+        mazes = new Maze[]{maze1, maze2, maze3};
     }
     
     public void setRunning(boolean value){

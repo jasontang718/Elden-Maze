@@ -41,11 +41,14 @@ public class Model extends Application {
     private Player player = new Player(this);
     private Maze1 maze1 = new Maze1(this);
     private Maze2 maze2 = new Maze2(this);
+    private Maze3 maze3 = new Maze3(this);
     private Spider spider = new Spider(this, player);
+    private Goblin goblin = new Goblin(this, player);
     private Phantom phantom = new Phantom(this, player);
+    private Skeleton skeleton = new Skeleton(this, player);
     
-    private Maze[] mazes = new Maze[]{maze1,maze2};
-    private Enemy[] enemies = new Enemy[]{spider};
+    private Maze[] mazes = new Maze[]{maze1,maze2,maze3};
+    private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
     
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
@@ -65,7 +68,7 @@ public class Model extends Application {
     private int screenSize = screenHSize*screenVSize;
     
     public Image heart, spiderImage, floor3, floor2, coin, sword;
-    public Image up, down, left, right, enhanced, background;
+    public Image up, down, left, right, enhanced, background, assassin, skeletonImage;
 
     private int reqDx = 0;
     private int reqDy = 0;
@@ -85,7 +88,7 @@ public class Model extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-         stage = primaryStage;
+        stage = primaryStage;
         primaryStage.setTitle("League of Legends");
 
         // Create the intro scene
@@ -100,7 +103,6 @@ public class Model extends Application {
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
             
-        
         double width = 250;
         double height = 50;
         
@@ -202,7 +204,6 @@ public class Model extends Application {
         });
 
         loadImages();
-        initVariables();
         initGame();
 
         new AnimationTimer() {
@@ -213,9 +214,8 @@ public class Model extends Application {
         }.start();
 
         setScene(introScene);
-   
-
     }
+    
   public Scene getGameScene() {
         return gameScene;
     }
@@ -279,6 +279,8 @@ public class Model extends Application {
         sword = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
         enhanced = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
         background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
+        assassin = new Image(getClass().getResourceAsStream("/images/assassindown.gif"));
+        skeletonImage = new Image(getClass().getResourceAsStream("/images/skeleton.gif"));
     }
     
     public void playSound(String soundFileName) {
@@ -295,13 +297,13 @@ public class Model extends Application {
     
     private void initVariables() {
         screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
-        spider.setEnemyX(new int[MAX_ENEMY]);
-        spider.setEnemyDx(new int[MAX_ENEMY]);
-        spider.setEnemyY(new int[MAX_ENEMY]);
-        spider.setEnemyDy(new int[MAX_ENEMY]);
-        spider.setEnemySpeed(new int[MAX_ENEMY]);
-        spider.setDx(new int[4]);
-        spider.setDy(new int[4]);
+        enemies[currentLevel].setEnemyX(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemyDx(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemyY(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemyDy(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemySpeed(new int[MAX_ENEMY]);
+        enemies[currentLevel].setDx(new int[4]);
+        enemies[currentLevel].setDy(new int[4]);
         phantom.setEnemyX(new int[MAX_ENEMY]);
         phantom.setEnemyDx(new int[MAX_ENEMY]);
         phantom.setEnemyY(new int[MAX_ENEMY]);
@@ -318,7 +320,7 @@ public class Model extends Application {
             player.updateStamina();
             player.movePlayer();
             player.drawPlayer(g2d);
-            spider.moveEnemy(g2d);
+            enemies[currentLevel].moveEnemy(g2d);
             phantom.moveEnemy(g2d);
             checkMaze();
         }
@@ -376,6 +378,7 @@ public class Model extends Application {
     }
 
     private void initLevel() {
+        initVariables();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
         continueLevel();
     }
@@ -384,10 +387,10 @@ public class Model extends Application {
         int dx = 1;
 
         for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
-            spider.setEnemyY(i, 4 * BLOCK_SIZE);
-            spider.setEnemyX(i, 4 * BLOCK_SIZE);
-            spider.setEnemyDy(i,0);
-            spider.setEnemyDx(i, dx);
+            enemies[currentLevel].setEnemyY(i, 4 * BLOCK_SIZE);
+            enemies[currentLevel].setEnemyX(i, 4 * BLOCK_SIZE);
+            enemies[currentLevel].setEnemyDy(i,0);
+            enemies[currentLevel].setEnemyDx(i, dx);
             phantom.setEnemyY(i, 4 * BLOCK_SIZE);
             phantom.setEnemyX(i, 4 * BLOCK_SIZE);
             phantom.setEnemyDy(i,0);
@@ -395,7 +398,7 @@ public class Model extends Application {
 
             dx = -dx;
 
-            spider.setEnemySpeed(i, validSpeed);
+            enemies[currentLevel].setEnemySpeed(i, validSpeed);
             phantom.setEnemySpeed(i, validSpeed);
         }
 
@@ -422,7 +425,7 @@ private void checkMaze() {
     // If no coins are left, the level is completed
     if (finished) {
         score += 50;
-        scoreBoard();
+        //scoreBoard();
         currentLevel++;
         if (currentLevel >= mazes.length) {
             currentLevel = 0; // Reset to first maze if there are no more levels
