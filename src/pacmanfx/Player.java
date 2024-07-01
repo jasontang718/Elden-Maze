@@ -5,8 +5,6 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class Player {
@@ -23,7 +21,7 @@ public class Player {
     private int playerSpeed = 2;
     private Timeline powerupTimer;
     private boolean powerUp = false;
-    private boolean blinded = false;
+    private boolean slowed = false;
 
     
     // Constructor to receive Model instance
@@ -34,14 +32,6 @@ public class Player {
         this.maze3 = new Maze3(model);
         
         mazes = new Maze[]{maze1, maze2, maze3};
-    }
-    
-    public boolean getBlinded(){
-        return blinded;
-    }
-    
-    public void setBlinded(boolean value){
-        this.blinded = blinded;
     }
     
     public void setRunning(boolean value){
@@ -112,6 +102,7 @@ public class Player {
                 score++;
                 model.setScore(score);
                 model.playSound("gold.mp3");        
+
             }
 
             if ((ch & 32) != 0) {
@@ -194,8 +185,9 @@ public class Player {
         powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                blinded = false;
                 powerUp = false;
+                slowed = false;
+                playerSpeed = 2;
             }
         }));
         powerupTimer.play();   
@@ -225,32 +217,12 @@ public class Player {
         }
     }
     
-
-public void blinded(GraphicsContext g2d) {
-    int BLOCK_SIZE = model.getBlockSize();
-    if (blinded) {
-        // Radius for the circle
-        double radius = 30;
-
-        // Calculate center coordinates for the circle
-        double centerX = playerX + BLOCK_SIZE / 2;
-        double centerY = playerY + BLOCK_SIZE / 2;
-
-        // Set the fill color to black
-        g2d.setFill(Color.BLACK);
-
-        // Draw the circle
-        g2d.fillOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
-    }
-}
-
-    public void checkBlinded() {
-        if (!blinded) {
-            blinded = true;
+    public void checkSlowed(){
+        if (!slowed) {
+            slowed = true;
+            playerSpeed = 1;
             startTimer();
         } else {
             resetTimer();
-        }
-    }
-
+        }    }
 }

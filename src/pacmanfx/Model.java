@@ -380,9 +380,8 @@ public class Model extends Application {
     private void initGame() {
         lives = 3;
         score = 0;
-        currentLevel = 1;
+        currentLevel = 0;
         initLevel();
-        mazes[currentLevel].setEnemyCount(4);
     }
 
     private void initLevel() {
@@ -506,4 +505,4 @@ private void checkMaze() {
      public void myMainMethod() {
         System.out.println("Main method called!");
     }
-    }
+}
