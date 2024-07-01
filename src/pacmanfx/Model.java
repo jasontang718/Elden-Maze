@@ -53,7 +53,7 @@ public class Model extends Application {
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
     boolean dying = false;
-
+    private boolean showscore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
 
     private static final int MAX_ENEMY = 12;
@@ -83,6 +83,7 @@ public class Model extends Application {
     private Scene introScene,selectScene;
     
     private MediaPlayer mediaPlayer;
+    private boolean finished = true;
 
    
 
@@ -232,6 +233,13 @@ public class Model extends Application {
         this.dying = dying;
     }
     
+    public void setshowScore(boolean showscore){
+        this.showscore = showscore;
+    }
+    
+    public void setFinished(boolean finished){
+        this.finished = finished;
+    }
 
     public int getBlockSize(){
         return BLOCK_SIZE;
@@ -412,29 +420,40 @@ public class Model extends Application {
     }
     
 private void checkMaze() {
-    boolean finished = true;
-
+  
+   
     // Iterate through screenData to check for remaining coins
     for (int i = 0; i < screenData.length; i++) {
         if ((screenData[i] & 16) != 0) {
             finished = false;
             break;
+        }else{
+            finished = true;
         }
     }
+       
 
     // If no coins are left, the level is completed
-    if (finished) {
+    if (finished && showscore == true) {
+      
         score += 50;
-        //scoreBoard();
-        currentLevel++;
+        scoreBoard();
+        
+        showscore = false;
+        
+        
+    }
+}
+
+    public void nextLevel(){
+        
+        currentLevel ++;
+        
         if (currentLevel >= mazes.length) {
             currentLevel = 0; // Reset to first maze if there are no more levels
         }
         initLevel();
     }
-}
-
-     
     private void draw(GraphicsContext g2d) {
         g2d.drawImage(floor3, 0, 0, screenHSize, screenVSize);
 
@@ -463,9 +482,9 @@ private void checkMaze() {
             e.printStackTrace();
         }
     }
-     @FXML 
-     private void scoreBoard(){
-      try{
+    @FXML
+     private void scoreBoard() {
+      try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreboard.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
@@ -473,11 +492,12 @@ private void checkMaze() {
             ScoreboardController controller = loader.getController();
             controller.scoreBoard(this);  // Pass the current instance of Model to the controller
 
-            Stage stage = (Stage) this.stage;
+            Stage stage = (Stage)this.stage;
             stage.setScene(scene);
-     }catch (IOException e){
-         e.printStackTrace();
-     }}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
      void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();

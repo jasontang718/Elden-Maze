@@ -6,6 +6,8 @@ package pacmanfx;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -20,6 +22,7 @@ import javafx.scene.text.Text;
 public class ScoreboardController implements Initializable {
 
     private Model model;
+   
     @FXML
     private Text score;
     @FXML
@@ -27,13 +30,28 @@ public class ScoreboardController implements Initializable {
         public void scoreBoard(Model model) {
         this.model = model;
     }
+    private int Level;
     /**
      * Initializes the controller class.
      */
+  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    @FXML
+    private void nextLevel(ActionEvent event) {
+      model.nextLevel();
+      Scene gameScene = model.getGameScene();
+      model.setScene(gameScene);
+      model.setshowScore(true);
+      model.setFinished(false);
+    }
+
+    @FXML
+    private void quit(ActionEvent event) {
+    }
     
   
    
