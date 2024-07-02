@@ -30,7 +30,7 @@ public class ScoreboardController implements Initializable {
         public void scoreBoard(Model model) {
         this.model = model;
     }
-    private int Level;
+   
     /**
      * Initializes the controller class.
      */
