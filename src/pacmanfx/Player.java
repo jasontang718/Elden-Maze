@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class Player {
@@ -18,8 +19,8 @@ public class Player {
     private int stamina = 500;
     private boolean running = false;
     public int playerX, playerY, playerDx, playerDy;
-    private int playerSpeed = 2;
-    private Timeline powerupTimer;
+    private int playerSpeed = 1;
+    private Timeline powerupTimer, slowedTimer;
     private boolean powerUp = false;
     private boolean slowed = false;
 
@@ -32,6 +33,14 @@ public class Player {
         this.maze3 = new Maze3(model);
         
         mazes = new Maze[]{maze1, maze2, maze3};
+    }
+    
+    public boolean getSlowed(){
+        return slowed;
+    }
+    
+    public void setSlowed(boolean value){
+        this.slowed = value;
     }
     
     public void setRunning(boolean value){
@@ -143,63 +152,95 @@ public class Player {
         // Debugging output after movement
         System.out.println("After movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
     }
-
-
-    public void checkPowerUp() {
-        if (!powerUp) {
-            powerUp = true;
-            startTimer();
-        } else {
-            resetTimer();
-        }
-    }
     
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = model.getReqDx();
         int reqDy = model.getReqDy();
+        
         if (!powerUp) {
             if (reqDx <= -1) {
-                g2d.drawImage(model.left, playerX + 1, playerY + 1);
+                g2d.drawImage(model.left, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.right, playerX + 1, playerY + 1);
+                g2d.drawImage(model.right, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.up, playerX + 1, playerY + 1);
+                g2d.drawImage(model.up, playerX, playerY);
             } else {
-                g2d.drawImage(model.down, playerX + 1, playerY + 1);
+                g2d.drawImage(model.down, playerX, playerY);
             }
         }
         else {
             if (reqDx <= -1) {
-                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
+                g2d.drawImage(model.enhanced, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
+                g2d.drawImage(model.enhanced, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
+                g2d.drawImage(model.enhanced, playerX, playerY);
             } else {
-                g2d.drawImage(model.enhanced, playerX + 1, playerY + 1);
+                g2d.drawImage(model.enhanced, playerX, playerY);
             }        
+        }
+        if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
+            int imageWidth = (int) model.blinded.getWidth();  // Assuming getWidth() gives the width of the image
+            int imageHeight = (int) model.blinded.getHeight(); // Assuming getHeight() gives the height of the image
+
+            int drawX = playerX - (imageWidth / 2);  // Center horizontally
+            int drawY = playerY - (imageHeight / 2); // Center vertically
+
+            g2d.drawImage(model.blinded, drawX + 15, drawY + 20);
         }
     }
 
-    public void startTimer() {
+    public void checkPowerUp() {
+        if (!powerUp) {
+            powerUp = true;
+            startPowerUpTimer();
+        } else {
+            resetPowerUpTimer();
+        }
+    }
+    
+    public void startPowerUpTimer() {
         powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
                 powerUp = false;
-                slowed = false;
-                playerSpeed = 2;
             }
         }));
         powerupTimer.play();   
     }
     
-    public void resetTimer() {
+    public void resetPowerUpTimer() {
         if (powerupTimer != null) {
             powerupTimer.stop();
         }
-        startTimer();
+        startPowerUpTimer();
     }
 
+    public void startSlowedTimer() {
+        slowedTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                slowed = false;
+            }
+        }));
+        slowedTimer.play();   
+    }
+        
+    public void resetSlowedTimer() {
+        if (slowedTimer != null) {
+            slowedTimer.stop();
+        }
+        startSlowedTimer();
+    }
+    
+    public void checkSlowed(GraphicsContext g2d){
+        if (!slowed) {
+            slowed = true;
+            startSlowedTimer();
+        } else {
+            resetSlowedTimer();
+        }    
+    }
     
     public void updateStamina() {
         if (running) {
@@ -216,13 +257,4 @@ public class Player {
             }
         }
     }
-    
-    public void checkSlowed(){
-        if (!slowed) {
-            slowed = true;
-            playerSpeed = 1;
-            startTimer();
-        } else {
-            resetTimer();
-        }    }
 }

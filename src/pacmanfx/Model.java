@@ -67,7 +67,7 @@ public class Model extends Application {
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
     
-    public Image heart, spiderImage, floor3, floor2, coin, sword;
+    public Image heart, spiderImage, floor3, floor2, coin, sword, blinded;
     public Image up, down, left, right, enhanced, background, assassin, skeletonImage;
 
     private int reqDx = 0;
@@ -140,43 +140,60 @@ public class Model extends Application {
             if (inGame) {
                 switch (key) {
                     case A:
-                        reqDx = -2;
+                        reqDx = -4;
                         reqDy = 0;
                         
                             if (!player.getRunning()){
-                                reqDx=-1;
+                                reqDx=-2;
                                 reqDy=0;
                             }
+                            
+                        if (player.getSlowed()){
+                            reqDx=-1;
+                            reqDy=0;                                
+                        }
                         break;
                         
                     case D:
-                        reqDx = 2;
+                        reqDx = 4;
                         reqDy = 0;
                         
                             if (!player.getRunning()){
-                                reqDx=1;
+                                reqDx=2;
                                 reqDy=0;
                             }
+                        if (player.getSlowed()){
+                            reqDx=1;
+                            reqDy=0;                                
+                        }                            
                         break;
                         
                     case W:
                         reqDx = 0;
-                        reqDy = -2;
+                        reqDy = -4;
                         
                             if (!player.getRunning()){
                                 reqDx=0;
-                                reqDy=-1;
+                                reqDy=-2;
                             }
+                        if (player.getSlowed()){
+                            reqDx=0;
+                            reqDy=-1;                                
+                        }
                         break;
                         
                     case S:
                         reqDx = 0;
-                        reqDy = 2;
+                        reqDy = 4;
                         
                             if (!player.getRunning()){
                                 reqDx=0;
-                                reqDy=1;
+                                reqDy=2;
                             }
+                        if (player.getSlowed()){
+                            reqDx=0;
+                            reqDy=1;                                
+                        }                            
                         break;
                         
                     case ESCAPE:
@@ -275,6 +292,7 @@ public class Model extends Application {
     
    
     public void loadImages() {
+        blinded = new Image(getClass().getResourceAsStream("/images/test.png"),4000,4000,false,false);        
         down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
         up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
         left = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
@@ -418,31 +436,27 @@ public class Model extends Application {
         dying = false;
     }
     
-private void checkMaze() {
-  
-   
-    // Iterate through screenData to check for remaining coins
-    for (int i = 0; i < screenData.length; i++) {
-        if ((screenData[i] & 16) != 0) {
-            finished = false;
-            break;
-        }else{
-            finished = true;
+    private void checkMaze() {
+        // Iterate through screenData to check for remaining coins
+        for (int i = 0; i < screenData.length; i++) {
+            if ((screenData[i] & 16) != 0) {
+                finished = false;
+                break;
+            }else{
+                finished = true;
+            }
+        }
+
+
+        // If no coins are left, the level is completed
+        if (finished && showscore == true) {
+
+            score += 50;
+            scoreBoard();
+
+            showscore = false;
         }
     }
-       
-
-    // If no coins are left, the level is completed
-    if (finished && showscore == true) {
-      
-        score += 50;
-        scoreBoard();
-        
-        showscore = false;
-        
-        
-    }
-}
 
     public void nextLevel(){
         

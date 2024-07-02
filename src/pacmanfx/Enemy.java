@@ -102,6 +102,8 @@ class Spider implements Enemy {
         int level = model.getCurrentLevel();
         
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
+            double distance = Math.sqrt(Math.pow(player.getPlayerX() - enemyX[i], 2) + Math.pow(player.getPlayerY() - enemyY[i], 2));
+
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
                 pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
@@ -154,8 +156,13 @@ class Spider implements Enemy {
 
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
-            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
-
+            
+            if (!player.getSlowed()){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
+            else if (player.getSlowed() && distance <= 100){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
 
             boolean inGame = model.getInGame();
             boolean powerUp = player.getPowerUp();
@@ -163,6 +170,7 @@ class Spider implements Enemy {
             if (player.getPlayerX() > (enemyX[i] - 12) && player.getPlayerX() < (enemyX[i] + 12) && player.getPlayerY() > (enemyY[i] - 12) && player.getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
                     model.setDying(true);
+                    player.setSlowed(false);
                 }
                 else {
                     removeEnemy(i);
@@ -269,6 +277,8 @@ class Goblin implements Enemy {
         int level = model.getCurrentLevel();
         
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
+            double distance = Math.sqrt(Math.pow(player.getPlayerX() - enemyX[i], 2) + Math.pow(player.getPlayerY() - enemyY[i], 2));
+
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
                 pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
@@ -321,8 +331,13 @@ class Goblin implements Enemy {
 
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
-            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
-
+            
+            if (!player.getSlowed()){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
+            else if (player.getSlowed() && distance <= 100){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
 
             boolean inGame = model.getInGame();
             boolean powerUp = player.getPowerUp();
@@ -330,6 +345,7 @@ class Goblin implements Enemy {
             if (player.getPlayerX() > (enemyX[i] - 12) && player.getPlayerX() < (enemyX[i] + 12) && player.getPlayerY() > (enemyY[i] - 12) && player.getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
                     model.setDying(true);
+                    player.setSlowed(false);
                 }
                 else {
                     removeEnemy(i);
@@ -436,6 +452,8 @@ class Phantom implements Enemy {
         int level = model.getCurrentLevel();
         
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
+            double distance = Math.sqrt(Math.pow(player.getPlayerX() - enemyX[i], 2) + Math.pow(player.getPlayerY() - enemyY[i], 2));
+            
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
                 pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
@@ -488,15 +506,20 @@ class Phantom implements Enemy {
 
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
-            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
-
+            
+            if (!player.getSlowed()){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
+            else if (player.getSlowed() && distance <= 100){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
 
             boolean inGame = model.getInGame();
             boolean powerUp = player.getPowerUp();
             
             if (player.getPlayerX() > (enemyX[i] - 12) && player.getPlayerX() < (enemyX[i] + 12) && player.getPlayerY() > (enemyY[i] - 12) && player.getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
-                    player.checkSlowed();
+                    player.checkSlowed(g2d);
                     removeEnemy(i);
                 }
                 else {
@@ -602,8 +625,10 @@ class Skeleton implements Enemy {
         int count;
         int BLOCK_SIZE = model.getBlockSize();
         int level = model.getCurrentLevel();
-        
+       
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
+            double distance = Math.sqrt(Math.pow(player.getPlayerX() - enemyX[i], 2) + Math.pow(player.getPlayerY() - enemyY[i], 2));
+            
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
                 pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
@@ -656,7 +681,13 @@ class Skeleton implements Enemy {
 
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
-            drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            
+            if (!player.getSlowed()){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
+            else if (player.getSlowed() && distance <= 100){
+                drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
+            }
 
 
             boolean inGame = model.getInGame();
@@ -665,6 +696,7 @@ class Skeleton implements Enemy {
             if (player.getPlayerX() > (enemyX[i] - 12) && player.getPlayerX() < (enemyX[i] + 12) && player.getPlayerY() > (enemyY[i] - 12) && player.getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
                     model.setDying(true);
+                    player.setSlowed(false);
                 }
                 else {
                     removeEnemy(i);
