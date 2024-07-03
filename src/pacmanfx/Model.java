@@ -309,7 +309,7 @@ public class Model extends Application {
     }
     
     public void loadImages() {
-        blinded = new Image(getClass().getResourceAsStream("/images/test.png"),4000,4000,false,false);        
+        blinded = new Image(getClass().getResourceAsStream("/images/blinded.png"),4000,2247,false,false);        
         down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
         up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
         left = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
