@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 /**
@@ -26,10 +27,12 @@ public class ScoreboardController implements Initializable {
     @FXML
     private Text score;
     @FXML
-    private Text time;
+    private Text duration;
         public void scoreBoard(Model model) {
         this.model = model;
+        updateScore();
     }
+
    
     /**
      * Initializes the controller class.
@@ -38,6 +41,8 @@ public class ScoreboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+    
     }    
     
     @FXML
@@ -52,7 +57,12 @@ public class ScoreboardController implements Initializable {
     @FXML
     private void quit(ActionEvent event) {
     }
-    
+
+    @FXML 
+    private void updateScore(){
+        int readscore = model.getScore();
+        score.setText(Integer.toString(readscore));
+    }
   
    
 

@@ -4,8 +4,7 @@
  */
 package pacmanfx;
 
-import com.sun.java.accessibility.util.EventID;
-import java.awt.RenderingHints;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -13,18 +12,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import jdk.nashorn.internal.runtime.PropertyDescriptor;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import static javax.management.Query.value;
+
 
 
 
@@ -35,9 +39,13 @@ public class settingController implements Initializable {
     @FXML
     private TextField upKey,downKey,leftKey,rightKey;
 
+    @FXML
     private Button button;
     private Model model;
+    @FXML
+    private Slider volume;
     
+     private MediaPlayer mediaPlayer;
   public void setting(Model model) {
         this.model = model;
     }
@@ -45,7 +53,7 @@ public class settingController implements Initializable {
     
   @FXML
 private void applyChanges(ActionEvent event) {
-    
+    double value = volume.getValue();
     TextField[] key = {rightKey,leftKey,upKey,downKey};
     String filePath = "/Users/jasontang/NetBeansProjects/pacman/src/pacmanfx/data.txt";
 
@@ -64,6 +72,8 @@ private void applyChanges(ActionEvent event) {
                 writer.write(",");
             }
         }
+        writer.newLine();
+        writer.write(String.valueOf(value));
     } catch (IOException e) {
         e.printStackTrace();
         // Handle IOException (file writing error) appropriately
@@ -79,7 +89,6 @@ private void applyChanges(ActionEvent event) {
     }
 
 
- @FXML
     private void checkLength(TextField textField, int maxLength) {
         textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
             // Get current text in the TextField
@@ -87,11 +96,15 @@ private void applyChanges(ActionEvent event) {
             // Check if adding the new character exceeds maxLength or is a duplicate
             String newText = currentText + event.getCharacter();
              System.out.println(newText);
-        if (newText.length() > maxLength || isDuplicateKey(newText, -1)) {
+        if (newText.length() > maxLength ) {
                 System.out.println(currentText.length());
-                textField.clear();
                 event.consume();
             }
+        else if(isDuplicateKey(newText, -1)){
+                 textField.clear();
+                 event.consume();
+        }
+        
         });
     }
 
@@ -101,8 +114,7 @@ private void applyChanges(ActionEvent event) {
         TextField[] key = {rightKey,leftKey,upKey,downKey};
         for (int i = 0; i < key.length; i++) {
             if (i != currentIndex && newKey.equals(key[i].getText())) {
-                System.out.println("true");
-                System.out.println(key[i].getText());
+              
                  
                 return true;
             }
@@ -112,6 +124,11 @@ private void applyChanges(ActionEvent event) {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+         String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
+        
+        // Initialize mediaPlayer
+        Media media = new Media(mediaUrl);
+        mediaPlayer = new MediaPlayer(media);
       TextField[] key = {rightKey,leftKey,upKey,downKey};
     
        try (BufferedReader reader = new BufferedReader(new FileReader("/Users/jasontang/NetBeansProjects/pacman/src/pacmanfx/data.txt"))) {
@@ -124,19 +141,33 @@ private void applyChanges(ActionEvent event) {
                     System.out.println(parts[i]);
                     key[i].setText(parts[i]);
                 }
+                
+            String volumeLine = reader.readLine();
+            if (volumeLine != null) {
+                double savedVolume = Double.parseDouble(volumeLine);
+                volume.setValue(savedVolume);
+                mediaPlayer.setVolume(savedVolume / 100.0);
+            }
+
             for (TextField textField : key) {
             checkLength(textField, 1);
+     
         }
- 
-
-  
          
         } }catch (IOException e) {
             e.printStackTrace();
            
         }
-     
-    
-    }    
-    
-}
+       
+        
+       
+      volume.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+               
+                mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+                 }
+        });
+    }}
+            
+               
+

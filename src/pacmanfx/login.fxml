@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="413.0" fitWidth="764.0" layoutX="-68.0" opacity="0.72" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@3axts06676511.jpg" />
+         </image>
+      </ImageView>
+      <Text fill="#2e1e1e" layoutX="148.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Elden Maze">
+         <font>
+            <Font name="Old English Text MT" size="63.0" />
+         </font>
+      </Text>
+      <TextField layoutX="225.0" layoutY="207.0" />
+      <TextField layoutX="226.0" layoutY="262.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text layoutX="233.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Username">
+         <font>
+            <Font name="Serif Regular" size="13.0" />
+         </font>
+      </Text>
+      <Text layoutX="235.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="49.951171875">
+         <font>
+            <Font name="Serif Regular" size="13.0" />
+         </font>
+      </Text>
+      <Button layoutX="276.0" layoutY="309.0" mnemonicParsing="false" text="Login" textFill="#170d42" textOverrun="CLIP">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
