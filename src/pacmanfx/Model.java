@@ -99,7 +99,7 @@ public class Model extends Application {
         
         Button settingsButton = new Button("Settings");
         settingsButton.setFont(smallFont);
-        //settingsButton.setOnAction(this::setting);  
+        settingsButton.setOnAction(this::Setting);  
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
@@ -236,6 +236,9 @@ public class Model extends Application {
     
   public Scene getGameScene() {
         return gameScene;
+    }
+ public Scene getintroScene() {
+        return introScene;
     }
 
     public int getCurrentLevel(){
@@ -478,8 +481,24 @@ public class Model extends Application {
         } else {
             showStartingText(g2d);
         }
+    }@FXML
+     private void Setting(ActionEvent event) {
+      try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("setting.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            settingController controller = loader.getController();
+            controller.setting(this);  // Pass the current instance of Model to the controller
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
      @FXML
+     
      private void selectCharacter(ActionEvent event) {
       try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("select.fxml"));
