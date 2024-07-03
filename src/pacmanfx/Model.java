@@ -268,7 +268,9 @@ public class Model extends Application {
     public short[] getScreenData() {
         return screenData;
     }
-    
+    public int getScore(){
+        return score;
+    }
     public int getScreenHSize() {
         return screenHSize;
     }
@@ -452,7 +454,7 @@ public class Model extends Application {
 
 
         // If no coins are left, the level is completed
-        if (finished && showscore == true) {
+        if (finished && showscore) {
 
             score += 50;
             scoreBoard();
