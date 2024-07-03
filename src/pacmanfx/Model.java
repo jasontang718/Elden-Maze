@@ -41,18 +41,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Model extends Application {
-    private Player player = new Player(this);
-    private Maze1 maze1 = new Maze1(this);
-    private Maze2 maze2 = new Maze2(this);
-    private Maze3 maze3 = new Maze3(this);
-    private Spider spider = new Spider(this, player);
-    private Goblin goblin = new Goblin(this, player);
-    private Phantom phantom = new Phantom(this, player);
-    private Skeleton skeleton = new Skeleton(this, player);
-    
-    private Maze[] mazes = new Maze[]{maze1,maze2,maze3};
-    private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
-    
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
     private boolean dying = false;
@@ -62,22 +50,17 @@ public class Model extends Application {
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
 
-    private int lives;
     private int score;
     private int currentLevel;
     private Timeline timer;
     
-    private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
-    private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
-    private int screenSize = screenHSize*screenVSize;
-    
     public Image heart, spiderImage, floor3, floor2, coin, sword, blinded;
-    public Image up, down, left, right, enhanced, background, assassin, skeletonImage, fire, spike;
+    public Image up, down, left, right, enhanced, background, assassinImage, skeletonImage, fire, spike;
 
     private int reqDx = 0;
     private int reqDy = 0;
    
-   Stage stage;
+    Stage stage;
 
     private int currentSpeed;
 
@@ -90,6 +73,40 @@ public class Model extends Application {
     private boolean finished = true;
     private boolean trap;
    
+    
+    
+    
+    
+    private int characterNo = 2; //THIS FOR CHARACTER SELECTION
+    
+    
+    
+    
+    
+    private Knight knight = new Knight(this);
+    private Assassin assassin = new Assassin(this);
+    private Mage mage = new Mage(this);
+    
+    private Character[] characters = new Character[]{knight, assassin, mage};
+            
+    private Maze1 maze1 = new Maze1(this);
+    private Maze2 maze2 = new Maze2(this);
+    private Maze3 maze3 = new Maze3(this);
+    
+    private Maze[] mazes = new Maze[]{maze1,maze2,maze3};    
+    
+    private Spider spider = new Spider(this, characters);
+    private Goblin goblin = new Goblin(this, characters);
+    private Phantom phantom = new Phantom(this, characters);
+    private Skeleton skeleton = new Skeleton(this, characters);
+    
+    private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
+    
+    private int lives = characters[characterNo].getLives();
+
+    private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
+    private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
+    private int screenSize = screenHSize*screenVSize;
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -147,12 +164,12 @@ public class Model extends Application {
                         reqDx = -4;
                         reqDy = 0;
                         
-                            if (!player.getRunning()){
+                            if (!characters[characterNo].getRunning()){
                                 reqDx=-2;
                                 reqDy=0;
                             }
                             
-                        if (player.getSlowed()){
+                        if (characters[characterNo].getSlowed()){
                             reqDx=-1;
                             reqDy=0;                                
                         }
@@ -162,11 +179,11 @@ public class Model extends Application {
                         reqDx = 4;
                         reqDy = 0;
                         
-                            if (!player.getRunning()){
+                            if (!characters[characterNo].getRunning()){
                                 reqDx=2;
                                 reqDy=0;
                             }
-                        if (player.getSlowed()){
+                        if (characters[characterNo].getSlowed()){
                             reqDx=1;
                             reqDy=0;                                
                         }                            
@@ -176,11 +193,11 @@ public class Model extends Application {
                         reqDx = 0;
                         reqDy = -4;
                         
-                            if (!player.getRunning()){
+                            if (!characters[characterNo].getRunning()){
                                 reqDx=0;
                                 reqDy=-2;
                             }
-                        if (player.getSlowed()){
+                        if (characters[characterNo].getSlowed()){
                             reqDx=0;
                             reqDy=-1;                                
                         }
@@ -190,11 +207,11 @@ public class Model extends Application {
                         reqDx = 0;
                         reqDy = 4;
                         
-                            if (!player.getRunning()){
+                            if (!characters[characterNo].getRunning()){
                                 reqDx=0;
                                 reqDy=2;
                             }
-                        if (player.getSlowed()){
+                        if (characters[characterNo].getSlowed()){
                             reqDx=0;
                             reqDy=1;                                
                         }                            
@@ -205,7 +222,7 @@ public class Model extends Application {
                         break;
                         
                     case SHIFT:
-                        player.setRunning(true);
+                        characters[characterNo].setRunning(true);
                         break;
                         
                     default:
@@ -221,7 +238,7 @@ public class Model extends Application {
 
         gameScene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.SHIFT) {
-                player.setRunning(false);
+                characters[characterNo].setRunning(false);
             }
         });
 
@@ -239,13 +256,17 @@ public class Model extends Application {
         setScene(introScene);
     }
     
-  public Scene getGameScene() {
+    public Scene getGameScene() {
         return gameScene;
     }
- public Scene getintroScene() {
+    public Scene getintroScene() {
         return introScene;
     }
 
+    public int getCharacterNo(){
+        return characterNo;
+    }
+    
     public int getCurrentLevel(){
         return currentLevel;
     }
@@ -322,7 +343,7 @@ public class Model extends Application {
         sword = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
         enhanced = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
         background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
-        assassin = new Image(getClass().getResourceAsStream("/images/assassindown.gif"));
+        assassinImage = new Image(getClass().getResourceAsStream("/images/assassindown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/skeleton.gif"));
         fire = new Image(getClass().getResourceAsStream("/images/fire.gif"));
         spike = new Image(getClass().getResourceAsStream("/images/spike.gif"));
@@ -384,9 +405,9 @@ public class Model extends Application {
         if (dying) {
             death();
         } else {
-            player.updateStamina();
-            player.movePlayer();
-            player.drawPlayer(g2d);
+            characters[characterNo].updateStamina();
+            characters[characterNo].movePlayer();
+            characters[characterNo].drawPlayer(g2d);
             enemies[currentLevel].moveEnemy(g2d);
             phantom.moveEnemy(g2d);
             checkMaze();
@@ -422,7 +443,7 @@ public class Model extends Application {
         }
         
         g2d.setFill(Color.GREEN);
-        g2d.fillRect(100, screenVSize - 30, player.getStamina()/5, 10);
+        g2d.fillRect(100, screenVSize - 30, characters[characterNo].getStamina()/5, 10);
         g2d.setStroke(Color.BLACK);
         g2d.strokeRect(100, screenVSize - 30, 100, 10);
     }
@@ -437,8 +458,6 @@ public class Model extends Application {
     }
 
     private void initGame() {
-        lives = 3;
-        score = 0;
         currentLevel = 0;
         initLevel();
     }
@@ -468,10 +487,10 @@ public class Model extends Application {
             phantom.setEnemySpeed(i, validSpeed);
         }
 
-        player.setPlayerX(8 * BLOCK_SIZE);
-        player.setPlayerY(12 * BLOCK_SIZE);
-        player.setPlayerDx(0);
-        player.setPlayerDy(0);
+        characters[characterNo].setPlayerX(8 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerDx(0);
+        characters[characterNo].setPlayerDy(0);
         reqDx = 0;
         reqDy = 0;
         dying = false;

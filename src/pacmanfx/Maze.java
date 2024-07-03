@@ -20,68 +20,47 @@ public interface Maze {
     void drawMaze(GraphicsContext g2d);
 }
 
-class Maze1 implements Maze{
-    private Model model;
-    private Player player;
+abstract class GeneralMaze implements Maze {
+    protected Model model;
+    protected Character player;
+    protected final int H_BLOCKS = 25;
+    protected final int V_BLOCKS = 24;
+    protected static final int BLOCK_SIZE = 40;
+    protected int enemyCount;
+    protected short[] levelData;
     
-    private final int H_BLOCKS = 25;
-    private final int V_BLOCKS = 24;
-    private static final int BLOCK_SIZE = 40;
-    private int enemyCount = 2;
-    private Timeline timer;
-    
-    private final short[] levelData = {
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,19,26,18,26,18,26,26,18,26,26,18,26,18,26,22,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,21,0,0,21,0,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,25,26,26,16,26,26,28,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,17,26,26,26,26,16,26,26,26,26,20,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,17,26,20,0,19,26,18,24,18,26,22,0,17,26,20,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,17,26,20,0,21,0,21,0,17,26,20,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,25,26,24,18,24,26,28,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,17,26,26,26,26,16,26,26,26,26,20,0,21,0,0,0,0,0,0,0,0,0,
-        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,25,26,24,26,26,26,26,24,26,26,74,74,74,74,44,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    };
-    
-    public Maze1(Model model) {
+    public GeneralMaze(Model model, int enemyCount, short[] levelData) {
         this.model = model;
-        this.player = player;
+        this.enemyCount = enemyCount;
+        this.levelData = levelData;
     }
-    
-    public short[] getLevelData(){
+
+    @Override
+    public short[] getLevelData() {
         return levelData;
     }
-    
-    public int getEnemyCount(){
+
+    @Override
+    public int getEnemyCount() {
         return enemyCount;
     }
-    
-    public void setEnemyCount(int enemyCount){
+
+    @Override
+    public void setEnemyCount(int enemyCount) {
         this.enemyCount = enemyCount;
     }
-    
+
+    @Override
     public int getHBlocks() {
         return H_BLOCKS;
     }
-    
+
+    @Override
     public int getVBlocks() {
         return V_BLOCKS;
     }
 
+    @Override
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
@@ -112,39 +91,64 @@ class Maze1 implements Maze{
                 }
 
                 if ((model.screenData[i] & 16) != 0) {
-                    double coinX = x + BLOCK_SIZE/2 - (model.coin).getWidth()/2;
-                    double coinY = y + BLOCK_SIZE/2 - (model.coin).getHeight()/2;
+                    double coinX = x + BLOCK_SIZE / 2 - (model.coin).getWidth() / 2;
+                    double coinY = y + BLOCK_SIZE / 2 - (model.coin).getHeight() / 2;
                     g2d.drawImage(model.coin, coinX, coinY);
                 }
 
                 if ((model.screenData[i] & 32) != 0) {
-                    double powerupX = x + BLOCK_SIZE/2 - (model.sword).getWidth()/2;
-                    double powerupY = y + BLOCK_SIZE/2 - (model.sword).getHeight()/2;
+                    double powerupX = x + BLOCK_SIZE / 2 - (model.sword).getWidth() / 2;
+                    double powerupY = y + BLOCK_SIZE / 2 - (model.sword).getHeight() / 2;
                     g2d.drawImage(model.sword, powerupX, powerupY);
                 }
                 
                 if ((model.screenData[i] & 64) != 0) {
-                    double trapX = x + BLOCK_SIZE/2 - (model.spike).getWidth()/2;
-                    double trapY = y + BLOCK_SIZE/2 - (model.spike).getHeight()/2;
+                    double trapX = x + BLOCK_SIZE / 2 - (model.spike).getWidth() / 2;
+                    double trapY = y + BLOCK_SIZE / 2 - (model.spike).getHeight() / 2;
                     g2d.drawImage(model.spike, trapX, trapY);
                 }
-                
+
                 i++;
             }
         }
-    }   
+    }
 }
 
-class Maze2 implements Maze{
-    private Model model;
-    private Player player;
-    private final int H_BLOCKS = 25;
-    private final int V_BLOCKS = 24;
-    private static final int BLOCK_SIZE = 40;
-    private int enemyCount = 4;
-    private Timer timer;
-    
-    private final short[] levelData = {
+class Maze1 extends GeneralMaze {
+    private static final short[] LEVEL_DATA = {
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,19,26,18,26,18,26,26,18,26,26,18,26,18,26,22,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,21,0,0,21,0,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,25,26,26,16,26,26,28,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,17,26,26,26,26,16,26,26,26,26,20,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,17,26,20,0,19,26,18,24,18,26,22,0,17,26,20,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,17,26,20,0,21,0,21,0,17,26,20,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,25,26,24,18,24,26,28,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,17,26,26,26,26,16,26,26,26,26,20,0,21,0,0,0,0,0,0,0,0,0,
+        0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
+        0,25,26,24,26,26,26,26,24,26,26,74,74,72,74,44,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    };
+
+    public Maze1(Model model) {
+        super(model, 2, LEVEL_DATA);
+    }
+}
+
+class Maze2 extends GeneralMaze {
+    private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,26,26,26,18,26,26,18,26,26,18,26,26,18,26,26,18,26,26,26,26,22,0,
         0,21,0,0,0,0,21,0,0,21,0,0,21,0,0,21,0,0,21,0,0,0,0,21,0,
@@ -170,94 +174,14 @@ class Maze2 implements Maze{
         0,25,26,26,26,26,24,26,26,26,24,26,26,26,24,26,26,26,24,26,26,26,26,44,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
-    
+
     public Maze2(Model model) {
-        this.model = model;
+        super(model, 4, LEVEL_DATA);
     }
-    
-
-    
-    public short[] getLevelData(){
-        return levelData;
-    }
-    
-    public int getEnemyCount(){
-        return enemyCount;
-    }
-    
-    public void setEnemyCount(int enemyCount){
-        this.enemyCount = enemyCount;
-    }
-    
-    public int getHBlocks() {
-        return H_BLOCKS;
-    }
-    
-    public int getVBlocks() {
-        return V_BLOCKS;
-    }
-
-    public void drawMaze(GraphicsContext g2d) {
-        short i = 0;
-        int x, y;
-
-        for (y = 0; y < model.getScreenVSize(); y += BLOCK_SIZE) {
-            for (x = 0; x < model.getScreenHSize(); x += BLOCK_SIZE) {
-
-                g2d.setStroke(Color.GREY);
-                g2d.setLineWidth(5);
-
-                if (levelData[i] == 0) {
-                    g2d.drawImage(model.floor2, x, y);
-                }
-
-                if ((levelData[i] & 1) != 0) {
-                    g2d.strokeLine(x, y, x, y + BLOCK_SIZE - 1);
-                }
-
-                if ((levelData[i] & 2) != 0) {
-                    g2d.strokeLine(x, y, x + BLOCK_SIZE - 1, y);
-                }
-
-                if ((levelData[i] & 4) != 0) {
-                    g2d.strokeLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
-                }
-
-                if ((levelData[i] & 8) != 0) {
-                    g2d.strokeLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
-                }
-
-                if ((model.screenData[i] & 16) != 0) {
-                    double coinX = x + BLOCK_SIZE/2 - (model.coin).getWidth()/2;
-                    double coinY = y + BLOCK_SIZE/2 - (model.coin).getHeight()/2;
-                    g2d.drawImage(model.coin, coinX, coinY);
-
-                }
-
-                if ((model.screenData[i] & 32) != 0) {
-                    double powerupX = x + BLOCK_SIZE/2 - (model.sword).getWidth()/2;
-                    double powerupY = y + BLOCK_SIZE/2 - (model.sword).getHeight()/2;
-                    g2d.drawImage(model.sword, powerupX, powerupY);
-
-                }
-
-                i++;
-            }
-        }
-    }   
-
 }
 
-class Maze3 implements Maze{
-    private Model model;
-    private Player player;
-    private final int H_BLOCKS = 25;
-    private final int V_BLOCKS = 24;
-    private static final int BLOCK_SIZE = 40;
-    private int enemyCount = 6;
-    private Timer timer;
-    
-    private final short[] levelData = {
+class Maze3 extends GeneralMaze {
+    private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,18,26,18,26,26,18,26,26,18,26,18,26,22,0,0,0,0,0,0,0,0,0,
         0,21,0,21,0,21,0,0,21,0,0,21,0,21,0,21,0,0,0,0,0,0,0,0,0,
@@ -284,78 +208,7 @@ class Maze3 implements Maze{
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     };
 
-    
     public Maze3(Model model) {
-        this.model = model;
+        super(model, 6, LEVEL_DATA);
     }
-    
-
-    
-    public short[] getLevelData(){
-        return levelData;
-    }
-    
-    public int getEnemyCount(){
-        return enemyCount;
-    }
-    
-    public void setEnemyCount(int enemyCount){
-        this.enemyCount = enemyCount;
-    }
-    
-    public int getHBlocks() {
-        return H_BLOCKS;
-    }
-    
-    public int getVBlocks() {
-        return V_BLOCKS;
-    }
-
-    public void drawMaze(GraphicsContext g2d) {
-        short i = 0;
-        int x, y;
-
-        for (y = 0; y < model.getScreenVSize(); y += BLOCK_SIZE) {
-            for (x = 0; x < model.getScreenHSize(); x += BLOCK_SIZE) {
-
-                g2d.setStroke(Color.GREY);
-                g2d.setLineWidth(5);
-
-                if (levelData[i] == 0) {
-                    g2d.drawImage(model.floor2, x, y);
-                }
-
-                if ((levelData[i] & 1) != 0) {
-                    g2d.strokeLine(x, y, x, y + BLOCK_SIZE - 1);
-                }
-
-                if ((levelData[i] & 2) != 0) {
-                    g2d.strokeLine(x, y, x + BLOCK_SIZE - 1, y);
-                }
-
-                if ((levelData[i] & 4) != 0) {
-                    g2d.strokeLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
-                }
-
-                if ((levelData[i] & 8) != 0) {
-                    g2d.strokeLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
-                }
-
-                if ((model.screenData[i] & 16) != 0) {
-                    double coinX = x + BLOCK_SIZE/2 - (model.coin).getWidth()/2;
-                    double coinY = y + BLOCK_SIZE/2 - (model.coin).getHeight()/2;
-                    g2d.drawImage(model.coin, coinX, coinY);
-                }
-
-                if ((model.screenData[i] & 32) != 0) {
-                    double powerupX = x + BLOCK_SIZE/2 - (model.sword).getWidth()/2;
-                    double powerupY = y + BLOCK_SIZE/2 - (model.sword).getHeight()/2;
-                    g2d.drawImage(model.sword, powerupX, powerupY);
-                }
-
-                i++;
-            }
-        }
-    }   
-
 }
