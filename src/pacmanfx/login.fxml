@@ -8,25 +8,36 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pacmanfx.LoginController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" opacity="0.2" pickOnBounds="true">
+      <ImageView fitHeight="413.0" fitWidth="764.0" layoutX="-68.0" opacity="0.72" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/background.jpg" />
+            <Image url="@3axts06676511.jpg" />
          </image>
       </ImageView>
-      <Text layoutX="162.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+      <Text fill="#2e1e1e" layoutX="148.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Elden Maze">
          <font>
-            <Font size="22.0" />
+            <Font name="Old English Text MT" size="63.0" />
          </font>
       </Text>
-      <TextField fx:id="username" layoutX="162.0" layoutY="131.0" />
-      <Text fill="#0d0a0a" layoutX="162.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+      <TextField layoutX="225.0" layoutY="207.0" />
+      <TextField layoutX="226.0" layoutY="262.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text layoutX="233.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Username">
          <font>
-            <Font size="22.0" />
+            <Font name="Serif Regular" size="13.0" />
          </font>
       </Text>
-      <TextField fx:id="password" layoutX="162.0" layoutY="232.0" />
-      <Button fx:id="login" layoutX="225.0" layoutY="334.0" mnemonicParsing="false" text="Button" />
+      <Text layoutX="235.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="49.951171875">
+         <font>
+            <Font name="Serif Regular" size="13.0" />
+         </font>
+      </Text>
+      <Button layoutX="276.0" layoutY="309.0" mnemonicParsing="false" text="Login" textFill="#170d42" textOverrun="CLIP">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
