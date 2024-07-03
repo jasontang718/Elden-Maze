@@ -94,7 +94,16 @@ public class Model extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
-        primaryStage.setTitle("League of Legends");
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent root = loader.load();
+
+        // Set the scene
+        Scene loginscene = new Scene(root);
+        LoginController controller = loader.getController();
+            controller.login(this);  // Pass the current instance of Model to the controller
+
+        // Set the stage
+        primaryStage.setTitle("Elden Maze");
 
         // Create the intro scene
         Button startButton = new Button("Start Game");
@@ -131,12 +140,12 @@ public class Model extends Application {
         introScene = new Scene(introLayout);
 
         // Create the game scene
-        StackPane root = new StackPane();
+        StackPane game = new StackPane();
         Canvas canvas = new Canvas(screenHSize, screenVSize);
         GraphicsContext g2d = canvas.getGraphicsContext2D();
 
-        root.getChildren().add(canvas);
-        gameScene = new Scene(root, screenHSize, screenVSize, Color.BLACK);
+        game.getChildren().add(canvas);
+        gameScene = new Scene(game, screenHSize, screenVSize, Color.BLACK);
 
         gameScene.setOnKeyPressed(event -> {
             KeyCode key = event.getCode();
@@ -236,7 +245,7 @@ public class Model extends Application {
             }
         }.start();
 
-        setScene(introScene);
+        setScene(loginscene);
     }
     
   public Scene getGameScene() {
