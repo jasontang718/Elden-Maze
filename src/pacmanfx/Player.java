@@ -24,7 +24,6 @@ public class Player {
     private boolean powerUp = false;
     private boolean slowed = false;
 
-    
     // Constructor to receive Model instance
     public Player(Model model) {
         this.model = model;
@@ -34,6 +33,8 @@ public class Player {
         
         mazes = new Maze[]{maze1, maze2, maze3};
     }
+    
+
     
     public boolean getSlowed(){
         return slowed;
@@ -115,11 +116,15 @@ public class Player {
             }
 
             if ((ch & 32) != 0) {
-                model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
+                model.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
                 model.setScore(score);
                 model.playSound("powerup.mp3");
                 checkPowerUp();
+            }
+            
+            if ((ch & 64) != 0 && model.getActive()) {
+                model.setDying(true);
             }
 
             // Check if the requested direction is valid
@@ -134,23 +139,17 @@ public class Player {
             }
 
             // Check for collisions with walls
-        if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
-                || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
-                || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)
-                || (playerDx == 0 && playerDy >= 1 && (ch & 8) != 0) && (ch & 0) == 0) {
-            playerDx = 0;
-            playerDy = 0;
-        }
+            if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
+                    || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
+                    || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)
+                    || (playerDx == 0 && playerDy >= 1 && (ch & 8) != 0) && (ch & 0) == 0) {
+                playerDx = 0;
+                playerDy = 0;
+            }
         }
         playerX += playerSpeed * playerDx;
         playerY += playerSpeed * playerDy;
-        
-        System.out.println("Before movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
-        System.out.println("Dx: " + playerDx + ", Dy: " + playerDy);
 
-
-        // Debugging output after movement
-        System.out.println("After movement - PacmanX: " + playerX + ", PacmanY: " + playerY);
     }
     
     public void drawPlayer(GraphicsContext g2d) {

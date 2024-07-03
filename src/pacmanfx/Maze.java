@@ -1,7 +1,15 @@
 package pacmanfx;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public interface Maze {
     short[] getLevelData();
@@ -14,10 +22,13 @@ public interface Maze {
 
 class Maze1 implements Maze{
     private Model model;
+    private Player player;
+    
     private final int H_BLOCKS = 25;
     private final int V_BLOCKS = 24;
     private static final int BLOCK_SIZE = 40;
     private int enemyCount = 2;
+    private Timeline timer;
     
     private final short[] levelData = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -35,7 +46,7 @@ class Maze1 implements Maze{
         0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
         0,21,0,17,26,26,26,26,16,26,26,26,26,20,0,21,0,0,0,0,0,0,0,0,0,
         0,21,0,21,0,0,0,0,21,0,0,0,0,21,0,21,0,0,0,0,0,0,0,0,0,
-        0,25,26,24,26,26,26,26,24,26,26,26,26,24,26,44,0,0,0,0,0,0,0,0,0,
+        0,25,26,24,26,26,26,26,24,26,26,74,74,74,74,44,0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -48,6 +59,7 @@ class Maze1 implements Maze{
     
     public Maze1(Model model) {
         this.model = model;
+        this.player = player;
     }
     
     public short[] getLevelData(){
@@ -69,11 +81,10 @@ class Maze1 implements Maze{
     public int getVBlocks() {
         return V_BLOCKS;
     }
-     
+
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
-
         for (y = 0; y < model.getScreenVSize(); y += BLOCK_SIZE) {
             for (x = 0; x < model.getScreenHSize(); x += BLOCK_SIZE) {
 
@@ -104,29 +115,34 @@ class Maze1 implements Maze{
                     double coinX = x + BLOCK_SIZE/2 - (model.coin).getWidth()/2;
                     double coinY = y + BLOCK_SIZE/2 - (model.coin).getHeight()/2;
                     g2d.drawImage(model.coin, coinX, coinY);
-
                 }
 
                 if ((model.screenData[i] & 32) != 0) {
                     double powerupX = x + BLOCK_SIZE/2 - (model.sword).getWidth()/2;
                     double powerupY = y + BLOCK_SIZE/2 - (model.sword).getHeight()/2;
                     g2d.drawImage(model.sword, powerupX, powerupY);
-
                 }
-
+                
+                if ((model.screenData[i] & 64) != 0) {
+                    double trapX = x + BLOCK_SIZE/2 - (model.spike).getWidth()/2;
+                    double trapY = y + BLOCK_SIZE/2 - (model.spike).getHeight()/2;
+                    g2d.drawImage(model.spike, trapX, trapY);
+                }
+                
                 i++;
             }
         }
     }   
-
 }
 
 class Maze2 implements Maze{
     private Model model;
+    private Player player;
     private final int H_BLOCKS = 25;
     private final int V_BLOCKS = 24;
     private static final int BLOCK_SIZE = 40;
     private int enemyCount = 4;
+    private Timer timer;
     
     private final short[] levelData = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -159,6 +175,8 @@ class Maze2 implements Maze{
         this.model = model;
     }
     
+
+    
     public short[] getLevelData(){
         return levelData;
     }
@@ -178,7 +196,7 @@ class Maze2 implements Maze{
     public int getVBlocks() {
         return V_BLOCKS;
     }
-     
+
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
@@ -232,10 +250,12 @@ class Maze2 implements Maze{
 
 class Maze3 implements Maze{
     private Model model;
+    private Player player;
     private final int H_BLOCKS = 25;
     private final int V_BLOCKS = 24;
     private static final int BLOCK_SIZE = 40;
     private int enemyCount = 6;
+    private Timer timer;
     
     private final short[] levelData = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -269,6 +289,8 @@ class Maze3 implements Maze{
         this.model = model;
     }
     
+
+    
     public short[] getLevelData(){
         return levelData;
     }
@@ -288,7 +310,7 @@ class Maze3 implements Maze{
     public int getVBlocks() {
         return V_BLOCKS;
     }
-     
+
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
@@ -323,14 +345,12 @@ class Maze3 implements Maze{
                     double coinX = x + BLOCK_SIZE/2 - (model.coin).getWidth()/2;
                     double coinY = y + BLOCK_SIZE/2 - (model.coin).getHeight()/2;
                     g2d.drawImage(model.coin, coinX, coinY);
-
                 }
 
                 if ((model.screenData[i] & 32) != 0) {
                     double powerupX = x + BLOCK_SIZE/2 - (model.sword).getWidth()/2;
                     double powerupY = y + BLOCK_SIZE/2 - (model.sword).getHeight()/2;
                     g2d.drawImage(model.sword, powerupX, powerupY);
-
                 }
 
                 i++;

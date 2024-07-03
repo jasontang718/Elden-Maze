@@ -2,6 +2,9 @@ package pacmanfx;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -52,7 +55,7 @@ public class Model extends Application {
     
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
-    boolean dying = false;
+    private boolean dying = false;
     private boolean showscore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
 
@@ -62,13 +65,14 @@ public class Model extends Application {
     private int lives;
     private int score;
     private int currentLevel;
+    private Timeline timer;
     
     private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
     
     public Image heart, spiderImage, floor3, floor2, coin, sword, blinded;
-    public Image up, down, left, right, enhanced, background, assassin, skeletonImage;
+    public Image up, down, left, right, enhanced, background, assassin, skeletonImage, fire, spike;
 
     private int reqDx = 0;
     private int reqDy = 0;
@@ -84,9 +88,9 @@ public class Model extends Application {
     
     private MediaPlayer mediaPlayer;
     private boolean finished = true;
-
+    private boolean trap;
    
-
+    
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
@@ -223,7 +227,8 @@ public class Model extends Application {
 
         loadImages();
         initGame();
-
+        startTrapTimer();
+        
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -293,7 +298,14 @@ public class Model extends Application {
         return reqDy;
     }
     
-   
+    public boolean getActive(){
+        return trap;
+    }
+    
+    public void setActive(boolean value){
+        this.trap = value;
+    }
+    
     public void loadImages() {
         blinded = new Image(getClass().getResourceAsStream("/images/test.png"),4000,4000,false,false);        
         down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
@@ -310,6 +322,8 @@ public class Model extends Application {
         background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
         assassin = new Image(getClass().getResourceAsStream("/images/assassindown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/skeleton.gif"));
+        fire = new Image(getClass().getResourceAsStream("/images/fire.gif"));
+        spike = new Image(getClass().getResourceAsStream("/images/spike.gif"));
     }
     
     public void playSound(String soundFileName) {
@@ -323,7 +337,29 @@ public class Model extends Application {
             System.out.println("Sound file not found: " + soundFileName);
         }
     }
-    
+
+    public void startTrapTimer() {
+        timer = new Timeline(
+                new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
+                        public void handle(ActionEvent event){
+                            trap = true;
+                            System.out.println("Active: " + trap);
+                        }
+                    }
+                ),
+                
+                new KeyFrame(Duration.seconds(4.8), new EventHandler<ActionEvent>() {
+                        public void handle(ActionEvent event){
+                            trap = false;
+                            System.out.println("Active: " + trap);                            
+                        }
+                    }
+                )            
+        );
+        timer.setCycleCount(Animation.INDEFINITE);
+        timer.play();   
+    }
+
     private void initVariables() {
         screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
         enemies[currentLevel].setEnemyX(new int[MAX_ENEMY]);
@@ -472,12 +508,12 @@ public class Model extends Application {
     }
     private void draw(GraphicsContext g2d) {
         g2d.drawImage(floor3, 0, 0, screenHSize, screenVSize);
-
         mazes[currentLevel].drawMaze(g2d);
         drawScore(g2d);
 
         if (inGame) {
             playGame(g2d);
+            
         } else {
             showStartingText(g2d);
         }

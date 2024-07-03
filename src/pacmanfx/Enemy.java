@@ -678,7 +678,13 @@ class Skeleton implements Enemy {
                     enemyDy[i] = dy[count];
                 }
             }
-
+            
+            /*if (!player.getPowerUp()){
+                enemyX[i] += enemyDx[i] * enemySpeed[i];   for mage powerup skill
+                enemyY[i] += enemyDy[i] * enemySpeed[i];
+            }*/
+            
+            
             enemyX[i] += enemyDx[i] * enemySpeed[i];
             enemyY[i] += enemyDy[i] * enemySpeed[i];
             
@@ -688,7 +694,6 @@ class Skeleton implements Enemy {
             else if (player.getSlowed() && distance <= 100){
                 drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
             }
-
 
             boolean inGame = model.getInGame();
             boolean powerUp = player.getPowerUp();
