@@ -487,7 +487,7 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
     }
 
     public void nextLevel(){
-        
+       
         currentLevel ++;
         
         if (currentLevel >= mazes.length) {
