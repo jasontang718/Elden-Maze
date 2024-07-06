@@ -1,2 +1,5 @@
-D,A,W,S
-76.61290322580645
+rightKey,C
+leftKey,A
+upKey,W
+downKey,S
+volume,50.0
