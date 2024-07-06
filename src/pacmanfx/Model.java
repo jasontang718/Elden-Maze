@@ -1,7 +1,13 @@
 package pacmanfx;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.Animation;
@@ -29,6 +35,7 @@ import static javafx.scene.input.KeyCode.ESCAPE;
 import static javafx.scene.input.KeyCode.S;
 import static javafx.scene.input.KeyCode.SHIFT;
 import static javafx.scene.input.KeyCode.W;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -39,6 +46,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import sun.audio.AudioPlayer;
 
 public class Model extends Application {
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
@@ -73,7 +81,7 @@ public class Model extends Application {
     private boolean finished = true;
     private boolean trap;
    
-    
+       private Map<String, KeyCode> keyMap = new HashMap<>();
     
     
     
@@ -82,7 +90,7 @@ public class Model extends Application {
     
     
     
-    
+        private  KeyCode moveRight,moveLeft,moveUp,moveDown;
     private Knight knight = new Knight(this);
     private Assassin assassin = new Assassin(this);
     private Mage mage = new Mage(this);
@@ -163,93 +171,42 @@ public class Model extends Application {
 
         game.getChildren().add(canvas);
         gameScene = new Scene(game, screenHSize, screenVSize, Color.BLACK);
+       
+       gameScene.setOnKeyPressed((KeyEvent event) -> {
+    KeyCode key = event.getCode();
+    
+    if (key == KeyCode.SPACE) {
+        inGame = true;
+        initGame();
+    }
+    
+    if (inGame) {
+        switch (key) {
+            case SHIFT:
+                characters[characterNo].setRunning(true);
+                System.out.println("Run: " + characters[characterNo].getRunning());
+                break;
+                
+            case ESCAPE:
+                inGame = false;
+                break;
+                
+            default:
+                handleMovement(key);
+        }
+    }
+});
 
-        gameScene.setOnKeyPressed(event -> {
-            KeyCode key = event.getCode();
+gameScene.setOnKeyReleased((KeyEvent event) -> {
+    KeyCode key = event.getCode();
+    
+    if (inGame && key == KeyCode.SHIFT) {
+        characters[characterNo].setRunning(false);
+        System.out.println("Run: " + characters[characterNo].getRunning());
+    }
+});
 
-            if (inGame) {
-                switch (key) {
-                    case A:
-                        reqDx = -4;
-                        reqDy = 0;
-                        
-                            if (!characters[characterNo].getRunning()){
-                                reqDx=-2;
-                                reqDy=0;
-                            }
-                            
-                        if (characters[characterNo].getSlowed()){
-                            reqDx=-1;
-                            reqDy=0;                                
-                        }
-                        break;
-                        
-                    case D:
-                        reqDx = 4;
-                        reqDy = 0;
-                        
-                            if (!characters[characterNo].getRunning()){
-                                reqDx=2;
-                                reqDy=0;
-                            }
-                        if (characters[characterNo].getSlowed()){
-                            reqDx=1;
-                            reqDy=0;                                
-                        }                            
-                        break;
-                        
-                    case W:
-                        reqDx = 0;
-                        reqDy = -4;
-                        
-                            if (!characters[characterNo].getRunning()){
-                                reqDx=0;
-                                reqDy=-2;
-                            }
-                        if (characters[characterNo].getSlowed()){
-                            reqDx=0;
-                            reqDy=-1;                                
-                        }
-                        break;
-                        
-                    case S:
-                        reqDx = 0;
-                        reqDy = 4;
-                        
-                            if (!characters[characterNo].getRunning()){
-                                reqDx=0;
-                                reqDy=2;
-                            }
-                        if (characters[characterNo].getSlowed()){
-                            reqDx=0;
-                            reqDy=1;                                
-                        }                            
-                        break;
-                        
-                    case ESCAPE:
-                        inGame = false;
-                        break;
-                        
-                    case SHIFT:
-                        characters[characterNo].setRunning(true);
-                        break;
-                        
-                    default:
-                        break;
-                }
-            } else {
-                if (key == KeyCode.SPACE) {
-                    inGame = true;
-                    initGame();
-                }
-            }
-        });
 
-        gameScene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.SHIFT) {
-                characters[characterNo].setRunning(false);
-            }
-        });
 
         loadImages();
         initGame();
@@ -299,7 +256,7 @@ public class Model extends Application {
     public int getBlockSize(){
         return BLOCK_SIZE;
     }
-    
+   
     public short[] getScreenData() {
         return screenData;
     }
@@ -566,6 +523,7 @@ public class Model extends Application {
      @FXML
      
      private void selectCharacter(ActionEvent event) {
+         loadData();
       try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("select.fxml"));
             Parent root = loader.load();
@@ -601,7 +559,91 @@ public class Model extends Application {
          stage.show();
          
      }
-     public void myMainMethod() {
-        System.out.println("Main method called!");
+     private void loadData() {
+    try (BufferedReader reader = new BufferedReader(new FileReader("/Users/jasontang/Downloads/pacman/src/pacmanfx/data.txt"))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            if (parts.length == 2) {
+                String keyType = parts[0];
+                String keyValue = parts[1];
+
+                if (!keyType.equals("volume")) {
+                    keyMap.put(keyType, KeyCode.valueOf(keyValue));
+                    System.out.println(keyType + ": " + KeyCode.valueOf(keyValue));
+                    
+                    switch (keyType) {
+                        case "rightKey":
+                            moveRight = KeyCode.valueOf(keyValue);
+                            System.out.println("Move Right: " + moveRight);
+                            break;
+                        case "leftKey":
+                            moveLeft = KeyCode.valueOf(keyValue);
+                            System.out.println("Move Left: " + moveLeft);
+                            break;
+                        case "upKey":
+                            moveUp = KeyCode.valueOf(keyValue);
+                            System.out.println("Move Up: " + moveUp);
+                            break;
+                        case "downKey":
+                            moveDown = KeyCode.valueOf(keyValue);
+                            System.out.println("Move Down: " + moveDown);
+                            break;
+                        default:
+                            System.out.println("Unknown key type: " + keyType);
+                            break;
+                    }
+                }
+            }
+        }
+        // Default key bindings if not set in the file
+        if (moveRight == null) moveRight = KeyCode.D;
+        if (moveLeft == null) moveLeft = KeyCode.A;
+        if (moveUp == null) moveUp = KeyCode.W;
+        if (moveDown == null) moveDown = KeyCode.S;
+
+    } catch (IOException | IllegalArgumentException e) {
+        e.printStackTrace();
+        System.out.println("Error loading key bindings. Using default keys.");
+        // Set default key bindings in case of error
+        moveRight = KeyCode.D;
+        moveLeft = KeyCode.A;
+        moveUp = KeyCode.W;
+        moveDown = KeyCode.S;
     }
 }
+
+
+       
+        //volume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            //mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+        //});
+     private void handleMovement(KeyCode key) {
+    int speed = 2; // Default walking speed
+    
+    if (characters[characterNo].getRunning()) {
+        speed = 4; // Running speed
+    }
+    if (characters[characterNo].getSlowed()) {
+        speed = 1; // Slowed speed
+    }
+    
+    if (key.equals(moveRight)) {
+        reqDx = speed;
+        reqDy = 0;
+    } else if (key.equals(moveLeft)) {
+        reqDx = -speed;
+        reqDy = 0;
+    } else if (key.equals(moveUp)) {
+        reqDx = 0;
+        reqDy = -speed;
+    } else if (key.equals(moveDown)) {
+        reqDx = 0;
+        reqDy = speed;
+    }
+}
+
+    }
+    
+
+
