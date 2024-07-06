@@ -85,7 +85,7 @@ public class Model extends Application {
     
     
     
-    private int characterNo = 2; //THIS FOR CHARACTER SELECTION
+    private int characterNo; //THIS FOR CHARACTER SELECTION
     
     
     
@@ -232,7 +232,9 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
     public int getCharacterNo(){
         return characterNo;
     }
-    
+     public void setCharacterNo(int characterNo){
+        this.characterNo = characterNo;
+    }
     public int getCurrentLevel(){
         return currentLevel;
     }
