@@ -57,13 +57,10 @@ public class settingController implements Initializable {
         try (BufferedReader reader = new BufferedReader(new FileReader("/Users/jasontang/Downloads/pacman/src/pacmanfx/data.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println("hi");
                 String[] parts = line.split(",");
-                
-
                 if (parts.length == 2) {
                     String keyType = parts[0];
-                 String keyValue = parts[1];
+                    String keyValue = parts[1];
                     if (!keyType.equals("volume")) {
                         keyMap.put(keyType, KeyCode.valueOf(keyValue));
                         switch (keyType) {
@@ -107,6 +104,9 @@ public class settingController implements Initializable {
         volume.valueProperty().addListener((observable, oldValue, newValue) -> {
             mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
         });
+
+        // Initial button state update
+        updateButtonState();
     }
 
     private void saveData() {
@@ -138,27 +138,43 @@ public class settingController implements Initializable {
 
     private void checkLength(TextField textField, int maxLength) {
         textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+            String character = event.getCharacter();
+            boolean isAlphabetic = character.matches("[A-Z]");
+
             String currentText = textField.getText();
             String newText = currentText + event.getCharacter();
-            if (newText.length() > maxLength || isDuplicateKey(newText, -1)) {
+            if (newText.length() > maxLength || isDuplicateKey(newText, textField) || !isAlphabetic) {
                 textField.clear();
                 event.consume();
             }
+
+            updateButtonState();
+        });
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateButtonState();
         });
     }
 
-    private boolean isDuplicateKey(String newKey, int currentIndex) {
+    private boolean isDuplicateKey(String newKey, TextField currentTextField) {
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
-        for (int i = 0; i < keys.length; i++) {
-            if (i != currentIndex && newKey.equals(keys[i].getText())) {
+        for (TextField key : keys) {
+            if (key != currentTextField && newKey.equals(key.getText())) {
                 return true;
             }
         }
         return false;
     }
 
-    public KeyCode getKey(String key) {
-        return keyMap.get(key);
+    private void updateButtonState() {
+        TextField[] keys = {rightKey, leftKey, upKey, downKey};
+        for (TextField key : keys) {
+            if (key.getText().isEmpty()) {
+                button.setDisable(true);
+                return;
+            }
+        }
+        button.setDisable(false);
     }
 
     @Override
