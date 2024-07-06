@@ -337,7 +337,7 @@ class Phantom extends AbstractEnemy{
     }
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.heart, x, y);
+        g2d.drawImage(model.fire, x, y);
     }
 }
 
