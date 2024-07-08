@@ -125,7 +125,7 @@ public class Model extends Application {
         // Set the scene
         Scene loginscene = new Scene(root);
         LoginController controller = loader.getController();
-            controller.login(this);  // Pass the current instance of Model to the controller
+        controller.login(this);  // Pass the current instance of Model to the controller
 
         // Set the stage
         primaryStage.setTitle("Elden Maze");
@@ -175,10 +175,12 @@ public class Model extends Application {
        gameScene.setOnKeyPressed((KeyEvent event) -> {
     KeyCode key = event.getCode();
     
-    if (key == KeyCode.SPACE) {
+  
+    if (key == KeyCode.SPACE && !inGame) {
         inGame = true;
         initGame();
     }
+    
     
     if (inGame) {
         switch (key) {
@@ -189,8 +191,11 @@ public class Model extends Application {
                 
             case ESCAPE:
                 inGame = false;
+                pauseScreen();
                 break;
-                
+            case SPACE:
+                event.consume();
+                break;
             default:
                 handleMovement(key);
         }
@@ -425,7 +430,7 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         continueLevel();
     }
 
-    private void initGame() {
+    public void initGame() {
         currentLevel = 0;
         initLevel();
     }
@@ -556,7 +561,23 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
             e.printStackTrace();
         }
     }
-     void setScene(Scene scene){
+     @FXML
+     private void pauseScreen() {
+      try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("pauseScreen.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            PauseScreenController controller = loader.getController();
+            controller.pause(this);  // Pass the current instance of Model to the controller
+
+            Stage stage = (Stage)this.stage;
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+     public void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();
          
