@@ -56,7 +56,10 @@ public class ScoreboardController implements Initializable {
 
     @FXML
     private void quit(ActionEvent event) {
+        Scene introScene = model.getintroScene();
+     model.setScene(introScene);
     }
+    
 
     @FXML 
     private void updateScore(){
