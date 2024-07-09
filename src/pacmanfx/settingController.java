@@ -112,7 +112,7 @@ public class settingController implements Initializable {
     private void saveData() {
         double value = volume.getValue();
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
-        String filePath = "/Users/jasontang/Downloads/pacman/src/pacmanfx/data.txt";
+        String filePath = "data.txt";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (TextField key : keys) {
@@ -139,7 +139,7 @@ public class settingController implements Initializable {
     private void checkLength(TextField textField, int maxLength) {
         textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
             String character = event.getCharacter();
-            boolean isAlphabetic = character.matches("[A-Z]");
+            boolean isAlphabetic = character.matches("[a-zA-Z]");
 
             String currentText = textField.getText();
             String newText = currentText + event.getCharacter();
