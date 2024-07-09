@@ -659,5 +659,3 @@ public class Model extends Application {
 
     }
     
-
-

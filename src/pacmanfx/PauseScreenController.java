@@ -45,6 +45,7 @@ public void pause(Model model) {
      Scene gameScene = model.getGameScene();
       model.setScene(gameScene);
       model.initLevel();
+      
     }
    @FXML
     private void quit(ActionEvent event) {
