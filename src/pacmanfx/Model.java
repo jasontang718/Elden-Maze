@@ -3,19 +3,14 @@ package pacmanfx;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import static javafx.application.Platform.exit;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,12 +24,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import static javafx.scene.input.KeyCode.A;
-import static javafx.scene.input.KeyCode.D;
 import static javafx.scene.input.KeyCode.ESCAPE;
-import static javafx.scene.input.KeyCode.S;
 import static javafx.scene.input.KeyCode.SHIFT;
-import static javafx.scene.input.KeyCode.W;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -46,7 +37,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import sun.audio.AudioPlayer;
 
 public class Model extends Application {
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
@@ -58,7 +48,7 @@ public class Model extends Application {
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
 
-    private int score;
+    private int score = 0;
     private int currentLevel;
     private Timeline timer;
     
@@ -70,8 +60,6 @@ public class Model extends Application {
    
     Stage stage;
 
-    private int currentSpeed;
-
     short[] screenData;
     Scene gameScene;
    
@@ -81,7 +69,7 @@ public class Model extends Application {
     private boolean finished = true;
     private boolean trap;
    
-       private Map<String, KeyCode> keyMap = new HashMap<>();
+    private Map<String, KeyCode> keyMap = new HashMap<>();
     
     
     
@@ -90,7 +78,7 @@ public class Model extends Application {
     
     
     
-        private  KeyCode moveRight,moveLeft,moveUp,moveDown;
+    private  KeyCode moveRight,moveLeft,moveUp,moveDown;
     private Knight knight = new Knight(this);
     private Assassin assassin = new Assassin(this);
     private Mage mage = new Mage(this);
@@ -110,7 +98,7 @@ public class Model extends Application {
     
     private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
     
-    private int lives = characters[characterNo].getLives();
+    private int lives;
 
     private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
@@ -172,46 +160,46 @@ public class Model extends Application {
         game.getChildren().add(canvas);
         gameScene = new Scene(game, screenHSize, screenVSize, Color.BLACK);
        
-       gameScene.setOnKeyPressed((KeyEvent event) -> {
-    KeyCode key = event.getCode();
-    
-  
-    if (key == KeyCode.SPACE && !inGame) {
-        inGame = true;
-        initGame();
-    }
-    
-    
-    if (inGame) {
-        switch (key) {
-            case SHIFT:
-                characters[characterNo].setRunning(true);
+        gameScene.setOnKeyPressed((KeyEvent event) -> {
+            KeyCode key = event.getCode();
+
+
+            if (key == KeyCode.SPACE && !inGame) {
+                    inGame = true;
+                    
+                    if (currentLevel == 0){
+                        initGame();
+                    }else{
+                        initLevel();
+                    }
+                }
+
+
+            if (inGame) {
+                switch (key) {
+                    case SHIFT:
+                        characters[characterNo].setRunning(true);
+                        System.out.println("Run: " + characters[characterNo].getRunning());
+                        break;
+
+                    case ESCAPE:
+                        inGame = false;
+                        pauseScreen();
+                        break;
+                    default:
+                        handleMovement(key);
+                }
+            }
+        });
+
+        gameScene.setOnKeyReleased((KeyEvent event) -> {
+            KeyCode key = event.getCode();
+
+            if (inGame && key == KeyCode.SHIFT) {
+                characters[characterNo].setRunning(false);
                 System.out.println("Run: " + characters[characterNo].getRunning());
-                break;
-                
-            case ESCAPE:
-                inGame = false;
-                pauseScreen();
-                break;
-            case SPACE:
-                event.consume();
-                break;
-            default:
-                handleMovement(key);
-        }
-    }
-});
-
-gameScene.setOnKeyReleased((KeyEvent event) -> {
-    KeyCode key = event.getCode();
-    
-    if (inGame && key == KeyCode.SHIFT) {
-        characters[characterNo].setRunning(false);
-        System.out.println("Run: " + characters[characterNo].getRunning());
-    }
-});
-
-
+            }
+        });
 
         loadImages();
         initGame();
@@ -407,9 +395,9 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
     private void drawScore(GraphicsContext g2d) {
         g2d.setFont(smallFont);
         g2d.setFill(Color.GREEN);
-        String s = "Score: " + score;
-        double textWidth = smallFont.getSize() * s.length() / 2;
-        g2d.fillText(s, screenHSize - textWidth - 10, screenVSize - 10);
+        String scoreText = "Score: " + score;
+        double textWidth = smallFont.getSize() * scoreText.length() / 2;
+        g2d.fillText(scoreText, screenHSize - textWidth - 10, screenVSize - 10);
 
         for (int i = 0; i < lives; i++) {
             g2d.drawImage(heart, i * 28 + 8, screenVSize - 30);
@@ -426,6 +414,8 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         lives--;
         if (lives == 0) {
             inGame = false;
+            currentLevel = 0;
+            initGame();
         }
         continueLevel();
     }
@@ -435,8 +425,9 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         initLevel();
     }
 
-    private void initLevel() {
+    public void initLevel() {
         initVariables();
+        lives = characters[characterNo].getLives();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
         continueLevel();
     }
