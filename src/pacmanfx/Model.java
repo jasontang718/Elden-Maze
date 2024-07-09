@@ -119,25 +119,18 @@ public class Model extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-        Parent root = loader.load();
-
-        // Set the scene
-        Scene loginscene = new Scene(root);
-        LoginController controller = loader.getController();
-        controller.login(this);  // Pass the current instance of Model to the controller
-
+        loadScene("login.fxml");
         // Set the stage
         primaryStage.setTitle("Elden Maze");
 
         // Create the intro scene
         Button startButton = new Button("Start Game");
         startButton.setFont(smallFont);
-        startButton.setOnAction(this::selectCharacter);   
+        startButton.setOnAction(event -> loadScene("select.fxml"));  
         
         Button settingsButton = new Button("Settings");
         settingsButton.setFont(smallFont);
-        settingsButton.setOnAction(this::Setting);  
+        settingsButton.setOnAction(event -> loadScene("setting.fxml")); 
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
@@ -178,7 +171,13 @@ public class Model extends Application {
   
     if (key == KeyCode.SPACE && !inGame) {
         inGame = true;
-        initGame();
+        if (currentLevel == 0){
+            System.out.println(currentLevel);
+            initGame();
+            
+        }else{
+         initLevel();
+        }
     }
     
     
@@ -191,11 +190,9 @@ public class Model extends Application {
                 
             case ESCAPE:
                 inGame = false;
-                pauseScreen();
+                loadScene("pauseScreen.fxml");
                 break;
-            case SPACE:
-                event.consume();
-                break;
+         
             default:
                 handleMovement(key);
         }
@@ -224,7 +221,7 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
             }
         }.start();
 
-        setScene(loginscene);
+       
     }
     
     public Scene getGameScene() {
@@ -426,6 +423,7 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         lives--;
         if (lives == 0) {
             inGame = false;
+            initGame();
         }
         continueLevel();
     }
@@ -435,7 +433,7 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         initLevel();
     }
 
-    private void initLevel() {
+    void initLevel() {
         initVariables();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
         continueLevel();
@@ -485,8 +483,7 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         if (finished && showscore) {
 
             score += 50;
-            scoreBoard();
-
+            loadScene("scoreboard.fxml");
             showscore = false;
         }
     }
@@ -511,79 +508,48 @@ gameScene.setOnKeyReleased((KeyEvent event) -> {
         } else {
             showStartingText(g2d);
         }
-    }@FXML
-     private void Setting(ActionEvent event) {
-      try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("setting.fxml"));
+    }
+     @FXML
+    public void loadScene(String file) {
+        loadData();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(file));
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            settingController controller = loader.getController();
-            controller.setting(this);  // Pass the current instance of Model to the controller
+            if (file.equals("select.fxml")) {
+                SelectController controller = loader.getController();
+                controller.select(this);
+            } else if (file.equals("scoreboard.fxml")) {
+                ScoreboardController controller = loader.getController();
+                controller.scoreBoard(this);
+            } else if (file.equals("pauseScreen.fxml")) {
+                PauseScreenController controller = loader.getController();
+                controller.pause(this);
+            } else if (file.equals("setting.fxml")) {
+                settingController controller = loader.getController();
+                controller.setting(this);
+            } else if (file.equals("login.fxml")) {
+                LoginController controller = loader.getController();
+                controller.login(this);
+            }
 
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     @FXML
+    setScene(scene);
+
+
      
-     private void selectCharacter(ActionEvent event) {
-         loadData();
-      try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("select.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            SelectController controller = loader.getController();
-            controller.select(this);  // Pass the current instance of Model to the controller
-
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
+    
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    @FXML
-     private void scoreBoard() {
-      try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("scoreboard.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            ScoreboardController controller = loader.getController();
-            controller.scoreBoard(this);  // Pass the current instance of Model to the controller
-
-            Stage stage = (Stage)this.stage;
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     @FXML
-     private void pauseScreen() {
-      try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("pauseScreen.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            PauseScreenController controller = loader.getController();
-            controller.pause(this);  // Pass the current instance of Model to the controller
-
-            Stage stage = (Stage)this.stage;
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+     }
      public void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();
          
      }
      private void loadData() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("/Users/jasontang/Downloads/pacman/src/pacmanfx/data.txt"))) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("data.txt"))) {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",");
