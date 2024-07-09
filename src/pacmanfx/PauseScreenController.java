@@ -44,7 +44,7 @@ public void pause(Model model) {
      
      Scene gameScene = model.getGameScene();
       model.setScene(gameScene);
-      model.initGame();
+      model.initLevel();
       
     }
    @FXML
