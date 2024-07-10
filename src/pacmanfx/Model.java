@@ -165,7 +165,7 @@ public class Model extends Application {
                     
                     if (currentLevel == 0){
                         initGame();
-                    }else{
+                    } else{
                         initLevel();
                     }
                 }
@@ -204,11 +204,20 @@ public class Model extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                checkMaze();
                 draw(g2d);
             }
         }.start();
 
         loadScene("login.fxml");
+    }
+    
+    public void setCurrentLevel(int currentLevel){
+        this.currentLevel = currentLevel;
+    }
+    
+    public void setInGame(boolean inGame){
+        this.inGame = inGame;
     }
     
     public Scene getGameScene() {
@@ -364,7 +373,6 @@ public class Model extends Application {
             characters[characterNo].drawPlayer(g2d);
             enemies[currentLevel].moveEnemy(g2d);
             phantom.moveEnemy(g2d);
-            checkMaze();
         }
     }
 
@@ -409,7 +417,13 @@ public class Model extends Application {
             inGame = false;
             initGame();
         }
-        continueLevel();
+        characters[characterNo].setPlayerX(8 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerDx(0);
+        characters[characterNo].setPlayerDy(0);
+        reqDx = 0;
+        reqDy = 0;
+        dying = false;        
     }
 
     public void initGame() {

@@ -27,7 +27,7 @@ public class PauseScreenController implements Initializable {
     private Button quit;
      private Model model;
      
-public void pause(Model model) {
+    public void pause(Model model) {
         this.model = model;
        
     }
@@ -49,6 +49,8 @@ public void pause(Model model) {
     }
    @FXML
     private void quit(ActionEvent event) {
+     model.setInGame(false);
+     model.setCurrentLevel(0);
      Scene introScene = model.getintroScene();
      model.setScene(introScene);
     }

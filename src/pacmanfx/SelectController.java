@@ -57,6 +57,7 @@ public class SelectController implements Initializable {
 
     @FXML
     public void startGame() {
+        model.setCurrentLevel(0);
         Scene gameScene = model.getGameScene();
         model.setScene(gameScene);
     }

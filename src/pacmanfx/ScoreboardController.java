@@ -65,8 +65,10 @@ public class ScoreboardController implements Initializable {
 
     @FXML
     private void quit(ActionEvent event) {
+        model.setInGame(false);
+        model.setCurrentLevel(0);
         Scene introScene = model.getintroScene();
-     model.setScene(introScene);
+        model.setScene(introScene);
     }
     
 
@@ -75,7 +77,4 @@ public class ScoreboardController implements Initializable {
         int readscore = model.getScore();
         score.setText(Integer.toString(readscore));
     }
-  
-   
-
 }
