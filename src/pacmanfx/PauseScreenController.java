@@ -49,9 +49,9 @@ public class PauseScreenController implements Initializable {
     }
    @FXML
     private void quit(ActionEvent event) {
-     model.setInGame(false);
-     model.setCurrentLevel(0);
-     Scene introScene = model.getintroScene();
-     model.setScene(introScene);
+        model.setInGame(false);
+        model.setCurrentLevel(0);
+        Scene introScene = model.getintroScene();
+        model.setScene(introScene);
     }
 }

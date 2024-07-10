@@ -162,6 +162,7 @@ class Knight implements Character{
             
             if ((ch & 64) != 0 && model.getActive()) {
                 model.setDying(true);
+                powerUp = false;
             }
 
             // Check if the requested direction is valid

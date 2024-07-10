@@ -25,14 +25,14 @@ public class ScoreboardController implements Initializable {
     private Model model;
     
   
-     private int characterNo;
+    private int characterNo;
 
     @FXML
     private Text score;
     @FXML
     private Text duration;
         public void scoreBoard(Model model) {
-        this.model = model;
+            this.model = model;
        
         updateScore();
     }
@@ -56,11 +56,11 @@ public class ScoreboardController implements Initializable {
     
     @FXML
     private void nextLevel(ActionEvent event) {
-      model.nextLevel();
-      Scene gameScene = model.getGameScene();
-      model.setScene(gameScene);
-      model.setshowScore(true);
-      model.setFinished(false);
+        model.nextLevel();
+        Scene gameScene = model.getGameScene();
+        model.setScene(gameScene);
+        model.setshowScore(true);
+        model.setFinished(false);
     }
 
     @FXML

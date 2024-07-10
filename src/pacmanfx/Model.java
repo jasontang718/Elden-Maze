@@ -204,7 +204,6 @@ public class Model extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                checkMaze();
                 draw(g2d);
             }
         }.start();
@@ -373,6 +372,7 @@ public class Model extends Application {
             characters[characterNo].drawPlayer(g2d);
             enemies[currentLevel].moveEnemy(g2d);
             phantom.moveEnemy(g2d);
+            checkMaze();
         }
     }
 
