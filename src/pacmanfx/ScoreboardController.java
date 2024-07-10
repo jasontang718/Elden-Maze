@@ -23,13 +23,17 @@ import javafx.scene.text.Text;
 public class ScoreboardController implements Initializable {
 
     private Model model;
-   
+    
+  
+     private int characterNo;
+
     @FXML
     private Text score;
     @FXML
     private Text duration;
         public void scoreBoard(Model model) {
         this.model = model;
+       
         updateScore();
     }
 
@@ -37,7 +41,12 @@ public class ScoreboardController implements Initializable {
     /**
      * Initializes the controller class.
      */
-  
+   public int getCharacterNo(){
+        return characterNo;
+    }
+     public void setCharacterNo(int characterNo){
+        this.characterNo = characterNo;
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -63,11 +72,7 @@ public class ScoreboardController implements Initializable {
 
     @FXML 
     private void updateScore(){
-        
-        
-        int readscore = characters[characterNo].getScore();
-        
-        
+        int readscore = model.getScore();
         score.setText(Integer.toString(readscore));
     }
   
