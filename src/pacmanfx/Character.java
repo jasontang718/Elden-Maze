@@ -11,6 +11,8 @@ import javafx.util.Duration;
 import javafx.scene.canvas.GraphicsContext;
 
 public interface Character {
+    int getScore();
+    void setScore(int score);
     void movePlayer();
     void drawPlayer(GraphicsContext g2d);
     int getLives();
@@ -59,6 +61,14 @@ class Knight implements Character{
         this.maze3 = new Maze3(model);
         
         mazes = new Maze[]{maze1, maze2, maze3};
+    }
+    
+    public int getScore(){
+        return score;
+    }
+    
+    public void setScore(int score) {
+        this.score = score;
     }
     
     public int getLives(){
@@ -139,7 +149,6 @@ class Knight implements Character{
                 // Pac-Man eats a dot
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
                 score++;
-                model.setScore(score);
                 model.playSound("gold.mp3");        
 
             }
@@ -147,7 +156,6 @@ class Knight implements Character{
             if ((ch & 32) != 0) {
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                model.setScore(score);
                 model.playSound("powerup.mp3");
                 checkPowerUp();
             }
@@ -314,6 +322,14 @@ class Assassin implements Character{
         mazes = new Maze[]{maze1, maze2, maze3};
     }
     
+    public int getScore(){
+        return score;
+    }
+    
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
     public int getLives(){
         return lives;
     }
@@ -392,7 +408,6 @@ class Assassin implements Character{
                 // Pac-Man eats a dot
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
                 score++;
-                model.setScore(score);
                 model.playSound("gold.mp3");        
 
             }
@@ -400,7 +415,6 @@ class Assassin implements Character{
             if ((ch & 32) != 0) {
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                model.setScore(score);
                 model.playSound("powerup.mp3");
                 checkPowerUp();
             }
@@ -570,6 +584,14 @@ class Mage implements Character{
         mazes = new Maze[]{maze1, maze2, maze3};
     }
     
+    public int getScore(){
+        return score;
+    }
+    
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
     public int getLives(){
         return lives;
     }
@@ -648,7 +670,6 @@ class Mage implements Character{
                 // Pac-Man eats a dot
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
                 score++;
-                model.setScore(score);
                 model.playSound("gold.mp3");        
 
             }
@@ -656,7 +677,6 @@ class Mage implements Character{
             if ((ch & 32) != 0) {
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                model.setScore(score);
                 model.playSound("powerup.mp3");
                 checkPowerUp();
             }

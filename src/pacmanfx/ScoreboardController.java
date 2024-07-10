@@ -63,7 +63,11 @@ public class ScoreboardController implements Initializable {
 
     @FXML 
     private void updateScore(){
-        int readscore = model.getScore();
+        
+        
+        int readscore = characters[characterNo].getScore();
+        
+        
         score.setText(Integer.toString(readscore));
     }
   

@@ -48,7 +48,6 @@ public class Model extends Application {
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
 
-    private int score = 0;
     private int currentLevel;
     private Timeline timer;
     
@@ -107,7 +106,7 @@ public class Model extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = loader.load();
 
         // Set the scene
@@ -255,9 +254,7 @@ public class Model extends Application {
     public short[] getScreenData() {
         return screenData;
     }
-    public int getScore(){
-        return score;
-    }
+
     public int getScreenHSize() {
         return screenHSize;
     }
@@ -268,10 +265,6 @@ public class Model extends Application {
     
     public int getScreenSize() {
         return screenSize;
-    }
-    
-    public void setScore(int score) {
-        this.score = score;
     }
     
     public int getReqDx() {
@@ -395,7 +388,7 @@ public class Model extends Application {
     private void drawScore(GraphicsContext g2d) {
         g2d.setFont(smallFont);
         g2d.setFill(Color.GREEN);
-        String scoreText = "Score: " + score;
+        String scoreText = "Score: " + characters[characterNo].getScore();
         double textWidth = smallFont.getSize() * scoreText.length() / 2;
         g2d.fillText(scoreText, screenHSize - textWidth - 10, screenVSize - 10);
 
@@ -406,7 +399,7 @@ public class Model extends Application {
         g2d.setFill(Color.GREEN);
         g2d.fillRect(100, screenVSize - 30, characters[characterNo].getStamina()/5, 10);
         g2d.setStroke(Color.BLACK);
-        g2d.strokeRect(100, screenVSize - 30, 100, 10);
+        g2d.strokeRect(100, screenVSize - 30, characters[characterNo].getStamina()/5, 10);
     }
 
    
@@ -427,6 +420,7 @@ public class Model extends Application {
 
     public void initLevel() {
         initVariables();
+        characters[characterNo].setScore(0);
         lives = characters[characterNo].getLives();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
         continueLevel();
@@ -475,7 +469,6 @@ public class Model extends Application {
         // If no coins are left, the level is completed
         if (finished && showscore) {
 
-            score += 50;
             scoreBoard();
 
             showscore = false;
@@ -632,30 +625,29 @@ public class Model extends Application {
         //volume.valueProperty().addListener((observable, oldValue, newValue) -> {
             //mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
         //});
-     private void handleMovement(KeyCode key) {
-    int speed = 2; // Default walking speed
-    
-    if (characters[characterNo].getRunning()) {
-        speed = 4; // Running speed
-    }
-    if (characters[characterNo].getSlowed()) {
-        speed = 1; // Slowed speed
-    }
-    
-    if (key.equals(moveRight)) {
-        reqDx = speed;
-        reqDy = 0;
-    } else if (key.equals(moveLeft)) {
-        reqDx = -speed;
-        reqDy = 0;
-    } else if (key.equals(moveUp)) {
-        reqDx = 0;
-        reqDy = -speed;
-    } else if (key.equals(moveDown)) {
-        reqDx = 0;
-        reqDy = speed;
+    private void handleMovement(KeyCode key) {
+        int speed = 2; // Default walking speed
+
+        if (characters[characterNo].getRunning()) {
+            speed = 4; // Running speed
+        }
+        if (characters[characterNo].getSlowed()) {
+            speed = 1; // Slowed speed
+        }
+
+        if (key.equals(moveRight)) {
+            reqDx = speed;
+            reqDy = 0;
+        } else if (key.equals(moveLeft)) {
+            reqDx = -speed;
+            reqDy = 0;
+        } else if (key.equals(moveUp)) {
+            reqDx = 0;
+            reqDy = -speed;
+        } else if (key.equals(moveDown)) {
+            reqDx = 0;
+            reqDy = speed;
+        }
     }
 }
-
-    }
     

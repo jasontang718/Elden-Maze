@@ -187,18 +187,13 @@ abstract class AbstractEnemy implements Enemy {
         }
     }
 
-    protected void removeEnemy(int index) {
-        int level = model.getCurrentLevel();
-        int enemyCount = mazes[level].getEnemyCount();
-        for (int i = index; i < enemyCount - 1; i++) {
-            enemyX[i] = enemyX[i + 1];
-            enemyY[i] = enemyY[i + 1];
-            enemyDx[i] = enemyDx[i + 1];
-            enemyDy[i] = enemyDy[i + 1];
-            enemySpeed[i] = enemySpeed[i + 1];
-        }
+    protected void removeEnemy(int i) {
+        enemyX[i] = -100;
+        enemyY[i] = -100;
+        enemyDx[i] = 0;
+        enemyDy[i] = 0;
+        enemySpeed[i] = 0;
         model.playSound("kill.mp3");
-        mazes[level].setEnemyCount(--enemyCount);
     }
 }
 
@@ -320,20 +315,13 @@ class Phantom extends AbstractEnemy{
         }
     }
     
-    public void removeEnemy(int index) {
-        int level = model.getCurrentLevel();
-        int enemyCount = mazes[level].getEnemyCount();
-        // Shift elements to the left to remove the ghost at indexToRemove
-        for (int i = index; i < mazes[level].getEnemyCount() - 1; i++) {
-            enemyX[i] = enemyX[i + 1];
-            enemyY[i] = enemyY[i + 1];
-            enemyDx[i] = enemyDx[i + 1];
-            enemyDy[i] = enemyDy[i + 1];
-            enemySpeed[i] = enemySpeed[i + 1];
-        }
+    public void removeEnemy(int i) {
+        enemyX[i] = -100;
+        enemyY[i] = -100;
+        enemyDx[i] = 0;
+        enemyDy[i] = 0;
+        enemySpeed[i] = 0;
         model.playSound("kill.mp3");
-        enemyCount--; // Decrease the count of ghosts
-        mazes[level].setEnemyCount(enemyCount);
     }
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
