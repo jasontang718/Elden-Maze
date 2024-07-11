@@ -17,7 +17,7 @@
             <Image url="@../images/scoreBg.jpg" />
          </image>
       </ImageView>
-      <Text layoutX="199.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard">
+      <Text fx:id="title" layoutX="199.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard">
          <font>
             <Font name="STFangsong" size="50.0" />
          </font>
@@ -69,7 +69,7 @@
             <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
          </font>
       </Text>
-      <Button layoutX="198.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" text="Next Level" />
+      <Button fx:id="button" layoutX="198.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" text="Next Level" />
       <Button layoutX="399.0" layoutY="284.0" mnemonicParsing="false" onAction="#quit" prefHeight="26.0" prefWidth="61.0" text="Exit" />
       <Text fx:id="score" fill="WHITE" layoutX="287.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="XX">
          <font>
