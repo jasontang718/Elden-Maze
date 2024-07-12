@@ -13,6 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -150,7 +152,11 @@ public class settingController implements Initializable {
             dos.writeUTF("volume");
             dos.writeDouble(value); // Write the volume value
             System.out.println("Writing volume: " + value);
-
+         Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Data Saved");
+            alert.setHeaderText(null);
+            alert.setContentText("Setting has been saved successfully!");
+              alert.showAndWait();
         } catch (IOException e) {
             System.err.println("Error saving data: " + e.getMessage());
             e.printStackTrace();
