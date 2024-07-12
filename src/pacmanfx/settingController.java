@@ -1,11 +1,12 @@
 package pacmanfx;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -47,85 +48,112 @@ public class settingController implements Initializable {
     }
 
     private void loadData() {
-        String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
-        // Initialize mediaPlayer
-        Media media = new Media(mediaUrl);
-        mediaPlayer = new MediaPlayer(media);
+    String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
+    // Initialize mediaPlayer
+    Media media = new Media(mediaUrl);
+    mediaPlayer = new MediaPlayer(media);
 
-        TextField[] keys = {rightKey, leftKey, upKey, downKey};
+    TextField[] keys = {rightKey, leftKey, upKey, downKey};
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("/Users/jasontang/Downloads/pacman/src/pacmanfx/data.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    String keyType = parts[0];
-                    String keyValue = parts[1];
-                    if (!keyType.equals("volume")) {
-                        keyMap.put(keyType, KeyCode.valueOf(keyValue));
-                        switch (keyType) {
-                            case "rightKey":
-                                rightKey.setText(keyValue);
-                                break;
-                            case "leftKey":
-                                leftKey.setText(keyValue);
-                                break;
-                            case "upKey":
-                                upKey.setText(keyValue);
-                                break;
-                            case "downKey":
-                                downKey.setText(keyValue);
-                                break;
-                        }
-                    } else {
-                        double savedVolume = Double.parseDouble(keyValue);
-                        volume.setValue(savedVolume);
-                        mediaPlayer.setVolume(savedVolume / 100.0);
-                    }
+    // Construct the file path relative to the current working directory
+    String filePath = "./src/pacmanfx/data.bin";
+    System.out.println("Loading data from: " + filePath);
+
+    try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
+        while (dis.available() > 0) {
+            String keyType = dis.readUTF();
+            if (!keyType.equals("volume")) {
+                String keyValue = dis.readUTF();
+                keyMap.put(keyType, KeyCode.valueOf(keyValue));
+                switch (keyType) {
+                    case "rightKey":
+                        rightKey.setText(keyValue);
+                        break;
+                    case "leftKey":
+                        leftKey.setText(keyValue);
+                        break;
+                    case "upKey":
+                        upKey.setText(keyValue);
+                        break;
+                    case "downKey":
+                        downKey.setText(keyValue);
+                        break;
                 }
+            } else {
+                double savedVolume = dis.readDouble();
+                volume.setValue(savedVolume);
+                mediaPlayer.setVolume(savedVolume / 100.0);
             }
-
-            if (rightKey.getText().isEmpty() && leftKey.getText().isEmpty() && upKey.getText().isEmpty() && downKey.getText().isEmpty()) {
-                rightKey.setText("D");
-                leftKey.setText("A");
-                upKey.setText("W");
-                downKey.setText("S");
-                saveData();
-            }
-
-        } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
         }
 
+        // If any key is empty, set default keys and save data
+        boolean anyKeyEmpty = false;
         for (TextField textField : keys) {
-            checkLength(textField, 1);
+            if (textField.getText().isEmpty()) {
+                anyKeyEmpty = true;
+                break;
+            }
         }
 
-        volume.valueProperty().addListener((observable, oldValue, newValue) -> {
-            mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
-        });
+        if (anyKeyEmpty) {
+            rightKey.setText("D");
+            leftKey.setText("A");
+            upKey.setText("W");
+            downKey.setText("S");
+            saveData(); // Save default keys
+        }
 
-        // Initial button state update
-        updateButtonState();
+    } catch (IOException | IllegalArgumentException e) {
+        System.err.println("Error loading data: " + e.getMessage());
+        e.printStackTrace();
+        
+
+        // Set default keys and volume on error
+        rightKey.setText("D");
+        leftKey.setText("A");
+        upKey.setText("W");
+        downKey.setText("S");
+        volume.setValue(50); // Default volume
+        mediaPlayer.setVolume(0.5); // Default volume
+        saveData(); // Save default keys and volume
     }
+
+    // Limit key length and update button state
+    for (TextField textField : keys) {
+        checkLength(textField, 1);
+    }
+
+    // Update media player volume based on slider
+    volume.valueProperty().addListener((observable, oldValue, newValue) -> {
+        mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+    });
+
+    // Initial button state update
+    updateButtonState();
+}
 
     private void saveData() {
         double value = volume.getValue();
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
-        String filePath = "data.txt";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        // Construct the file path relative to the current working directory
+             String filePath = "./src/pacmanfx/data.bin";
+        System.out.println("Saving data to: " + filePath);
+
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePath))) {
             for (TextField key : keys) {
-                String newKey = key.getText();
                 String keyType = key.getId();
-                writer.write(keyType + "," + newKey);
-                writer.newLine();
+                String keyValue = key.getText();
+                dos.writeUTF(keyType); // Write the key type
+                dos.writeUTF(keyValue); // Write the key value
+                System.out.println("Writing " + keyType + ": " + keyValue);
             }
-
-            writer.write("volume," + value);
-            writer.newLine();
+            dos.writeUTF("volume");
+            dos.writeDouble(value); // Write the volume value
+            System.out.println("Writing volume: " + value);
 
         } catch (IOException e) {
+            System.err.println("Error saving data: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -180,5 +208,6 @@ public class settingController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadData();
+        
     }
 }
