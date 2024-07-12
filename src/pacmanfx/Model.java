@@ -1,9 +1,8 @@
 package pacmanfx;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import static javafx.scene.input.KeyCode.ESCAPE;
@@ -487,7 +485,7 @@ public class Model extends Application {
 
 
         // If no coins are left, the level is completed
-        if (!finished && showscore) {
+        if (finished && showscore) {
 
             loadScene("scoreboard.fxml");
             showscore = false;
@@ -540,8 +538,6 @@ public class Model extends Application {
             }
 
     setScene(scene);
-
-
      
     
         } catch (IOException e) {
