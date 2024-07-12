@@ -1,6 +1,8 @@
 package pacmanfx;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -11,6 +13,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,6 +25,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import static javafx.scene.input.KeyCode.ESCAPE;
@@ -124,6 +128,7 @@ public class Model extends Application {
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
+         exitButton.setOnAction(e -> exitApplication());
             
 
         double width = 250;
@@ -548,52 +553,48 @@ public class Model extends Application {
      }
 
      private void loadData() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data.txt"))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(",");
-            if (parts.length == 2) {
-                String keyType = parts[0];
-                String keyValue = parts[1];
+    String filePath = "./src/pacmanfx/data.bin";
+    System.out.println("Loading data from: " + filePath);
 
-                if (!keyType.equals("volume")) {
-                    keyMap.put(keyType, KeyCode.valueOf(keyValue));
-                    System.out.println(keyType + ": " + KeyCode.valueOf(keyValue));
-                    
-                    switch (keyType) {
-                        case "rightKey":
-                            moveRight = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Right: " + moveRight);
-                            break;
-                        case "leftKey":
-                            moveLeft = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Left: " + moveLeft);
-                            break;
-                        case "upKey":
-                            moveUp = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Up: " + moveUp);
-                            break;
-                        case "downKey":
-                            moveDown = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Down: " + moveDown);
-                            break;
-                        default:
-                            System.out.println("Unknown key type: " + keyType);
-                            break;
-                    }
+    try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
+        while (dis.available() > 0) {
+            String keyType = dis.readUTF();
+            if (!keyType.equals("volume")) {
+                String keyValue = dis.readUTF();
+                switch (keyType) {
+                    case "rightKey":
+                        moveRight = KeyCode.valueOf(keyValue);
+                        break;
+                    case "leftKey":
+                        moveLeft = KeyCode.valueOf(keyValue);
+                        break;
+                    case "upKey":
+                        moveUp = KeyCode.valueOf(keyValue);
+                        break;
+                    case "downKey":
+                        moveDown = KeyCode.valueOf(keyValue);
+                        break;
+                    default:
+                        System.err.println("Unknown key type: " + keyType);
                 }
+            } else {
+                double savedVolume = dis.readDouble();
+                System.out.println("Volume found but not used in model: " + savedVolume);
             }
         }
-        // Default key bindings if not set in the file
+
+        // Initialize default keys if not found
         if (moveRight == null) moveRight = KeyCode.D;
         if (moveLeft == null) moveLeft = KeyCode.A;
         if (moveUp == null) moveUp = KeyCode.W;
         if (moveDown == null) moveDown = KeyCode.S;
 
+        System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", Up=" + moveUp + ", Down=" + moveDown);
+
     } catch (IOException | IllegalArgumentException e) {
+        System.err.println("Error loading data: " + e.getMessage());
         e.printStackTrace();
-        System.out.println("Error loading key bindings. Using default keys.");
-        // Set default key bindings in case of error
+        // Set default keys on error
         moveRight = KeyCode.D;
         moveLeft = KeyCode.A;
         moveUp = KeyCode.W;
@@ -601,8 +602,7 @@ public class Model extends Application {
     }
 }
 
-
-       
+    
         //volume.valueProperty().addListener((observable, oldValue, newValue) -> {
             //mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
         //});
@@ -629,6 +629,9 @@ public class Model extends Application {
             reqDx = 0;
             reqDy = speed;
         }
+    }
+    public void exitApplication(){
+        Platform.exit();
     }
 }
     
