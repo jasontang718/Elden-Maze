@@ -138,8 +138,8 @@ public class settingController implements Initializable {
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
 
         // Construct the file path relative to the current working directory
-             String filePath = "./src/pacmanfx/data.bin";
-        System.out.println("Saving data to: " + filePath);
+        String filePath = "./src/pacmanfx/data.bin";
+       
 
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePath))) {
             for (TextField key : keys) {
