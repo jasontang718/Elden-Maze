@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -39,6 +40,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -485,7 +487,7 @@ public class Model extends Application {
 
 
         // If no coins are left, the level is completed
-        if (finished && showscore) {
+        if (!finished && showscore) {
 
             loadScene("scoreboard.fxml");
             showscore = false;
@@ -549,8 +551,22 @@ public class Model extends Application {
      public void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();
-         
-     }
+         stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
+         stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
+}
+
+private void centerStage() {
+    // Get primary screen bounds
+    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+ 
+    // Compute the center position
+    double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
+    double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+
+    // Set the position
+    stage.setX(centerXPosition);
+    stage.setY(centerYPosition);
+}
 
      private void loadData() {
     String filePath = "./src/pacmanfx/data.bin";
