@@ -164,25 +164,35 @@ public class settingController implements Initializable {
         model.setScene(scene);
     }
 
-    private void checkLength(TextField textField, int maxLength) {
-        textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
-            String character = event.getCharacter();
-            boolean isAlphabetic = character.matches("[a-zA-Z]");
+  private void checkLength(TextField textField, int maxLength) {
+    textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+        String character = event.getCharacter().toUpperCase(); // Convert to uppercase
+        boolean isAlphabetic = character.matches("[a-zA-Z]");
 
-            String currentText = textField.getText();
-            String newText = currentText + event.getCharacter();
-            if (newText.length() > maxLength || isDuplicateKey(newText, textField) || !isAlphabetic) {
-                textField.clear();
-                event.consume();
-            }
+        String currentText = textField.getText();
+        String newText = currentText + character;
 
-            updateButtonState();
-        });
+        if (newText.length() > maxLength || isDuplicateKey(newText, textField) || !isAlphabetic) {
+            event.consume();
+        } else {
+            textField.setText(newText); // Set text to uppercase
+            textField.positionCaret(newText.length()); // Move caret to the end
+            event.consume();
+        }
 
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateButtonState();
-        });
-    }
+        updateButtonState();
+    });
+
+    textField.textProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue.length() > maxLength) {
+            textField.setText(newValue.substring(0, maxLength).toUpperCase()); // Truncate and convert to uppercase
+        } else {
+            textField.setText(newValue.toUpperCase()); // Convert to uppercase
+        }
+        updateButtonState();
+    });
+}
+
 
     private boolean isDuplicateKey(String newKey, TextField currentTextField) {
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
