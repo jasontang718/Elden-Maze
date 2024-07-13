@@ -31,8 +31,6 @@ public class ScoreboardController implements Initializable {
     @FXML
     private Text score;
     @FXML
-    private Text duration;
-    @FXML
     private Text title;
     @FXML
     private Button button;
@@ -64,8 +62,7 @@ public class ScoreboardController implements Initializable {
       model.nextLevel();
       Scene gameScene = model.getGameScene();
       model.setScene(gameScene);
-      model.setshowScore(true);
-      model.setFinished(false);
+   
     }
 
     @FXML

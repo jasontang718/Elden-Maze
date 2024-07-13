@@ -1,7 +1,8 @@
 package pacmanfx;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -11,11 +12,13 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -35,6 +38,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -42,18 +46,25 @@ public class Model extends Application {
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
     private boolean dying = false;
-    private boolean showscore = true; // Class-level variable
+    private boolean showScore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
 
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
 
-    private int currentLevel;
+    private int currentLevel = 0;
     private Timeline timer;
     
-    public Image heart, spiderImage, floor3, floor2, coin, sword, blinded;
-    public Image up, down, left, right, enhanced, background, assassinImage, skeletonImage, fire, spike;
+    public Image mazeFloor1, mazeWall1, mazeFloor2, mazeWall2, mazeFloor3, mazeWall3;
 
+    public Image heart, coin, powerOrb, blinded, frozen;
+    public Image spiderImage, skeletonImage, goblinImage, fire, spike;
+    public Image knightUp, knightDown, knightLeft, knightRight, powerKnightUp, powerKnightDown, powerKnightLeft, powerKnightRight, background, assassinImage;
+    public Image assassinUp, assassinDown, assassinLeft, assassinRight, powerAssassinUp, powerAssassinDown, powerAssassinLeft, powerAssassinRight;
+    public Image mageUp, mageDown, mageLeft, mageRight, powerMage;
+
+    
+    
     private int reqDx = 0;
     private int reqDy = 0;
    
@@ -124,6 +135,7 @@ public class Model extends Application {
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
+         exitButton.setOnAction(e -> exitApplication());
             
 
         double width = 250;
@@ -244,8 +256,8 @@ public class Model extends Application {
         this.dying = dying;
     }
     
-    public void setshowScore(boolean showscore){
-        this.showscore = showscore;
+    public void setshowScore(boolean showScore){
+        this.showScore = showScore;
     }
     
     public void setFinished(boolean finished){
@@ -292,18 +304,40 @@ public class Model extends Application {
     }
     
     public void loadImages() {
-        blinded = new Image(getClass().getResourceAsStream("/images/blinded.png"),4000,2247,false,false);        
-        down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
-        up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
-        left = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
-        right = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
+        blinded = new Image(getClass().getResourceAsStream("/images/blinded.png"),4000,2247,false,false);    
+        frozen = new Image(getClass().getResourceAsStream("/images/frozen.png"),screenHSize,screenVSize,false,false);    
+        
+        knightDown = new Image(getClass().getResourceAsStream("/images/knightDown.gif"));
+        knightUp = new Image(getClass().getResourceAsStream("/images/knightUp.gif"));
+        knightLeft = new Image(getClass().getResourceAsStream("/images/knightLeft.gif"));
+        knightRight = new Image(getClass().getResourceAsStream("/images/knightRight.gif"));
+        
+        assassinDown = new Image(getClass().getResourceAsStream("/images/assassinDown.gif"));
+        assassinUp = new Image(getClass().getResourceAsStream("/images/assassinUp.gif"));
+        assassinLeft = new Image(getClass().getResourceAsStream("/images/assassinLeft.gif"));
+        assassinRight = new Image(getClass().getResourceAsStream("/images/assassinRight.gif"));
+        
+        mageDown = new Image(getClass().getResourceAsStream("/images/mageDown.gif"));
+        mageUp = new Image(getClass().getResourceAsStream("/images/mageUp.gif"));
+        mageLeft = new Image(getClass().getResourceAsStream("/images/mageLeft.gif"));
+        mageRight = new Image(getClass().getResourceAsStream("/images/mageRight.gif"));
+        powerMage = new Image(getClass().getResourceAsStream("/images/powerMage.gif"));
+        
         spiderImage = new Image(getClass().getResourceAsStream("/images/spider.gif"));
         heart = new Image(getClass().getResourceAsStream("/images/heart.png"));
-        floor3 = new Image(getClass().getResourceAsStream("/images/floor3.jpg"));
-        floor2 = new Image(getClass().getResourceAsStream("/images/floor2.jpg"));
+        
+        mazeFloor1 = new Image(getClass().getResourceAsStream("/images/floor3.jpg"));        
+        mazeFloor2 = new Image(getClass().getResourceAsStream("/images/dark-red.png"));
+        mazeFloor3 = new Image(getClass().getResourceAsStream("/images/sand.jpg"));
+        
+        mazeWall1 = new Image(getClass().getResourceAsStream("/images/floor2.jpg"));
+        mazeWall2 = new Image(getClass().getResourceAsStream("/images/nether-brick.png"));
+        mazeWall3 = new Image(getClass().getResourceAsStream("/images/mossyDirt.png"));
+        
+        
         coin = new Image(getClass().getResourceAsStream("/images/coin.gif"));
-        sword = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
-        enhanced = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
+        powerOrb = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
+        powerKnightUp = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
         background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
         assassinImage = new Image(getClass().getResourceAsStream("/images/assassindown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/skeleton.gif"));
@@ -361,6 +395,8 @@ public class Model extends Application {
         phantom.setEnemySpeed(new int[MAX_ENEMY]);
         phantom.setDx(new int[4]);
         phantom.setDy(new int[4]);
+        showScore = true;
+        finished = false;
     }
 
     private void playGame(GraphicsContext g2d) {
@@ -417,8 +453,8 @@ public class Model extends Application {
             inGame = false;
             initGame();
         }
-        characters[characterNo].setPlayerX(8 * BLOCK_SIZE);
-        characters[characterNo].setPlayerY(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
         characters[characterNo].setPlayerDy(0);
         reqDx = 0;
@@ -444,12 +480,12 @@ public class Model extends Application {
         int dx = 1;
 
         for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
-            enemies[currentLevel].setEnemyY(i, 4 * BLOCK_SIZE);
-            enemies[currentLevel].setEnemyX(i, 4 * BLOCK_SIZE);
+            enemies[currentLevel].setEnemyY(i, 1 * BLOCK_SIZE);
+            enemies[currentLevel].setEnemyX(i, 1 * BLOCK_SIZE);
             enemies[currentLevel].setEnemyDy(i,0);
             enemies[currentLevel].setEnemyDx(i, dx);
-            phantom.setEnemyY(i, 4 * BLOCK_SIZE);
-            phantom.setEnemyX(i, 4 * BLOCK_SIZE);
+            phantom.setEnemyY(i, 22 * BLOCK_SIZE);
+            phantom.setEnemyX(i, 23 * BLOCK_SIZE);
             phantom.setEnemyDy(i,0);
             phantom.setEnemyDx(i, dx);
 
@@ -459,8 +495,8 @@ public class Model extends Application {
             phantom.setEnemySpeed(i, validSpeed);
         }
 
-        characters[characterNo].setPlayerX(8 * BLOCK_SIZE);
-        characters[characterNo].setPlayerY(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
         characters[characterNo].setPlayerDy(0);
         reqDx = 0;
@@ -481,10 +517,10 @@ public class Model extends Application {
 
 
         // If no coins are left, the level is completed
-        if (finished && showscore) {
+        if (finished && showScore) {
 
             loadScene("scoreboard.fxml");
-            showscore = false;
+            showScore = false;
         }
     }
 
@@ -497,7 +533,16 @@ public class Model extends Application {
         initLevel();
     }
     private void draw(GraphicsContext g2d) {
-        g2d.drawImage(floor3, 0, 0, screenHSize, screenVSize);
+        if (currentLevel == 0){
+            g2d.drawImage(mazeFloor1, 0, 0, screenHSize, screenVSize);            
+        }
+        else if (currentLevel == 1){
+            g2d.drawImage(mazeFloor2, 0, 0, screenHSize, screenVSize);            
+        }
+        else if (currentLevel == 2){
+            g2d.drawImage(mazeFloor3, 0, 0, screenHSize, screenVSize);                    
+        }
+        
         mazes[currentLevel].drawMaze(g2d);
         drawScore(g2d);
 
@@ -507,7 +552,8 @@ public class Model extends Application {
         } else {
             showStartingText(g2d);
         }
-    }@FXML
+    }
+    @FXML
     public void loadScene(String file) {
         loadData();
         try {
@@ -533,8 +579,6 @@ public class Model extends Application {
             }
 
     setScene(scene);
-
-
      
     
         } catch (IOException e) {
@@ -544,56 +588,67 @@ public class Model extends Application {
      public void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();
-         
-     }
+         stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
+         stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
+             centerStage();
+}
+
+private void centerStage() {
+    // Get primary screen bounds
+    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+ 
+    // Compute the center position
+    double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
+    double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+
+    // Set the position
+    stage.setX(centerXPosition);
+    stage.setY(centerYPosition);
+}
 
      private void loadData() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data.txt"))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(",");
-            if (parts.length == 2) {
-                String keyType = parts[0];
-                String keyValue = parts[1];
+    String filePath = "./src/pacmanfx/data.bin";
+    System.out.println("Loading data from: " + filePath);
 
-                if (!keyType.equals("volume")) {
-                    keyMap.put(keyType, KeyCode.valueOf(keyValue));
-                    System.out.println(keyType + ": " + KeyCode.valueOf(keyValue));
-                    
-                    switch (keyType) {
-                        case "rightKey":
-                            moveRight = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Right: " + moveRight);
-                            break;
-                        case "leftKey":
-                            moveLeft = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Left: " + moveLeft);
-                            break;
-                        case "upKey":
-                            moveUp = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Up: " + moveUp);
-                            break;
-                        case "downKey":
-                            moveDown = KeyCode.valueOf(keyValue);
-                            System.out.println("Move Down: " + moveDown);
-                            break;
-                        default:
-                            System.out.println("Unknown key type: " + keyType);
-                            break;
-                    }
+    try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
+        while (dis.available() > 0) {
+            String keyType = dis.readUTF();
+            if (!keyType.equals("volume")) {
+                String keyValue = dis.readUTF();
+                switch (keyType) {
+                    case "rightKey":
+                        moveRight = KeyCode.valueOf(keyValue);
+                        break;
+                    case "leftKey":
+                        moveLeft = KeyCode.valueOf(keyValue);
+                        break;
+                    case "upKey":
+                        moveUp = KeyCode.valueOf(keyValue);
+                        break;
+                    case "downKey":
+                        moveDown = KeyCode.valueOf(keyValue);
+                        break;
+                    default:
+                        System.err.println("Unknown key type: " + keyType);
                 }
+            } else {
+                double savedVolume = dis.readDouble();
+                System.out.println("Volume found but not used in model: " + savedVolume);
             }
         }
-        // Default key bindings if not set in the file
+
+        // Initialize default keys if not found
         if (moveRight == null) moveRight = KeyCode.D;
         if (moveLeft == null) moveLeft = KeyCode.A;
         if (moveUp == null) moveUp = KeyCode.W;
         if (moveDown == null) moveDown = KeyCode.S;
 
+        System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", Up=" + moveUp + ", Down=" + moveDown);
+
     } catch (IOException | IllegalArgumentException e) {
+        System.err.println("Error loading data: " + e.getMessage());
         e.printStackTrace();
-        System.out.println("Error loading key bindings. Using default keys.");
-        // Set default key bindings in case of error
+        // Set default keys on error
         moveRight = KeyCode.D;
         moveLeft = KeyCode.A;
         moveUp = KeyCode.W;
@@ -601,8 +656,7 @@ public class Model extends Application {
     }
 }
 
-
-       
+    
         //volume.valueProperty().addListener((observable, oldValue, newValue) -> {
             //mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
         //});
@@ -629,6 +683,9 @@ public class Model extends Application {
             reqDx = 0;
             reqDy = speed;
         }
+    }
+    public void exitApplication(){
+        Platform.exit();
     }
 }
     

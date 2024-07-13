@@ -147,7 +147,7 @@ class Knight implements Character{
 
             if ((ch & 16) != 0) {
                 // Pac-Man eats a dot
-                model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
+                model.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
                 model.playSound("gold.mp3");        
 
@@ -196,24 +196,24 @@ class Knight implements Character{
         
         if (!powerUp) {
             if (reqDx <= -1) {
-                g2d.drawImage(model.left, playerX, playerY);
+                g2d.drawImage(model.knightLeft, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.right, playerX, playerY);
+                g2d.drawImage(model.knightRight, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.up, playerX, playerY);
+                g2d.drawImage(model.knightUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.down, playerX, playerY);
+                g2d.drawImage(model.knightDown, playerX, playerY);
             }
         }
         else {
             if (reqDx <= -1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
@@ -456,24 +456,24 @@ class Assassin implements Character{
         
         if (!powerUp) {
             if (reqDx <= -1) {
-                g2d.drawImage(model.assassinImage, playerX, playerY);
+                g2d.drawImage(model.assassinLeft, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.assassinImage, playerX, playerY);
+                g2d.drawImage(model.assassinRight, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.assassinImage, playerX, playerY);
+                g2d.drawImage(model.assassinUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.assassinImage, playerX, playerY);
+                g2d.drawImage(model.assassinDown, playerX, playerY);
             }
         }
         else {
             if (reqDx <= -1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
@@ -717,24 +717,25 @@ class Mage implements Character{
         
         if (!powerUp) {
             if (reqDx <= -1) {
-                g2d.drawImage(model.spiderImage, playerX, playerY);
+                g2d.drawImage(model.mageLeft, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.spiderImage, playerX, playerY);
+                g2d.drawImage(model.mageRight, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.spiderImage, playerX, playerY);
+                g2d.drawImage(model.mageUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.spiderImage, playerX, playerY);
+                g2d.drawImage(model.mageDown, playerX, playerY);
             }
         }
         else {
+            g2d.drawImage(model.frozen, 0, 0);
             if (reqDx <= -1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.enhanced, playerX, playerY);
+                g2d.drawImage(model.powerKnightUp, playerX, playerY);
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
