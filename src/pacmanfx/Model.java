@@ -52,12 +52,19 @@ public class Model extends Application {
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
 
-    private int currentLevel;
+    private int currentLevel = 0;
     private Timeline timer;
     
-    public Image heart, spiderImage, floor3, floor2, coin, sword, blinded;
-    public Image up, down, left, right, enhanced, background, assassinImage, skeletonImage, fire, spike;
+    public Image mazeFloor1, mazeWall1, mazeFloor2, mazeWall2, mazeFloor3, mazeWall3;
 
+    public Image heart, coin, powerOrb, blinded, frozen;
+    public Image spiderImage, skeletonImage, goblinImage, fire, spike;
+    public Image knightUp, knightDown, knightLeft, knightRight, powerKnightUp, powerKnightDown, powerKnightLeft, powerKnightRight, background, assassinImage;
+    public Image assassinUp, assassinDown, assassinLeft, assassinRight, powerAssassinUp, powerAssassinDown, powerAssassinLeft, powerAssassinRight;
+    public Image mageUp, mageDown, mageLeft, mageRight, powerMage;
+
+    
+    
     private int reqDx = 0;
     private int reqDy = 0;
    
@@ -297,18 +304,40 @@ public class Model extends Application {
     }
     
     public void loadImages() {
-        blinded = new Image(getClass().getResourceAsStream("/images/blinded.png"),4000,2247,false,false);        
-        down = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
-        up = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
-        left = new Image(getClass().getResourceAsStream("/images/knightleft.gif"));
-        right = new Image(getClass().getResourceAsStream("/images/knightright.gif"));
+        blinded = new Image(getClass().getResourceAsStream("/images/blinded.png"),4000,2247,false,false);    
+        frozen = new Image(getClass().getResourceAsStream("/images/frozen.png"),screenHSize,screenVSize,false,false);    
+        
+        knightDown = new Image(getClass().getResourceAsStream("/images/knightDown.gif"));
+        knightUp = new Image(getClass().getResourceAsStream("/images/knightUp.gif"));
+        knightLeft = new Image(getClass().getResourceAsStream("/images/knightLeft.gif"));
+        knightRight = new Image(getClass().getResourceAsStream("/images/knightRight.gif"));
+        
+        assassinDown = new Image(getClass().getResourceAsStream("/images/assassinDown.gif"));
+        assassinUp = new Image(getClass().getResourceAsStream("/images/assassinUp.gif"));
+        assassinLeft = new Image(getClass().getResourceAsStream("/images/assassinLeft.gif"));
+        assassinRight = new Image(getClass().getResourceAsStream("/images/assassinRight.gif"));
+        
+        mageDown = new Image(getClass().getResourceAsStream("/images/mageDown.gif"));
+        mageUp = new Image(getClass().getResourceAsStream("/images/mageUp.gif"));
+        mageLeft = new Image(getClass().getResourceAsStream("/images/mageLeft.gif"));
+        mageRight = new Image(getClass().getResourceAsStream("/images/mageRight.gif"));
+        powerMage = new Image(getClass().getResourceAsStream("/images/powerMage.gif"));
+        
         spiderImage = new Image(getClass().getResourceAsStream("/images/spider.gif"));
         heart = new Image(getClass().getResourceAsStream("/images/heart.png"));
-        floor3 = new Image(getClass().getResourceAsStream("/images/floor3.jpg"));
-        floor2 = new Image(getClass().getResourceAsStream("/images/floor2.jpg"));
+        
+        mazeFloor1 = new Image(getClass().getResourceAsStream("/images/floor3.jpg"));        
+        mazeFloor2 = new Image(getClass().getResourceAsStream("/images/dark-red.png"));
+        mazeFloor3 = new Image(getClass().getResourceAsStream("/images/sand.jpg"));
+        
+        mazeWall1 = new Image(getClass().getResourceAsStream("/images/floor2.jpg"));
+        mazeWall2 = new Image(getClass().getResourceAsStream("/images/nether-brick.png"));
+        mazeWall3 = new Image(getClass().getResourceAsStream("/images/mossyDirt.png"));
+        
+        
         coin = new Image(getClass().getResourceAsStream("/images/coin.gif"));
-        sword = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
-        enhanced = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
+        powerOrb = new Image(getClass().getResourceAsStream("/images/powerup.gif"));
+        powerKnightUp = new Image(getClass().getResourceAsStream("/images/powerupPlayer.gif"));
         background = new Image(getClass().getResourceAsStream("/images/background.jpg"));
         assassinImage = new Image(getClass().getResourceAsStream("/images/assassindown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/skeleton.gif"));
@@ -424,8 +453,8 @@ public class Model extends Application {
             inGame = false;
             initGame();
         }
-        characters[characterNo].setPlayerX(8 * BLOCK_SIZE);
-        characters[characterNo].setPlayerY(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
         characters[characterNo].setPlayerDy(0);
         reqDx = 0;
@@ -450,12 +479,12 @@ public class Model extends Application {
         int dx = 1;
 
         for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
-            enemies[currentLevel].setEnemyY(i, 4 * BLOCK_SIZE);
-            enemies[currentLevel].setEnemyX(i, 4 * BLOCK_SIZE);
+            enemies[currentLevel].setEnemyY(i, 1 * BLOCK_SIZE);
+            enemies[currentLevel].setEnemyX(i, 1 * BLOCK_SIZE);
             enemies[currentLevel].setEnemyDy(i,0);
             enemies[currentLevel].setEnemyDx(i, dx);
-            phantom.setEnemyY(i, 4 * BLOCK_SIZE);
-            phantom.setEnemyX(i, 4 * BLOCK_SIZE);
+            phantom.setEnemyY(i, 22 * BLOCK_SIZE);
+            phantom.setEnemyX(i, 23 * BLOCK_SIZE);
             phantom.setEnemyDy(i,0);
             phantom.setEnemyDx(i, dx);
 
@@ -465,8 +494,8 @@ public class Model extends Application {
             phantom.setEnemySpeed(i, validSpeed);
         }
 
-        characters[characterNo].setPlayerX(8 * BLOCK_SIZE);
-        characters[characterNo].setPlayerY(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
         characters[characterNo].setPlayerDy(0);
         reqDx = 0;
@@ -487,7 +516,7 @@ public class Model extends Application {
 
 
         // If no coins are left, the level is completed
-        if (!finished && showScore) {
+        if (finished && showScore) {
 
             loadScene("scoreboard.fxml");
             showScore = false;
@@ -504,7 +533,16 @@ public class Model extends Application {
         initLevel();
     }
     private void draw(GraphicsContext g2d) {
-        g2d.drawImage(floor3, 0, 0, screenHSize, screenVSize);
+        if (currentLevel == 0){
+            g2d.drawImage(mazeFloor1, 0, 0, screenHSize, screenVSize);            
+        }
+        else if (currentLevel == 1){
+            g2d.drawImage(mazeFloor2, 0, 0, screenHSize, screenVSize);            
+        }
+        else if (currentLevel == 2){
+            g2d.drawImage(mazeFloor3, 0, 0, screenHSize, screenVSize);                    
+        }
+        
         mazes[currentLevel].drawMaze(g2d);
         drawScore(g2d);
 
@@ -514,7 +552,8 @@ public class Model extends Application {
         } else {
             showStartingText(g2d);
         }
-    }@FXML
+    }
+    @FXML
     public void loadScene(String file) {
         loadData();
         try {
