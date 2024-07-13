@@ -489,7 +489,6 @@ public class Model extends Application {
     }
 
     public void nextLevel(){
-       
         currentLevel ++;
         
         if (currentLevel >= mazes.length) {
