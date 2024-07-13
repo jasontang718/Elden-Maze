@@ -46,7 +46,7 @@ public class Model extends Application {
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
     private boolean dying = false;
-    private boolean showscore = true; // Class-level variable
+    private boolean showScore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
 
     private static final int MAX_ENEMY = 12;
@@ -249,8 +249,8 @@ public class Model extends Application {
         this.dying = dying;
     }
     
-    public void setshowScore(boolean showscore){
-        this.showscore = showscore;
+    public void setshowScore(boolean showScore){
+        this.showScore = showScore;
     }
     
     public void setFinished(boolean finished){
@@ -366,6 +366,8 @@ public class Model extends Application {
         phantom.setEnemySpeed(new int[MAX_ENEMY]);
         phantom.setDx(new int[4]);
         phantom.setDy(new int[4]);
+        showScore = true;
+        finished = false;
     }
 
     private void playGame(GraphicsContext g2d) {
@@ -485,10 +487,10 @@ public class Model extends Application {
 
 
         // If no coins are left, the level is completed
-        if (finished && showscore) {
+        if (!finished && showScore) {
 
             loadScene("scoreboard.fxml");
-            showscore = false;
+            showScore = false;
         }
     }
 
@@ -549,6 +551,7 @@ public class Model extends Application {
          stage.show();
          stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
          stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
+             centerStage();
 }
 
 private void centerStage() {
