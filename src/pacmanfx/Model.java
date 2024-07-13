@@ -468,7 +468,6 @@ public class Model extends Application {
     }
 
     public void initLevel() {
-        showscore = true;
         initVariables();
         characters[characterNo].setScore(0);
         lives = characters[characterNo].getLives();
