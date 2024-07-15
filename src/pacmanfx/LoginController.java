@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
@@ -25,9 +26,7 @@ public class LoginController implements Initializable {
     @FXML
     private TextField username;
     @FXML
-    private TextField password;
-    @FXML
-    private Button login;
+    private PasswordField password;
     private Model model;
     /**
      * Initializes the controller class.
@@ -35,7 +34,6 @@ public class LoginController implements Initializable {
      public void login(Model model) {
         this.model = model;
     }
-     @FXML
      private void handleLogin() {
         Scene introScene = model.getintroScene();
         String user = username.getText().trim();
@@ -47,7 +45,6 @@ public class LoginController implements Initializable {
             model.setScene(introScene);
         } 
     }
-      @FXML
     private void handleManualLogin() {
         String user = username.getText().trim();
         String pass = password.getText().trim();
