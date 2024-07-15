@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -20,7 +21,6 @@
          </font>
       </Text>
       <TextField fx:id="username" layoutX="225.0" layoutY="207.0" />
-      <TextField fx:id="password" layoutX="226.0" layoutY="262.0" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <Text layoutX="222.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Username">
          <font>
@@ -32,5 +32,6 @@
             <Font name="Serif Regular" size="16.0" />
          </font>
       </Text>
+      <PasswordField fx:id="password" layoutX="225.0" layoutY="266.0" />
    </children>
 </AnchorPane>
