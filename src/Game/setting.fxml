@@ -11,11 +11,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="387.0" prefWidth="496.0" style="-fx-background-image: url(&quot;/images/background.jpg);;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pacmanfx.settingController">
+<AnchorPane id="AnchorPane" prefHeight="387.0" prefWidth="496.0" style="-fx-background-image: url(&quot;/images/background.jpg);;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.settingController">
     <children>
       <ImageView fitHeight="395.0" fitWidth="500.0" opacity="0.6" pickOnBounds="true">
          <image>
-            <Image url="@../images/background.jpg" />
+            <Image url="@../images/maze/background.jpg" />
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccd5dd" height="24.0" layoutX="223.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="140.0" />

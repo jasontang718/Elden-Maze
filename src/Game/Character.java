@@ -1,4 +1,4 @@
-package pacmanfx;
+package Game;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -37,7 +37,7 @@ public interface Character {
 
 
 class Knight implements Character{
-    private Model model;
+    private Controller controller;
     private Maze1 maze1;
     private Maze2 maze2;
     private Maze3 maze3;
@@ -53,12 +53,12 @@ class Knight implements Character{
     private boolean powerUp = false;
     private boolean slowed = false;
 
-    // Constructor to receive Model instance
-    public Knight(Model model) {
-        this.model = model;
-        this.maze1 = new Maze1(model);
-        this.maze2 = new Maze2(model);
-        this.maze3 = new Maze3(model);
+    // Constructor to receive Controller instance
+    public Knight(Controller controller) {
+        this.controller = controller;
+        this.maze1 = new Maze1(controller);
+        this.maze2 = new Maze2(controller);
+        this.maze3 = new Maze3(controller);
         
         mazes = new Maze[]{maze1, maze2, maze3};
     }
@@ -136,32 +136,32 @@ class Knight implements Character{
    public void movePlayer() {
         int pos;
         short ch;
-        int BLOCK_SIZE = model.getBlockSize();
-        int reqDx = model.getReqDx();
-        int reqDy = model.getReqDy();
-        int level = model.getCurrentLevel();
+        int BLOCK_SIZE = controller.getBlockSize();
+        int reqDx = controller.getReqDx();
+        int reqDy = controller.getReqDy();
+        int level = controller.getCurrentLevel();
         
         if (playerX % BLOCK_SIZE == 0 && playerY % BLOCK_SIZE == 0) {
             pos = playerX / BLOCK_SIZE + mazes[level].getHBlocks() * (playerY / BLOCK_SIZE);
-            ch = model.getScreenData()[pos];
+            ch = controller.getScreenData()[pos];
 
             if ((ch & 16) != 0) {
                 // Pac-Man eats a dot
-                model.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
+                controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
-                model.playSound("gold.mp3");        
+                controller.playSound("gold.mp3");        
 
             }
 
             if ((ch & 32) != 0) {
-                model.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
+                controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                model.playSound("powerup.mp3");
+                controller.playSound("powerup.mp3");
                 checkPowerUp();
             }
             
-            if ((ch & 64) != 0 && model.getActive()) {
-                model.setDying(true);
+            if ((ch & 64) != 0 && controller.getActive()) {
+                controller.setDying(true);
                 powerUp = false;
             }
 
@@ -191,39 +191,39 @@ class Knight implements Character{
     }
     
     public void drawPlayer(GraphicsContext g2d) {
-        int reqDx = model.getReqDx();
-        int reqDy = model.getReqDy();
+        int reqDx = controller.getReqDx();
+        int reqDy = controller.getReqDy();
         
         if (!powerUp) {
             if (reqDx <= -1) {
-                g2d.drawImage(model.knightLeft, playerX, playerY);
+                g2d.drawImage(controller.knightLeft, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.knightRight, playerX, playerY);
+                g2d.drawImage(controller.knightRight, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.knightUp, playerX, playerY);
+                g2d.drawImage(controller.knightUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.knightDown, playerX, playerY);
+                g2d.drawImage(controller.knightDown, playerX, playerY);
             }
         }
         else {
             if (reqDx <= -1) {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
             } else {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
-            int imageWidth = (int) model.blinded.getWidth();  // Assuming getWidth() gives the width of the image
-            int imageHeight = (int) model.blinded.getHeight(); // Assuming getHeight() gives the height of the image
+            int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
+            int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
 
             int drawX = playerX - (imageWidth / 2);  // Center horizontally
             int drawY = playerY - (imageHeight / 2); // Center vertically
 
-            g2d.drawImage(model.blinded, drawX + 15, drawY + 20);
+            g2d.drawImage(controller.blinded, drawX + 15, drawY + 20);
         }
     }
 
@@ -297,7 +297,7 @@ class Knight implements Character{
 }
 
 class Assassin implements Character{
-    private Model model;
+    private Controller model;
     private Maze1 maze1;
     private Maze2 maze2;
     private Maze3 maze3;
@@ -313,8 +313,8 @@ class Assassin implements Character{
     private boolean powerUp = false;
     private boolean slowed = false;
 
-    // Constructor to receive Model instance
-    public Assassin(Model model) {
+    // Constructor to receive Controller instance
+    public Assassin(Controller model) {
         this.model = model;
         this.maze1 = new Maze1(model);
         this.maze2 = new Maze2(model);
@@ -559,7 +559,7 @@ class Assassin implements Character{
 }
 
 class Mage implements Character{
-    private Model model;
+    private Controller model;
     private Maze1 maze1;
     private Maze2 maze2;
     private Maze3 maze3;
@@ -575,8 +575,8 @@ class Mage implements Character{
     private boolean powerUp = false;
     private boolean slowed = false;
 
-    // Constructor to receive Model instance
-    public Mage(Model model) {
+    // Constructor to receive Controller instance
+    public Mage(Controller model) {
         this.model = model;
         this.maze1 = new Maze1(model);
         this.maze2 = new Maze2(model);

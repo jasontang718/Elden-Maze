@@ -1,4 +1,4 @@
-package pacmanfx;
+package Game;
 
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -19,7 +19,7 @@ public class SelectController implements Initializable {
     @FXML
     private Text title;
 
-    private Model model; // Reference to the model
+    private Controller controller; // Reference to the model
 
     @FXML
     private ImageView assasin;
@@ -38,8 +38,8 @@ public class SelectController implements Initializable {
     private ImageView currentlyZoomedImageView = null;
     private Rectangle currentlyZoomedShape = null;
 
-    public void select(Model model) {
-        this.model = model;
+    public void select(Controller controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -57,9 +57,9 @@ public class SelectController implements Initializable {
 
     @FXML
     public void startGame() {
-        model.setCurrentLevel(0);
-        Scene gameScene = model.getGameScene();
-        model.setScene(gameScene);
+        controller.setCurrentLevel(0);
+        Scene gameScene = controller.getGameScene();
+        controller.setScene(gameScene);
     }
 
     private void imageTransition(ImageView imageView, Rectangle shape) {
@@ -122,13 +122,13 @@ public class SelectController implements Initializable {
             }
             String selectCharacter = currentlyZoomedImageView.getId();
             if (selectCharacter.equals("knight")){
-             model.setCharacterNo(0);
+             controller.setCharacterNo(0);
            
             }else if (selectCharacter.equals("assasin")){
-             model.setCharacterNo(1);
+             controller.setCharacterNo(1);
                
             }else{
-             model.setCharacterNo(2);
+             controller.setCharacterNo(2);
              
             }
         });

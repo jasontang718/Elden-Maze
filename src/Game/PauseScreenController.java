@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package pacmanfx;
+package Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,10 +25,10 @@ public class PauseScreenController implements Initializable {
     private Button resume;
     @FXML
     private Button quit;
-     private Model model;
+     private Controller controller;
      
-    public void pause(Model model) {
-        this.model = model;
+    public void pause(Controller controller) {
+        this.controller = controller;
        
     }
     /**
@@ -42,16 +42,16 @@ public class PauseScreenController implements Initializable {
     @FXML
     private void restart(ActionEvent event) {
      
-     Scene gameScene = model.getGameScene();
-      model.setScene(gameScene);
-      model.initLevel();
+     Scene gameScene = controller.getGameScene();
+      controller.setScene(gameScene);
+      controller.initLevel();
       
     }
    @FXML
     private void quit(ActionEvent event) {
-        model.setInGame(false);
-        model.setCurrentLevel(0);
-        Scene introScene = model.getintroScene();
-        model.setScene(introScene);
+        controller.setInGame(false);
+        controller.setCurrentLevel(0);
+        Scene introScene = controller.getintroScene();
+        controller.setScene(introScene);
     }
 }

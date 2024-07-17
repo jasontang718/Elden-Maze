@@ -1,4 +1,4 @@
-package pacmanfx;
+package Game;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -6,6 +6,6 @@ import javafx.stage.Stage;
 public class Pacmanfx {
 
     public static void main(String[] args) {
-        Application.launch(Model.class, args);
+        Application.launch(Controller.class, args);
     }
 }

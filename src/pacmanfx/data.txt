@@ -1,5 +1,0 @@
-rightKey,C
-leftKey,A
-upKey,W
-downKey,S
-volume,50.0

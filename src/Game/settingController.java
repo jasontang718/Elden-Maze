@@ -1,4 +1,4 @@
-package pacmanfx;
+package Game;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -32,15 +32,15 @@ public class settingController implements Initializable {
     private TextField upKey, downKey, leftKey, rightKey;
     @FXML
     private Button button;
-    private Model model;
+    private Controller controller;
     @FXML
     private Slider volume;
 
     private Map<String, KeyCode> keyMap = new HashMap<>();
     private MediaPlayer mediaPlayer;
 
-    public void setting(Model model) {
-        this.model = model;
+    public void setting(Controller controller) {
+        this.controller = controller;
     }
 
     @FXML
@@ -57,7 +57,7 @@ public class settingController implements Initializable {
     TextField[] keys = {rightKey, leftKey, upKey, downKey};
 
     // Construct the file path relative to the current working directory
-    String filePath = "./src/pacmanfx/data.bin";
+    String filePath = "./src/Game/data.bin";
     System.out.println("Loading data from: " + filePath);
 
     try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
@@ -165,8 +165,8 @@ public class settingController implements Initializable {
 
     @FXML
     private void back(ActionEvent event) {
-        Scene scene = model.getintroScene();
-        model.setScene(scene);
+        Scene scene = controller.getintroScene();
+        controller.setScene(scene);
     }
 
   private void checkLength(TextField textField, int maxLength) {

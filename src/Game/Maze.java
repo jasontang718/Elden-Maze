@@ -1,4 +1,4 @@
-package pacmanfx;
+package Game;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,7 +21,7 @@ public interface Maze {
 }
 
 abstract class GeneralMaze implements Maze {
-    protected Model model;
+    protected Controller controller;
     protected Character player;
     protected final int H_BLOCKS = 25;
     protected final int V_BLOCKS = 24;
@@ -29,8 +29,8 @@ abstract class GeneralMaze implements Maze {
     protected int enemyCount;
     protected short[] levelData;
     
-    public GeneralMaze(Model model, int enemyCount, short[] levelData) {
-        this.model = model;
+    public GeneralMaze(Controller controller, int enemyCount, short[] levelData) {
+        this.controller = controller;
         this.enemyCount = enemyCount;
         this.levelData = levelData;
     }
@@ -64,21 +64,21 @@ abstract class GeneralMaze implements Maze {
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
-        for (y = 0; y < model.getScreenVSize(); y += BLOCK_SIZE) {
-            for (x = 0; x < model.getScreenHSize(); x += BLOCK_SIZE) {
+        for (y = 0; y < controller.getScreenVSize(); y += BLOCK_SIZE) {
+            for (x = 0; x < controller.getScreenHSize(); x += BLOCK_SIZE) {
 
                 g2d.setStroke(Color.GREY);
                 g2d.setLineWidth(5);
 
                 if (levelData[i] == 0) {
-                    if(model.getCurrentLevel() == 0){
-                        g2d.drawImage(model.mazeWall1, x, y);                    
+                    if(controller.getCurrentLevel() == 0){
+                        g2d.drawImage(controller.mazeWall1, x, y);                    
                     }
-                    else if(model.getCurrentLevel() == 1){
-                        g2d.drawImage(model.mazeWall2, x, y);                    
+                    else if(controller.getCurrentLevel() == 1){
+                        g2d.drawImage(controller.mazeWall2, x, y);                    
                     }
-                    else if(model.getCurrentLevel() == 2){
-                        g2d.drawImage(model.mazeWall3, x, y);                    
+                    else if(controller.getCurrentLevel() == 2){
+                        g2d.drawImage(controller.mazeWall3, x, y);                    
                     }
                 }
 
@@ -98,28 +98,28 @@ abstract class GeneralMaze implements Maze {
                     g2d.strokeLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
 
-                if ((model.screenData[i] & 16) != 0) {
-                    double coinX = x + BLOCK_SIZE / 2 - (model.coin).getWidth() / 2;
-                    double coinY = y + BLOCK_SIZE / 2 - (model.coin).getHeight() / 2;
-                    g2d.drawImage(model.coin, coinX, coinY);
+                if ((controller.screenData[i] & 16) != 0) {
+                    double coinX = x + BLOCK_SIZE / 2 - (controller.coin).getWidth() / 2;
+                    double coinY = y + BLOCK_SIZE / 2 - (controller.coin).getHeight() / 2;
+                    g2d.drawImage(controller.coin, coinX, coinY);
                 }
 
-                if ((model.screenData[i] & 32) != 0) {
-                    double powerupX = x + BLOCK_SIZE / 2 - (model.powerOrb).getWidth() / 2;
-                    double powerupY = y + BLOCK_SIZE / 2 - (model.powerOrb).getHeight() / 2;
-                    g2d.drawImage(model.powerOrb, powerupX, powerupY);
+                if ((controller.screenData[i] & 32) != 0) {
+                    double powerupX = x + BLOCK_SIZE / 2 - (controller.powerOrb).getWidth() / 2;
+                    double powerupY = y + BLOCK_SIZE / 2 - (controller.powerOrb).getHeight() / 2;
+                    g2d.drawImage(controller.powerOrb, powerupX, powerupY);
                 }
                 
-                if ((model.screenData[i] & 64) != 0) {
-                    if(model.getCurrentLevel() == 2){
-                        double trapX = x + BLOCK_SIZE / 2 - (model.fire).getWidth() / 2;
-                        double trapY = y + BLOCK_SIZE / 2 - (model.fire).getHeight() / 2;
-                        g2d.drawImage(model.spike, trapX, trapY);                    
+                if ((controller.screenData[i] & 64) != 0) {
+                    if(controller.getCurrentLevel() == 2){
+                        double trapX = x + BLOCK_SIZE / 2 - (controller.fire).getWidth() / 2;
+                        double trapY = y + BLOCK_SIZE / 2 - (controller.fire).getHeight() / 2;
+                        g2d.drawImage(controller.spike, trapX, trapY);                    
                     }
                     else {
-                        double trapX = x + BLOCK_SIZE / 2 - (model.spike).getWidth() / 2;
-                        double trapY = y + BLOCK_SIZE / 2 - (model.spike).getHeight() / 2;
-                        g2d.drawImage(model.spike, trapX, trapY);
+                        double trapX = x + BLOCK_SIZE / 2 - (controller.spike).getWidth() / 2;
+                        double trapY = y + BLOCK_SIZE / 2 - (controller.spike).getHeight() / 2;
+                        g2d.drawImage(controller.spike, trapX, trapY);
                     }
                 }
 
@@ -157,7 +157,7 @@ class Maze1 extends GeneralMaze {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     };
 
-    public Maze1(Model model) {
+    public Maze1(Controller model) {
         super(model, 2, LEVEL_DATA);
     }
 }
@@ -190,7 +190,7 @@ class Maze2 extends GeneralMaze {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
 
-    public Maze2(Model model) {
+    public Maze2(Controller model) {
         super(model, 4, LEVEL_DATA);
     }
 }
@@ -223,7 +223,7 @@ class Maze3 extends GeneralMaze {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     };
 
-    public Maze3(Model model) {
+    public Maze3(Controller model) {
         super(model, 6, LEVEL_DATA);
     }
 }

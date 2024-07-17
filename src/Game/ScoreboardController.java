@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package pacmanfx;
+package Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,7 +23,7 @@ import javafx.scene.text.Text;
 
 public class ScoreboardController implements Initializable {
 
-    private Model model;
+    private Controller controller;
     
   
      private int characterNo;
@@ -34,8 +34,8 @@ public class ScoreboardController implements Initializable {
     private Text title;
     @FXML
     private Button button;
-        public void scoreBoard(Model model) {
-        this.model = model;
+        public void scoreBoard(Controller controller) {
+        this.controller = controller;
        updateText();
         updateScore();
     }
@@ -59,29 +59,29 @@ public class ScoreboardController implements Initializable {
     
     @FXML
     private void nextLevel(ActionEvent event) {
-      model.nextLevel();
-      Scene gameScene = model.getGameScene();
-      model.setScene(gameScene);
+      controller.nextLevel();
+      Scene gameScene = controller.getGameScene();
+      controller.setScene(gameScene);
    
     }
 
     @FXML
     private void quit(ActionEvent event) {
-        model.setInGame(false);
-        model.setCurrentLevel(0);
-        Scene introScene = model.getintroScene();
-        model.setScene(introScene);
+        controller.setInGame(false);
+        controller.setCurrentLevel(0);
+        Scene introScene = controller.getintroScene();
+        controller.setScene(introScene);
     }
     
     private void updateText(){
-     int gameCompleted = model.getCurrentLevel();
+     int gameCompleted = controller.getCurrentLevel();
      if (gameCompleted == 2){
       title.setText("Congratulation");
        button.setDisable(true);
      }
     }
     private void updateScore(){
-        int readscore = model.getScore();
+        int readscore = controller.getScore();
         score.setText(Integer.toString(readscore));
     }
 }

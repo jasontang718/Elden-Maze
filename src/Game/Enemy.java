@@ -1,4 +1,4 @@
-package pacmanfx;
+package Game;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -26,7 +26,7 @@ public interface Enemy {
 }
 
 abstract class AbstractEnemy implements Enemy {
-    protected Model model;
+    protected Controller controller;
     protected Character[] characters;
     protected Maze1 maze1;
     protected Maze2 maze2;
@@ -36,13 +36,13 @@ abstract class AbstractEnemy implements Enemy {
     protected int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
     protected int[] dx, dy;
 
-    // Constructor to receive Model instance
-    public AbstractEnemy(Model model, Character[] characters) {
-        this.model = model;
+    // Constructor to receive Controller instance
+    public AbstractEnemy(Controller controller, Character[] characters) {
+        this.controller = controller;
         this.characters = characters;
-        this.maze1 = new Maze1(model);
-        this.maze2 = new Maze2(model);
-        this.maze3 = new Maze3(model);
+        this.maze1 = new Maze1(controller);
+        this.maze2 = new Maze2(controller);
+        this.maze3 = new Maze3(controller);
         this.mazes = new Maze[]{maze1, maze2, maze3};
     }
 
@@ -108,7 +108,7 @@ abstract class AbstractEnemy implements Enemy {
 
     @Override
     public void moveEnemy(GraphicsContext g2d) {
-        int pos, count, BLOCK_SIZE = model.getBlockSize(), level = model.getCurrentLevel(), characterNo = model.getCharacterNo();
+        int pos, count, BLOCK_SIZE = controller.getBlockSize(), level = controller.getCurrentLevel(), characterNo = controller.getCharacterNo();
 
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
             double distance = Math.sqrt(Math.pow(characters[characterNo].getPlayerX() - enemyX[i], 2) + Math.pow(characters[characterNo].getPlayerY() - enemyY[i], 2));
@@ -116,7 +116,7 @@ abstract class AbstractEnemy implements Enemy {
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
                 pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
-                short ch = model.getScreenData()[pos];
+                short ch = controller.getScreenData()[pos];
                 count = 0;
 
                 if ((ch & 1) == 0 && enemyDx[i] != 1) {
@@ -169,12 +169,12 @@ abstract class AbstractEnemy implements Enemy {
             }
             
             boolean powerUp = characters[characterNo].getPowerUp();
-            boolean inGame = model.getInGame();
+            boolean inGame = controller.getInGame();
             
             if (characters[characterNo].getPlayerX() > (enemyX[i] - 12) && characters[characterNo].getPlayerX() < (enemyX[i] + 12)
                     && characters[characterNo].getPlayerY() > (enemyY[i] - 12) && characters[characterNo].getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
-                    model.setDying(true);
+                    controller.setDying(true);
                     characters[characterNo].setSlowed(false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
@@ -193,43 +193,43 @@ abstract class AbstractEnemy implements Enemy {
         enemyDx[i] = 0;
         enemyDy[i] = 0;
         enemySpeed[i] = 0;
-        model.playSound("kill.mp3");
+        controller.playSound("kill.mp3");
     }
 }
 
 class Spider extends AbstractEnemy {
-    public Spider(Model model, Character[] characters) {
+    public Spider(Controller model, Character[] characters) {
         super(model, characters);
     }
 
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.spiderImage, x, y);
+        g2d.drawImage(controller.spiderImage, x, y);
     }
 }
 
 class Goblin extends AbstractEnemy {
-    public Goblin(Model model, Character[] characters) {
+    public Goblin(Controller model, Character[] characters) {
         super(model, characters);
     }
 
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.assassinImage, x, y);
+        g2d.drawImage(controller.assassinImage, x, y);
     }
 }
 
 class Phantom extends AbstractEnemy{
-    public Phantom(Model model, Character[] characters) {
+    public Phantom(Controller model, Character[] characters) {
         super(model, characters);
     }
 
     public void moveEnemy(GraphicsContext g2d) {
         int pos;
         int count;
-        int BLOCK_SIZE = model.getBlockSize();
-        int level = model.getCurrentLevel();
-        int characterNo = model.getCharacterNo();
+        int BLOCK_SIZE = controller.getBlockSize();
+        int level = controller.getCurrentLevel();
+        int characterNo = controller.getCharacterNo();
         
         for (int i = 0; i < mazes[level].getEnemyCount(); i++) {
             double distance = Math.sqrt(Math.pow(characters[characterNo].getPlayerX() - enemyX[i], 2) + Math.pow(characters[characterNo].getPlayerY() - enemyY[i], 2));
@@ -237,7 +237,7 @@ class Phantom extends AbstractEnemy{
             if (enemyX[i] % BLOCK_SIZE == 0 && enemyY[i] % BLOCK_SIZE == 0) {
                 pos = enemyX[i] / BLOCK_SIZE + mazes[level].getHBlocks() * (enemyY[i] / BLOCK_SIZE);
 
-                short ch = model.getScreenData()[pos];
+                short ch = controller.getScreenData()[pos];
                 count = 0;
 
                 if ((ch & 1) == 0 && enemyDx[i] != 1) {
@@ -296,7 +296,7 @@ class Phantom extends AbstractEnemy{
                 drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
             }
 
-            boolean inGame = model.getInGame();
+            boolean inGame = controller.getInGame();
             boolean powerUp = characters[characterNo].getPowerUp();
             
             if (characters[characterNo].getPlayerX() > (enemyX[i] - 12) && characters[characterNo].getPlayerX() < (enemyX[i] + 12)
@@ -321,21 +321,21 @@ class Phantom extends AbstractEnemy{
         enemyDx[i] = 0;
         enemyDy[i] = 0;
         enemySpeed[i] = 0;
-        model.playSound("kill.mp3");
+        controller.playSound("kill.mp3");
     }
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.fire, x, y);
+        g2d.drawImage(controller.fire, x, y);
     }
 }
 
 class Skeleton extends AbstractEnemy {
-    public Skeleton(Model model, Character[] characters) {
+    public Skeleton(Controller model, Character[] characters) {
         super(model, characters);
     }
 
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(model.skeletonImage, x, y);
+        g2d.drawImage(controller.skeletonImage, x, y);
     }
 }
