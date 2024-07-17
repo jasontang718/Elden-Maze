@@ -140,7 +140,7 @@ public class Controller extends Application {
 
         VBox introLayout = new VBox(20);
         introLayout.setPrefSize(728, 403);
-        introLayout.setStyle("-fx-background-image: url('/images/background.jpg');" + "-fx-background-size: cover;" + "-fx-background-repeat: stretch;" + "-fx-background-position: center center;");
+        introLayout.setStyle("-fx-background-image: url('/images/maze/background.jpg');" + "-fx-background-size: cover;" + "-fx-background-repeat: stretch;" + "-fx-background-position: center center;");
         introLayout.setAlignment(Pos.CENTER);
         introLayout.getChildren().add(title);
         introLayout.getChildren().add(startButton);

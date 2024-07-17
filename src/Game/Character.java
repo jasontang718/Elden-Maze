@@ -678,7 +678,7 @@ class Mage implements Character{
             if ((ch & 32) != 0) {
                 model.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                model.playSound("powerup.mp3");
+                model.playSound("freeze.mp3");
                 checkPowerUp();
             }
             
