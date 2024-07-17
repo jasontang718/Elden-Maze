@@ -25,7 +25,7 @@ public interface Enemy {
     void setDy(int[] i);
 }
 
-abstract class AbstractEnemy implements Enemy {
+abstract class GeneralEnemy implements Enemy {
     protected Controller controller;
     protected Character[] characters;
     protected Maze1 maze1;
@@ -37,7 +37,7 @@ abstract class AbstractEnemy implements Enemy {
     protected int[] dx, dy;
 
     // Constructor to receive Controller instance
-    public AbstractEnemy(Controller controller, Character[] characters) {
+    public GeneralEnemy(Controller controller, Character[] characters) {
         this.controller = controller;
         this.characters = characters;
         this.maze1 = new Maze1(controller);
@@ -197,7 +197,7 @@ abstract class AbstractEnemy implements Enemy {
     }
 }
 
-class Spider extends AbstractEnemy {
+class Spider extends GeneralEnemy {
     public Spider(Controller model, Character[] characters) {
         super(model, characters);
     }
@@ -208,18 +208,18 @@ class Spider extends AbstractEnemy {
     }
 }
 
-class Goblin extends AbstractEnemy {
+class Goblin extends GeneralEnemy {
     public Goblin(Controller model, Character[] characters) {
         super(model, characters);
     }
 
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(controller.assassinImage, x, y);
+        g2d.drawImage(controller.goblinImage, x, y);
     }
 }
 
-class Phantom extends AbstractEnemy{
+class Phantom extends GeneralEnemy{
     public Phantom(Controller model, Character[] characters) {
         super(model, characters);
     }
@@ -329,7 +329,7 @@ class Phantom extends AbstractEnemy{
     }
 }
 
-class Skeleton extends AbstractEnemy {
+class Skeleton extends GeneralEnemy {
     public Skeleton(Controller model, Character[] characters) {
         super(model, characters);
     }

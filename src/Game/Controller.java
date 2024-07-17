@@ -2,6 +2,7 @@ package Game;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -139,7 +140,7 @@ public class Controller extends Application {
 
         VBox introLayout = new VBox(20);
         introLayout.setPrefSize(728, 403);
-        introLayout.setStyle("-fx-background-image: url('/images/background.jpg');" + "-fx-background-size: cover;" + "-fx-background-repeat: stretch;" + "-fx-background-position: center center;");
+        introLayout.setStyle("-fx-background-image: url('/images/maze/background.jpg');" + "-fx-background-size: cover;" + "-fx-background-repeat: stretch;" + "-fx-background-position: center center;");
         introLayout.setAlignment(Pos.CENTER);
         introLayout.getChildren().add(title);
         introLayout.getChildren().add(startButton);
@@ -329,6 +330,7 @@ public class Controller extends Application {
         background = new Image(getClass().getResourceAsStream("/images/maze/background.jpg"));
         assassinImage = new Image(getClass().getResourceAsStream("/images/assasin/assassinDown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/maze/skeleton.gif"));
+        goblinImage = new Image(getClass().getResourceAsStream("/images/maze/goblin.gif"));
         fire = new Image(getClass().getResourceAsStream("/images/maze/fire.gif"));
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
@@ -519,7 +521,6 @@ public class Controller extends Application {
         }
         initLevel();
     }
-    
     private void draw(GraphicsContext g2d) {
         if (currentLevel == 0){
             g2d.drawImage(mazeFloor1, 0, 0, screenHSize, screenVSize);            
