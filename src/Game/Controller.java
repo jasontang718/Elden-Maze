@@ -2,7 +2,6 @@ package Game;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -298,13 +297,13 @@ public class Controller extends Application {
         
         knightDown = new Image(getClass().getResourceAsStream("/images/knight/knightDown.gif"));
         knightUp = new Image(getClass().getResourceAsStream("/images/knight/knightUp.gif"));
-        knightLeft = new Image(getClass().getResourceAsStream("/images/knight/knightUp.gif"));
-        knightRight = new Image(getClass().getResourceAsStream("/images/knight/knightUp.gif"));
+        knightLeft = new Image(getClass().getResourceAsStream("/images/knight/knightLeft.gif"));
+        knightRight = new Image(getClass().getResourceAsStream("/images/knight/knightRight.gif"));
         
-        assassinDown = new Image(getClass().getResourceAsStream("/images/assasin/assassinLeft.gif"));
-        assassinUp = new Image(getClass().getResourceAsStream("/images/assasin/assassin_up.gif"));
-        assassinLeft = new Image(getClass().getResourceAsStream("/images/assasin/assassin_left.gif"));
-        assassinRight = new Image(getClass().getResourceAsStream("/images/assasin/assassin_right.gif"));
+        assassinDown = new Image(getClass().getResourceAsStream("/images/assasin/assassinDown.gif"));
+        assassinUp = new Image(getClass().getResourceAsStream("/images/assasin/assassinUp.gif"));
+        assassinLeft = new Image(getClass().getResourceAsStream("/images/assasin/assassinLeft.gif"));
+        assassinRight = new Image(getClass().getResourceAsStream("/images/assasin/assassinRight.gif"));
         
         mageDown = new Image(getClass().getResourceAsStream("/images/mage/mageDown.gif"));
         mageUp = new Image(getClass().getResourceAsStream("/images/mage/mageUp.gif"));
@@ -328,7 +327,7 @@ public class Controller extends Application {
         powerOrb = new Image(getClass().getResourceAsStream("/images/maze/powerup.gif"));
         powerKnightUp = new Image(getClass().getResourceAsStream("/images/knight/powerupPlayer.gif"));
         background = new Image(getClass().getResourceAsStream("/images/maze/background.jpg"));
-        assassinImage = new Image(getClass().getResourceAsStream("/images/assasin/assassin_down.gif"));
+        assassinImage = new Image(getClass().getResourceAsStream("/images/assasin/assassinDown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/maze/skeleton.gif"));
         fire = new Image(getClass().getResourceAsStream("/images/maze/fire.gif"));
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
@@ -520,6 +519,7 @@ public class Controller extends Application {
         }
         initLevel();
     }
+    
     private void draw(GraphicsContext g2d) {
         if (currentLevel == 0){
             g2d.drawImage(mazeFloor1, 0, 0, screenHSize, screenVSize);            

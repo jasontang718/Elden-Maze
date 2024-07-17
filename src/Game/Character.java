@@ -407,7 +407,7 @@ class Assassin implements Character{
 
             if ((ch & 16) != 0) {
                 // Pac-Man eats a dot
-                model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
+                model.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
                 model.playSound("gold.mp3");        
 
@@ -571,9 +571,10 @@ class Mage implements Character{
     private boolean running = false;
     public int playerX, playerY, playerDx, playerDy;
     private int playerSpeed = 1;
-    private Timeline powerupTimer, slowedTimer;
+    private Timeline powerupTimer, powerupAnimationTimer, slowedTimer;
     private boolean powerUp = false;
     private boolean slowed = false;
+    private boolean powerUpAnimation = false;
 
     // Constructor to receive Controller instance
     public Mage(Controller model) {
@@ -669,7 +670,7 @@ class Mage implements Character{
 
             if ((ch & 16) != 0) {
                 // Pac-Man eats a dot
-                model.getScreenData()[pos] = (short) (ch & 15); // Remove the dot
+                model.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
                 model.playSound("gold.mp3");        
 
@@ -728,15 +729,23 @@ class Mage implements Character{
         }
         else {
             g2d.drawImage(model.frozen, 0, 0);
-            if (reqDx <= -1) {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
-            } else if (reqDx >= 1) {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
-            } else if (reqDy <= -1) {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
-            } else {
-                g2d.drawImage(model.powerKnightUp, playerX, playerY);
-            }        
+            
+            if (powerUpAnimation) {
+                if (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1) {
+                    g2d.drawImage(model.powerMage, playerX, playerY);
+                }
+            }
+            else {
+                if (reqDx <= -1) {
+                    g2d.drawImage(model.mageLeft, playerX, playerY);
+                } else if (reqDx >= 1) {
+                    g2d.drawImage(model.mageRight, playerX, playerY);
+                } else if (reqDy <= -1) {
+                    g2d.drawImage(model.mageUp, playerX, playerY);
+                } else {
+                    g2d.drawImage(model.mageDown, playerX, playerY);
+                }
+            }
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
             int imageWidth = (int) model.blinded.getWidth();  // Assuming getWidth() gives the width of the image
@@ -753,13 +762,19 @@ class Mage implements Character{
         if (!powerUp) {
             powerUp = true;
             startPowerUpTimer();
-        } else {
+        } 
+        else {
             resetPowerUpTimer();
+        }
+        
+        if (!powerUpAnimation) {
+            powerUpAnimation = true;
+            startAnimationTimer();
         }
     }
     
     public void startPowerUpTimer() {
-        powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
+        powerupTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
                 powerUp = false;
@@ -774,7 +789,26 @@ class Mage implements Character{
         }
         startPowerUpTimer();
     }
+    
+    public void startAnimationTimer() {
+        powerupAnimationTimer = new Timeline(new KeyFrame(Duration.seconds(1.4), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                powerUpAnimation = false;
+            }
+        }));
+        powerupAnimationTimer.play();   
+    }
 
+    public void checkSlowed(GraphicsContext g2d){
+        if (!slowed) {
+            slowed = true;
+            startSlowedTimer();
+        } else {
+            resetSlowedTimer();
+        }    
+    }
+    
     public void startSlowedTimer() {
         slowedTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
             @Override
@@ -792,15 +826,6 @@ class Mage implements Character{
         startSlowedTimer();
     }
     
-    public void checkSlowed(GraphicsContext g2d){
-        if (!slowed) {
-            slowed = true;
-            startSlowedTimer();
-        } else {
-            resetSlowedTimer();
-        }    
-    }
-    
     public void updateStamina() {
         if (running) {
             if (stamina > 0) {
@@ -811,7 +836,7 @@ class Mage implements Character{
             }
         } else {
             running = false;
-            if (stamina < 500) {
+            if (stamina < getStamina()) {
                 stamina++;
             }
         }
