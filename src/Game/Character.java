@@ -234,14 +234,14 @@ class Knight extends GeneralCharacter{
                 // Pac-Man eats a dot
                 controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
-                controller.playSound("gold.mp3");        
+                controller.playSound("gold.mp3",false);        
 
             }
 
             if ((ch & 32) != 0) {
                 controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                controller.playSound("powerup.mp3");
+                controller.playSound("powerup.mp3",false);
                 checkPowerUp();
             }
             
@@ -348,14 +348,14 @@ class Assassin extends GeneralCharacter{
                 // Pac-Man eats a dot
                 controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
-                controller.playSound("gold.mp3");        
+                controller.playSound("gold.mp3",false);        
 
             }
 
             if ((ch & 32) != 0) {
                 controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                controller.playSound("powerup.mp3");
+                controller.playSound("powerup.mp3",false);
                 checkPowerUp();
             }
             
@@ -463,14 +463,14 @@ class Mage extends GeneralCharacter{
                 // Pac-Man eats a dot
                 controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
-                controller.playSound("gold.mp3");        
+                controller.playSound("gold.mp3",false);        
 
             }
 
             if ((ch & 32) != 0) {
                 controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                controller.playSound("freeze.mp3");
+                controller.playSound("freeze.mp3",false);
                 checkPowerUp();
             }
             

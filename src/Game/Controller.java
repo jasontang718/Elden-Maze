@@ -317,15 +317,14 @@ public class Controller extends Application {
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
     
-    public void playSound(String soundFileName) {
+    public void playSound(String soundFileName,boolean stopAudio) {
         
         URL soundURL = getClass().getResource("/sound/" + soundFileName);
-        if (soundURL != null) {
+        if (soundURL != null && !stopAudio) {
             Media sound = new Media(soundURL.toString());
            
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.setVolume(volume);
-           
             mediaPlayer.play(); // Play the specified sound
         } else {
             System.out.println("Sound file not found: " + soundFileName);
@@ -550,6 +549,7 @@ public class Controller extends Application {
             } else if (file.equals("login.fxml")) {
                 LoginController controller = loader.getController();
                 controller.login(this);
+                playSound("login.mp3",false);
             }
 
     setScene(scene);

@@ -193,7 +193,7 @@ abstract class GeneralEnemy implements Enemy {
         enemyDx[i] = 0;
         enemyDy[i] = 0;
         enemySpeed[i] = 0;
-        controller.playSound("kill.mp3");
+        controller.playSound("kill.mp3",false);
     }
 }
 
@@ -321,7 +321,7 @@ class Phantom extends GeneralEnemy{
         enemyDx[i] = 0;
         enemyDy[i] = 0;
         enemySpeed[i] = 0;
-        controller.playSound("kill.mp3");
+        controller.playSound("kill.mp3",false);
     }
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
