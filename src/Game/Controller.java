@@ -130,7 +130,7 @@ public class Controller extends Application {
         introLayout.getChildren().add(exitButton);        
 
         introScene = new Scene(introLayout);
-
+        
         // Create the game scene
         StackPane game = new StackPane();
         Canvas canvas = new Canvas(screenHSize, screenVSize);
@@ -316,22 +316,24 @@ public class Controller extends Application {
         fire = new Image(getClass().getResourceAsStream("/images/maze/fire.gif"));
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
-    
-    public void playSound(String soundFileName,boolean stopAudio) {
-        
-        URL soundURL = getClass().getResource("/sound/" + soundFileName);
-        if (soundURL != null) {
-            if(stopAudio){
-                mediaPlayer.stop();
-            }
-            Media sound = new Media(soundURL.toString());
-            mediaPlayer = new MediaPlayer(sound);
-            mediaPlayer.setVolume(volume);
-            mediaPlayer.play(); // Play the specified sound
-        } else {
-            System.out.println("Sound file not found: " + soundFileName);
-        }
-    }
+    public void playSound(String soundFileName, boolean stopAudio) {
+      URL soundURL = getClass().getResource("/sound/" + soundFileName);
+      Media sound = new Media(soundURL.toString());
+      if (mediaPlayer != null) {
+          mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
+      }
+      mediaPlayer = new MediaPlayer(sound);
+      mediaPlayer.setVolume(volume);
+
+      if (soundURL != null) {
+          if (stopAudio) {
+              mediaPlayer.stop();
+          }
+          mediaPlayer.play(); // Play the specified sound
+      } else {
+          System.out.println("Sound file not found: " + soundFileName);
+      }
+  }
 
     public void startTrapTimer() {
         timer = new Timeline(
@@ -562,7 +564,12 @@ public class Controller extends Application {
         }
      }
     public void setScene(Scene scene){
+        loadData();
         stage.setScene(scene);
+        System.out.println(scene);
+      if (scene == introScene) {
+        playSound("lobby.mp3", true); // Assuming playSound method is defined
+    }
         stage.show();
         stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
         stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());

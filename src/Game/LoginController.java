@@ -15,6 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
+
 /**
  * FXML Controller class
  *
@@ -42,6 +43,7 @@ public class LoginController implements Initializable {
         if ("admin".equals(user) && "password".equals(pass)) {
             System.out.println("Login successful!");
             controller.setScene(introScene);
+            
         } 
     }
     private void handleManualLogin() {
