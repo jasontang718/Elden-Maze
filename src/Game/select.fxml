@@ -78,11 +78,11 @@
       <Text layoutX="365.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mage" />
       <ImageView fx:id="knight" fitHeight="61.0" fitWidth="54.0" layoutX="183.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/knightleft.gif" />
+            <Image url="@../images/knight/knightLeft.gif" />
          </image></ImageView>
       <ImageView fx:id="assasin" fitHeight="61.0" fitWidth="54.0" layoutX="273.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/assasin/assassin_right.gif" />
+            <Image url="@../images/assasin/assassinRight.gif" />
          </image>
       </ImageView>
       <ImageView fx:id="mage" fitHeight="61.0" fitWidth="54.0" layoutX="362.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true">
