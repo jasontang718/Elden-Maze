@@ -4,7 +4,7 @@ package Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-
+//interface for the maze class to set up the common methods
 public interface Maze {
     short[] getLevelData();
     int getEnemyCount();
@@ -14,6 +14,7 @@ public interface Maze {
     void drawMaze(GraphicsContext g2d);
 }
 
+//a parent class which implements the interface from the maze class, it contains the general variables and methods used by all subclasses
 abstract class GeneralMaze implements Maze {
     protected Controller controller;
     protected Character player;
@@ -54,6 +55,7 @@ abstract class GeneralMaze implements Maze {
         return V_BLOCKS;
     }
 
+    //draws the maze such as the boundaries, coins, powerup orbs and traps
     @Override
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
@@ -124,6 +126,7 @@ abstract class GeneralMaze implements Maze {
 }
 
 class Maze1 extends GeneralMaze {
+    //the array for the maze design
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,26,26,18,26,26,26,18,26,26,18,26,26,18,26,26,26,18,26,26,26,22,0,
@@ -157,6 +160,7 @@ class Maze1 extends GeneralMaze {
 }
 
 class Maze2 extends GeneralMaze {
+    //the array for the maze design
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,26,26,18,26,26,26,18,26,26,18,26,26,18,26,26,26,18,26,26,26,22,0,
@@ -190,6 +194,7 @@ class Maze2 extends GeneralMaze {
 }
 
 class Maze3 extends GeneralMaze {
+    //the array for the maze design
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,18,26,18,26,26,18,26,26,18,26,18,26,22,0,0,0,0,0,0,0,0,0,

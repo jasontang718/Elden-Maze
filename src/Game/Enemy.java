@@ -2,6 +2,7 @@ package Game;
 
 import javafx.scene.canvas.GraphicsContext;
 
+//interface for the enemy class to set up the common methods
 public interface Enemy {
     void moveEnemy(GraphicsContext g2d);
     void drawEnemy(GraphicsContext g2d, int x, int y);
@@ -25,6 +26,7 @@ public interface Enemy {
     void setDy(int[] i);
 }
 
+//a parent class which implements the interface from the enemy class, it contains the general variables and methods used by all subclasses
 abstract class GeneralEnemy implements Enemy {
     protected Controller controller;
     protected Character[] characters;
@@ -106,6 +108,7 @@ abstract class GeneralEnemy implements Enemy {
         this.dy = i;
     }
 
+    //algorithm for moving the enemy randomly in four directions, and handles the events that will occur when it hits the player
     @Override
     public void moveEnemy(GraphicsContext g2d) {
         int pos, count, BLOCK_SIZE = controller.getBlockSize(), level = controller.getCurrentLevel(), characterNo = controller.getCharacterNo();
@@ -187,6 +190,7 @@ abstract class GeneralEnemy implements Enemy {
         }
     }
 
+    //removes the enemy when killed, moving it out of bounds
     protected void removeEnemy(int i) {
         enemyX[i] = -100;
         enemyY[i] = -100;
@@ -202,6 +206,7 @@ class Spider extends GeneralEnemy {
         super(model, characters);
     }
 
+    //draws the enemy according to the x and y coordinates
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.spiderImage, x, y);
@@ -213,6 +218,7 @@ class Goblin extends GeneralEnemy {
         super(model, characters);
     }
 
+    //draws the enemy according to the x and y coordinates
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.goblinImage, x, y);
@@ -224,6 +230,7 @@ class Phantom extends GeneralEnemy{
         super(model, characters);
     }
 
+    //phantom has its unique moveEnemy method as it has different events that occur when it hits the player
     public void moveEnemy(GraphicsContext g2d) {
         int pos;
         int count;
@@ -315,6 +322,7 @@ class Phantom extends GeneralEnemy{
         }
     }
     
+    //removes the phantom when killed by moving it out of bounds
     public void removeEnemy(int i) {
         enemyX[i] = -100;
         enemyY[i] = -100;
@@ -324,6 +332,7 @@ class Phantom extends GeneralEnemy{
         controller.playSound("kill.mp3",false);
     }
     
+    //draws the enemy according to the x and y coordinates
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.phantomImage, x, y);
     }
@@ -334,6 +343,7 @@ class Skeleton extends GeneralEnemy {
         super(model, characters);
     }
 
+    //draws the enemy according to the x and y coordinates
     @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.skeletonImage, x, y);

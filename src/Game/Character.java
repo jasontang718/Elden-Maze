@@ -10,6 +10,7 @@ import javafx.util.Duration;
 
 import javafx.scene.canvas.GraphicsContext;
 
+//interface for the character class to set up the common methods
 public interface Character {
     int getScore();
     void setScore(int score);
@@ -35,6 +36,7 @@ public interface Character {
     void checkSlowed(GraphicsContext g2d);
 }
 
+//a parent class which implements the interface from the character class, it contains the general variables and methods used by all subclasses
 abstract class GeneralCharacter implements Character {
     protected Controller controller;
     protected Maze1 maze1;
@@ -119,7 +121,7 @@ abstract class GeneralCharacter implements Character {
         return playerSpeed;
     }
     
-
+    //checks whether a powerup is active and starts or resets the powerup timer
     public void checkPowerUp() {
         if (!powerUp) {
             powerUp = true;
@@ -129,6 +131,7 @@ abstract class GeneralCharacter implements Character {
         }
     }
     
+    //starts the powerup timer
     public void startPowerUpTimer() {
         powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
             @Override
@@ -139,6 +142,7 @@ abstract class GeneralCharacter implements Character {
         powerupTimer.play();   
     }
     
+    //restarts the powerup timer
     public void resetPowerUpTimer() {
         if (powerupTimer != null) {
             powerupTimer.stop();
@@ -146,6 +150,17 @@ abstract class GeneralCharacter implements Character {
         startPowerUpTimer();
     }
 
+    //checks whether a debuff is active and starts or resets the slowed timer
+    public void checkSlowed(GraphicsContext g2d){
+        if (!slowed) {
+            slowed = true;
+            startSlowedTimer();
+        } else {
+            resetSlowedTimer();
+        }    
+    }
+    
+    //starts the slowed timer for when a player receives a debuff
     public void startSlowedTimer() {
         slowedTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
             @Override
@@ -156,6 +171,7 @@ abstract class GeneralCharacter implements Character {
         slowedTimer.play();   
     }
         
+    //restarts the slowed timer if a player gets debuffed again during a debuff
     public void resetSlowedTimer() {
         if (slowedTimer != null) {
             slowedTimer.stop();
@@ -163,15 +179,7 @@ abstract class GeneralCharacter implements Character {
         startSlowedTimer();
     }
     
-    public void checkSlowed(GraphicsContext g2d){
-        if (!slowed) {
-            slowed = true;
-            startSlowedTimer();
-        } else {
-            resetSlowedTimer();
-        }    
-    }
-    
+    //handles the stamina of the player by checking if the player is running or not running
     public void updateStamina() {
         if (running) {
             if (stamina > 0) {
@@ -213,11 +221,11 @@ class Knight extends GeneralCharacter{
         mazes = new Maze[]{maze1, maze2, maze3};
     }
 
-    // Constructor to receive Controller instance
     public int getLives(){
         return lives;
     }
 
+    //code for moving the player, and handles the collectibles such as coins and powerups and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -275,6 +283,7 @@ class Knight extends GeneralCharacter{
 
     }
 
+    //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
@@ -332,6 +341,7 @@ class Assassin extends GeneralCharacter{
         return lives;
     }
 
+    //code for moving the player, and handles the collectibles such as coins and powerups and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -389,6 +399,7 @@ class Assassin extends GeneralCharacter{
 
     }
     
+    //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
@@ -447,6 +458,7 @@ class Mage extends GeneralCharacter{
         return lives;
     }
  
+    //code for moving the player, and handles the collectibles such as coins and powerups and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -503,6 +515,7 @@ class Mage extends GeneralCharacter{
 
     }
     
+    //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
@@ -549,6 +562,7 @@ class Mage extends GeneralCharacter{
         }
     }
 
+    //mage has its unique checkPowerUp method as the tranformation only happens one time, therefore it needs a separate timer for the animation
     public void checkPowerUp() {
         if (!powerUp) {
             powerUp = true;

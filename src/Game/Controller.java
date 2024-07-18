@@ -49,7 +49,7 @@ public class Controller extends Application {
     private boolean showScore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
 
-    private static final int MAX_ENEMY = 12;
+    private static final int MAX_ENEMY = 6;
     private static int validSpeed = 1;
     private double volume = 0.5;
 
@@ -107,7 +107,9 @@ public class Controller extends Application {
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
     
-  @Override
+    
+    //loads the game (pages, gameplay etc)
+    @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
         loadScene("login.fxml");
@@ -293,6 +295,7 @@ public class Controller extends Application {
         this.trap = value;
     }
     
+    //preloads the images to reduce buffering when the game runs and prevents lag
     public void loadImages() {
         blinded = new Image(getClass().getResourceAsStream("/images/maze/blinded.png"),4000,2247,false,false);    
         frozen = new Image(getClass().getResourceAsStream("/images/maze/frozen.png"),screenHSize,screenVSize,false,false);    
@@ -342,6 +345,7 @@ public class Controller extends Application {
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
     
+    //plays sound effects
     public void playSound(String soundFileName, boolean stopAudio) {
           URL soundURL = getClass().getResource("/sound/" + soundFileName);
           Media sound = new Media(soundURL.toString());
@@ -361,6 +365,7 @@ public class Controller extends Application {
           }
       }
 
+    //sets the timer for each interval of trap damage
     public void startTrapTimer() {
         timer = new Timeline(
                 new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
@@ -383,6 +388,7 @@ public class Controller extends Application {
         timer.play();   
     }
 
+    //initialize the variables needed before starting the game
     private void initVariables() {
         screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
         enemies[currentLevel].setEnemyX(new int[MAX_ENEMY]);
@@ -403,6 +409,7 @@ public class Controller extends Application {
         finished = false;
     }
 
+    //handles the methods that are needed during the game
     private void playGame(GraphicsContext g2d) {
         if (dying) {
             death();
@@ -416,6 +423,7 @@ public class Controller extends Application {
         }
     }
 
+    //a start screen before a game to let the player to prepare
     private void showStartingText(GraphicsContext g2d) {
         String start = "Press SPACE to start";
         g2d.setFill(Color.WHITESMOKE);
@@ -433,6 +441,7 @@ public class Controller extends Application {
         g2d.fillText(start, textX, textY);
     }
 
+    //draws the score, lives, and stamina bar
     private void drawScore(GraphicsContext g2d) {
         g2d.setFont(smallFont);
         g2d.setFill(Color.GREEN);
@@ -445,12 +454,17 @@ public class Controller extends Application {
         }
         
         g2d.setFill(Color.GREEN);
-        g2d.fillRect(100, screenVSize - 30, characters[characterNo].getStamina()/5, 10);
+        g2d.fillRect(170, screenVSize - 25, characters[characterNo].getStamina()/2, 10);
         g2d.setStroke(Color.BLACK);
-        g2d.strokeRect(100, screenVSize - 30, characters[characterNo].getStamina()/5, 10);
+        if (characters[characterNo] == characters[0] || characters[characterNo] == characters[2]){
+            g2d.strokeRect(170, screenVSize - 25, 300/2, 10);
+        }
+        else if (characters[characterNo] == characters[1]){
+            g2d.strokeRect(170, screenVSize - 25, 500/2, 10);
+        }
     }
 
-   
+    //handles the deaths of the player and respawn the player back at the spawn point
     private void death() {
         lives--;
         if (lives == 0) {
@@ -466,11 +480,13 @@ public class Controller extends Application {
         dying = false;        
     }
 
+    //initializes the game
     public void initGame() {
         currentLevel = 0;
         initLevel();
     }
 
+    //initializes the level
     public void initLevel() {
         initVariables();
         characters[characterNo].setScore(0);
@@ -479,6 +495,7 @@ public class Controller extends Application {
         continueLevel();
     }
 
+    //can be a continuation of the initLevel method, or continues the level after the player dies, respawning the enemies and players back at their spawnpoints, as well as setting the speed for the enemies
     private void continueLevel() {
         int dx = 1;
 
@@ -507,6 +524,7 @@ public class Controller extends Application {
         dying = false;
     }
     
+    //iterate through each tile of the maze to check for remaining coins, if none are present, the level is finished and the scoreboard is shown
     private void checkMaze() {
         // Iterate through screenData to check for remaining coins
         for (int i = 0; i < screenData.length; i++) {
@@ -527,6 +545,7 @@ public class Controller extends Application {
         }
     }
 
+    //changes the current level after a level is cleared
     public void nextLevel(){
         currentLevel ++;
         
@@ -535,6 +554,8 @@ public class Controller extends Application {
         }
         initLevel();
     }
+    
+    //draws the texture of the mazes, and other related graphical content
     private void draw(GraphicsContext g2d) {
         if (currentLevel == 0){
             g2d.drawImage(mazeFloor1, 0, 0, screenHSize, screenVSize);            
@@ -581,13 +602,14 @@ public class Controller extends Application {
                 controller.login(this);
             }
 
-    setScene(scene);
+        setScene(scene);
      
     
         } catch (IOException e) {
             e.printStackTrace();
         }
      }
+    
      public void setScene(Scene scene){
          stage.setScene(scene);
          stage.show();
@@ -596,20 +618,20 @@ public class Controller extends Application {
              centerStage();
 }
 
-private void centerStage() {
-    // Get primary screen bounds
-    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
- 
-    // Compute the center position
-    double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
-    double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+    private void centerStage() {
+        // Get primary screen bounds
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
-    // Set the position
-    stage.setX(centerXPosition);
-    stage.setY(centerYPosition);
-}
+        // Compute the center position
+        double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
+        double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
 
-private void loadData() {
+        // Set the position
+        stage.setX(centerXPosition);
+        stage.setY(centerYPosition);
+    }
+
+    private void loadData() {
       
         String filePath = "./src/Game/data.bin";
         System.out.println("Loading data from: " + filePath);
