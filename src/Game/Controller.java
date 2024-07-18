@@ -48,33 +48,22 @@ public class Controller extends Application {
     private boolean dying = false;
     private boolean showScore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
-
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
-
     private int currentLevel = 0;
     private Timeline timer;
-    
     public Image mazeFloor1, mazeWall1, mazeFloor2, mazeWall2, mazeFloor3, mazeWall3;
-
     public Image heart, coin, powerOrb, blinded, frozen;
     public Image spiderImage, skeletonImage, goblinImage, fire, spike;
     public Image knightUp, knightDown, knightLeft, knightRight, powerKnightUp, powerKnightDown, powerKnightLeft, powerKnightRight, background, assassinImage;
     public Image assassinUp, assassinDown, assassinLeft, assassinRight, powerAssassinUp, powerAssassinDown, powerAssassinLeft, powerAssassinRight;
     public Image mageUp, mageDown, mageLeft, mageRight, powerMage;
-
-    
-    
     private int reqDx = 0;
     private int reqDy = 0;
-   
-    Stage stage;
-
+    private Stage stage;
     short[] screenData;
-    Scene gameScene;
-   
+    private Scene gameScene;
     private Scene introScene;
-    
     private MediaPlayer mediaPlayer;
     private boolean finished = true;
     private boolean trap;
@@ -84,24 +73,17 @@ public class Controller extends Application {
     private Knight knight = new Knight(this);
     private Assassin assassin = new Assassin(this);
     private Mage mage = new Mage(this);
-    
     private Character[] characters = new Character[]{knight, assassin, mage};
-            
     private Maze1 maze1 = new Maze1(this);
     private Maze2 maze2 = new Maze2(this);
     private Maze3 maze3 = new Maze3(this);
-    
     private Maze[] mazes = new Maze[]{maze1,maze2,maze3};    
-    
     private Spider spider = new Spider(this, characters);
     private Goblin goblin = new Goblin(this, characters);
     private Phantom phantom = new Phantom(this, characters);
     private Skeleton skeleton = new Skeleton(this, characters);
-    
     private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
-    
     private int lives;
-
     private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
@@ -574,31 +556,31 @@ public class Controller extends Application {
             e.printStackTrace();
         }
      }
-     public void setScene(Scene scene){
-         stage.setScene(scene);
-         stage.show();
-         stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
-         stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
-             centerStage();
-}
+    public void setScene(Scene scene){
+        stage.setScene(scene);
+        stage.show();
+        stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
+        stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
+        centerStage();
+   }
 
-private void centerStage() {
-    // Get primary screen bounds
-    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
- 
-    // Compute the center position
-    double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
-    double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+    private void centerStage() {
+        // Get primary screen bounds
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
-    // Set the position
-    stage.setX(centerXPosition);
-    stage.setY(centerYPosition);
-}
+        // Compute the center position
+        double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
+        double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+
+        // Set the position
+        stage.setX(centerXPosition);
+        stage.setY(centerYPosition);
+    }
 
 private void loadData() {
     String filePath = "./src/Game/data.bin";
     System.out.println("Loading data from: " + filePath);
-      String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
+     String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
     // Initialize mediaPlayer
     Media media = new Media(mediaUrl);
     mediaPlayer = new MediaPlayer(media);

@@ -49,88 +49,88 @@ public class settingController implements Initializable {
     }
 
     private void loadData() {
-    String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
-    // Initialize mediaPlayer
-    Media media = new Media(mediaUrl);
-    mediaPlayer = new MediaPlayer(media);
+        String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
+      
+        Media media = new Media(mediaUrl);
+        mediaPlayer = new MediaPlayer(media);
 
-    TextField[] keys = {rightKey, leftKey, upKey, downKey};
+        TextField[] keys = {rightKey, leftKey, upKey, downKey};
 
-    // Construct the file path relative to the current working directory
-    String filePath = "./src/Game/data.bin";
-    System.out.println("Loading data from: " + filePath);
+        // Construct the file path relative to the current working directory
+        String filePath = "./src/Game/data.bin";
+        System.out.println("Loading data from: " + filePath);
 
-    try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
-        while (dis.available() > 0) {
-            String keyType = dis.readUTF();
-            if (!keyType.equals("volume")) {
-                String keyValue = dis.readUTF();
-                keyMap.put(keyType, KeyCode.valueOf(keyValue));
-                switch (keyType) {
-                    case "rightKey":
-                        rightKey.setText(keyValue);
-                        break;
-                    case "leftKey":
-                        leftKey.setText(keyValue);
-                        break;
-                    case "upKey":
-                        upKey.setText(keyValue);
-                        break;
-                    case "downKey":
-                        downKey.setText(keyValue);
-                        break;
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
+            while (dis.available() > 0) {
+                String keyType = dis.readUTF();
+                if (!keyType.equals("volume")) {
+                    String keyValue = dis.readUTF();
+                    keyMap.put(keyType, KeyCode.valueOf(keyValue));
+                    switch (keyType) {
+                        case "rightKey":
+                            rightKey.setText(keyValue);
+                            break;
+                        case "leftKey":
+                            leftKey.setText(keyValue);
+                            break;
+                        case "upKey":
+                            upKey.setText(keyValue);
+                            break;
+                        case "downKey":
+                            downKey.setText(keyValue);
+                            break;
+                    }
+                } else {
+                    double savedVolume = dis.readDouble();
+                    volume.setValue(savedVolume);
+                    mediaPlayer.setVolume(savedVolume / 100.0);
                 }
-            } else {
-                double savedVolume = dis.readDouble();
-                volume.setValue(savedVolume);
-                mediaPlayer.setVolume(savedVolume / 100.0);
             }
-        }
 
-        // If any key is empty, set default keys and save data
-        boolean anyKeyEmpty = false;
-        for (TextField textField : keys) {
-            if (textField.getText().isEmpty()) {
-                anyKeyEmpty = true;
-                break;
+            // If any key is empty, set default keys and save data
+            boolean anyKeyEmpty = false;
+            for (TextField textField : keys) {
+                if (textField.getText().isEmpty()) {
+                    anyKeyEmpty = true;
+                    break;
+                }
             }
-        }
 
-        if (anyKeyEmpty) {
+            if (anyKeyEmpty) {
+                rightKey.setText("D");
+                leftKey.setText("A");
+                upKey.setText("W");
+                downKey.setText("S");
+                saveData(); // Save default keys
+            }
+
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Error loading data: " + e.getMessage());
+            e.printStackTrace();
+
+
+            // Set default keys and volume on error
             rightKey.setText("D");
             leftKey.setText("A");
             upKey.setText("W");
             downKey.setText("S");
-            saveData(); // Save default keys
+            volume.setValue(50); // Default volume
+            mediaPlayer.setVolume(0.5); // Default volume
+            saveData(); // Save default keys and volume
         }
 
-    } catch (IOException | IllegalArgumentException e) {
-        System.err.println("Error loading data: " + e.getMessage());
-        e.printStackTrace();
-        
+        // Limit key length and update button state
+        for (TextField textField : keys) {
+            checkLength(textField, 1);
+        }
 
-        // Set default keys and volume on error
-        rightKey.setText("D");
-        leftKey.setText("A");
-        upKey.setText("W");
-        downKey.setText("S");
-        volume.setValue(50); // Default volume
-        mediaPlayer.setVolume(0.5); // Default volume
-        saveData(); // Save default keys and volume
-    }
+        // Update media player volume based on slider
+        volume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+        });
 
-    // Limit key length and update button state
-    for (TextField textField : keys) {
-        checkLength(textField, 1);
-    }
-
-    // Update media player volume based on slider
-    volume.valueProperty().addListener((observable, oldValue, newValue) -> {
-        mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
-    });
-
-    // Initial button state update
-    updateButtonState();
+        // Initial button state update
+        updateButtonState();
 }
 
     private void saveData() {
