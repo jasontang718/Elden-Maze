@@ -320,9 +320,11 @@ public class Controller extends Application {
     public void playSound(String soundFileName,boolean stopAudio) {
         
         URL soundURL = getClass().getResource("/sound/" + soundFileName);
-        if (soundURL != null && !stopAudio) {
+        if (soundURL != null) {
+            if(stopAudio){
+                mediaPlayer.stop();
+            }
             Media sound = new Media(soundURL.toString());
-           
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.setVolume(volume);
             mediaPlayer.play(); // Play the specified sound
