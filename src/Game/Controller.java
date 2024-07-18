@@ -595,10 +595,13 @@ private void centerStage() {
     stage.setY(centerYPosition);
 }
 
-     private void loadData() {
+private void loadData() {
     String filePath = "./src/Game/data.bin";
     System.out.println("Loading data from: " + filePath);
-
+      String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
+    // Initialize mediaPlayer
+    Media media = new Media(mediaUrl);
+    mediaPlayer = new MediaPlayer(media);
     try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
         while (dis.available() > 0) {
             String keyType = dis.readUTF();
