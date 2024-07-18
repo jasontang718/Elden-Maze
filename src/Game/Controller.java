@@ -51,6 +51,7 @@ public class Controller extends Application {
 
     private static final int MAX_ENEMY = 12;
     private static int validSpeed = 1;
+    private double volume = 0.5;
 
     private int currentLevel = 0;
     private Timeline timer;
@@ -341,55 +342,6 @@ public class Controller extends Application {
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
     
-    private void loadData() {
-      
-        String filePath = "./src/Game/data.bin";
-        System.out.println("Loading data from: " + filePath);
-          //Load file from directory
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))){
-            //read file
-            while (dis.available() > 0) {
-                String keyType = dis.readUTF();
-                if (keyType.equals("volume")) {
-                volume = dis.readDouble(); // Read and set the volume
-            } else {
-                    //Read and set keybind
-                String keyValue = dis.readUTF();
-                switch (keyType) {
-                    case "rightKey":
-                        moveRight = KeyCode.valueOf(keyValue);
-                        break;
-                    case "leftKey":
-                        moveLeft = KeyCode.valueOf(keyValue);
-                        break;
-                    case "upKey":
-                        moveUp = KeyCode.valueOf(keyValue);
-                        break;
-                    case "downKey":
-                        moveDown = KeyCode.valueOf(keyValue);
-                        break;
-                }
-            }}
-
-        // Initialize default keys if not found
-        if (moveRight == null) moveRight = KeyCode.D;
-        if (moveLeft == null) moveLeft = KeyCode.A;
-        if (moveUp == null) moveUp = KeyCode.W;
-        if (moveDown == null) moveDown = KeyCode.S;
-        
-        System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", Up=" + moveUp + ", Down=" + moveDown);
-
-        } catch (IOException | IllegalArgumentException e) {
-            System.err.println("Error loading data: " + e.getMessage());
-            e.printStackTrace();
-            // Set default keys on error
-            moveRight = KeyCode.D;
-            moveLeft = KeyCode.A;
-            moveUp = KeyCode.W;
-            moveDown = KeyCode.S;
-        }
-    }
-    
     public void playSound(String soundFileName, boolean stopAudio) {
           URL soundURL = getClass().getResource("/sound/" + soundFileName);
           Media sound = new Media(soundURL.toString());
@@ -657,14 +609,19 @@ private void centerStage() {
     stage.setY(centerYPosition);
 }
 
-     private void loadData() {
-    String filePath = "./src/Game/data.bin";
-    System.out.println("Loading data from: " + filePath);
-
-    try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
-        while (dis.available() > 0) {
-            String keyType = dis.readUTF();
-            if (!keyType.equals("volume")) {
+private void loadData() {
+      
+        String filePath = "./src/Game/data.bin";
+        System.out.println("Loading data from: " + filePath);
+          //Load file from directory
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))){
+            //read file
+            while (dis.available() > 0) {
+                String keyType = dis.readUTF();
+                if (keyType.equals("volume")) {
+                volume = dis.readDouble(); // Read and set the volume
+            } else {
+                    //Read and set keybind
                 String keyValue = dis.readUTF();
                 switch (keyType) {
                     case "rightKey":
@@ -679,14 +636,8 @@ private void centerStage() {
                     case "downKey":
                         moveDown = KeyCode.valueOf(keyValue);
                         break;
-                    default:
-                        System.err.println("Unknown key type: " + keyType);
                 }
-            } else {
-                double savedVolume = dis.readDouble();
-                mediaPlayer.setVolume(savedVolume / 100.0);
-            }
-        }
+            }}
 
         // Initialize default keys if not found
         if (moveRight == null) moveRight = KeyCode.D;
@@ -696,17 +647,16 @@ private void centerStage() {
         
         System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", Up=" + moveUp + ", Down=" + moveDown);
 
-    } catch (IOException | IllegalArgumentException e) {
-        System.err.println("Error loading data: " + e.getMessage());
-        e.printStackTrace();
-        // Set default keys on error
-        moveRight = KeyCode.D;
-        moveLeft = KeyCode.A;
-        moveUp = KeyCode.W;
-        moveDown = KeyCode.S;
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Error loading data: " + e.getMessage());
+            e.printStackTrace();
+            // Set default keys on error
+            moveRight = KeyCode.D;
+            moveLeft = KeyCode.A;
+            moveUp = KeyCode.W;
+            moveDown = KeyCode.S;
+        }
     }
-}
-
     
     private void handleMovement(KeyCode key) {
         int speed = 2; // Default walking speed
