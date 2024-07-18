@@ -58,7 +58,7 @@ public class Controller extends Application {
     public Image mazeFloor1, mazeWall1, mazeFloor2, mazeWall2, mazeFloor3, mazeWall3;
 
     public Image heart, coin, powerOrb, blinded, frozen;
-    public Image spiderImage, skeletonImage, goblinImage, fire, spike;
+    public Image spiderImage, skeletonImage, goblinImage, phantomImage, fire, spike;
     public Image knightUp, knightDown, knightLeft, knightRight, powerKnightUp, powerKnightDown, powerKnightLeft, powerKnightRight, background, assassinImage;
     public Image assassinUp, assassinDown, assassinLeft, assassinRight, powerAssassinUp, powerAssassinDown, powerAssassinLeft, powerAssassinRight;
     public Image mageUp, mageDown, mageLeft, mageRight, powerMage;
@@ -300,20 +300,25 @@ public class Controller extends Application {
         knightUp = new Image(getClass().getResourceAsStream("/images/knight/knightUp.gif"));
         knightLeft = new Image(getClass().getResourceAsStream("/images/knight/knightLeft.gif"));
         knightRight = new Image(getClass().getResourceAsStream("/images/knight/knightRight.gif"));
+        powerKnightDown = new Image(getClass().getResourceAsStream("/images/knight/powerKnightDown.gif"));
+        powerKnightUp = new Image(getClass().getResourceAsStream("/images/knight/powerKnightUp.gif"));
+        powerKnightLeft = new Image(getClass().getResourceAsStream("/images/knight/powerKnightLeft.gif"));
+        powerKnightRight = new Image(getClass().getResourceAsStream("/images/knight/powerKnightRight.gif"));
         
         assassinDown = new Image(getClass().getResourceAsStream("/images/assasin/assassinDown.gif"));
         assassinUp = new Image(getClass().getResourceAsStream("/images/assasin/assassinUp.gif"));
         assassinLeft = new Image(getClass().getResourceAsStream("/images/assasin/assassinLeft.gif"));
         assassinRight = new Image(getClass().getResourceAsStream("/images/assasin/assassinRight.gif"));
+        powerAssassinDown = new Image(getClass().getResourceAsStream("/images/assasin/powerAssassinDown.gif"));
+        powerAssassinUp = new Image(getClass().getResourceAsStream("/images/assasin/powerAssassinUp.gif"));
+        powerAssassinLeft = new Image(getClass().getResourceAsStream("/images/assasin/powerAssassinLeft.gif"));
+        powerAssassinRight = new Image(getClass().getResourceAsStream("/images/assasin/powerAssassinRight.gif"));
         
         mageDown = new Image(getClass().getResourceAsStream("/images/mage/mageDown.gif"));
         mageUp = new Image(getClass().getResourceAsStream("/images/mage/mageUp.gif"));
         mageLeft = new Image(getClass().getResourceAsStream("/images/mage/mageLeft.gif"));
         mageRight = new Image(getClass().getResourceAsStream("/images/mage/mageRight.gif"));
         powerMage = new Image(getClass().getResourceAsStream("/images/mage/powerMage.gif"));
-        
-        spiderImage = new Image(getClass().getResourceAsStream("/images/maze/spider.gif"));
-        heart = new Image(getClass().getResourceAsStream("/images/maze/heart.png"));
         
         mazeFloor1 = new Image(getClass().getResourceAsStream("/images/maze/floor3.jpg"));        
         mazeFloor2 = new Image(getClass().getResourceAsStream("/images/maze/dark-red.png"));
@@ -323,14 +328,15 @@ public class Controller extends Application {
         mazeWall2 = new Image(getClass().getResourceAsStream("/images/maze/nether-brick.png"));
         mazeWall3 = new Image(getClass().getResourceAsStream("/images/maze/mossyDirt.png"));
         
-        
+        heart = new Image(getClass().getResourceAsStream("/images/maze/heart.png"));
         coin = new Image(getClass().getResourceAsStream("/images/maze/coin.gif"));
         powerOrb = new Image(getClass().getResourceAsStream("/images/maze/powerup.gif"));
-        powerKnightUp = new Image(getClass().getResourceAsStream("/images/knight/powerupPlayer.gif"));
         background = new Image(getClass().getResourceAsStream("/images/maze/background.jpg"));
+        spiderImage = new Image(getClass().getResourceAsStream("/images/maze/spider.gif"));
         assassinImage = new Image(getClass().getResourceAsStream("/images/assasin/assassinDown.gif"));
         skeletonImage = new Image(getClass().getResourceAsStream("/images/maze/skeleton.gif"));
         goblinImage = new Image(getClass().getResourceAsStream("/images/maze/goblin.gif"));
+        phantomImage = new Image(getClass().getResourceAsStream("/images/maze/phantom.gif"));        
         fire = new Image(getClass().getResourceAsStream("/images/maze/fire.gif"));
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }

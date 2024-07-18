@@ -325,7 +325,7 @@ class Phantom extends GeneralEnemy{
     }
     
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
-        g2d.drawImage(controller.fire, x, y);
+        g2d.drawImage(controller.phantomImage, x, y);
     }
 }
 

@@ -292,13 +292,13 @@ class Knight extends GeneralCharacter{
         }
         else {
             if (reqDx <= -1) {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightLeft, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightRight, playerX, playerY);
             } else if (reqDy <= -1) {
                 g2d.drawImage(controller.powerKnightUp, playerX, playerY);
             } else {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerKnightDown, playerX, playerY);
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
@@ -406,13 +406,13 @@ class Assassin extends GeneralCharacter{
         }
         else {
             if (reqDx <= -1) {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerAssassinLeft, playerX, playerY);
             } else if (reqDx >= 1) {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerAssassinRight, playerX, playerY);
             } else if (reqDy <= -1) {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerAssassinUp, playerX, playerY);
             } else {
-                g2d.drawImage(controller.powerKnightUp, playerX, playerY);
+                g2d.drawImage(controller.powerAssassinDown, playerX, playerY);
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
