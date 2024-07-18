@@ -87,7 +87,7 @@ public class Controller extends Application {
     private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
-    
+    private double volume = 0.5;
   @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
@@ -201,7 +201,7 @@ public class Controller extends Application {
     public void setInGame(boolean inGame){
         this.inGame = inGame;
     }
-    
+   
     public Scene getGameScene() {
         return gameScene;
     }
@@ -318,11 +318,14 @@ public class Controller extends Application {
     }
     
     public void playSound(String soundFileName) {
+        
         URL soundURL = getClass().getResource("/sound/" + soundFileName);
         if (soundURL != null) {
             Media sound = new Media(soundURL.toString());
            
             mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.setVolume(volume);
+           
             mediaPlayer.play(); // Play the specified sound
         } else {
             System.out.println("Sound file not found: " + soundFileName);
@@ -577,17 +580,15 @@ public class Controller extends Application {
         stage.setY(centerYPosition);
     }
 
-private void loadData() {
-    String filePath = "./src/Game/data.bin";
-    System.out.println("Loading data from: " + filePath);
-     String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
-    // Initialize mediaPlayer
-    Media media = new Media(mediaUrl);
-    mediaPlayer = new MediaPlayer(media);
-    try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
-        while (dis.available() > 0) {
-            String keyType = dis.readUTF();
-            if (!keyType.equals("volume")) {
+    private void loadData() {
+        String filePath = "./src/Game/data.bin";
+        System.out.println("Loading data from: " + filePath);
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))){
+            while (dis.available() > 0) {
+                String keyType = dis.readUTF();
+                if (keyType.equals("volume")) {
+                volume = dis.readDouble(); // Read and set the volume
+            } else {
                 String keyValue = dis.readUTF();
                 switch (keyType) {
                     case "rightKey":
@@ -602,14 +603,8 @@ private void loadData() {
                     case "downKey":
                         moveDown = KeyCode.valueOf(keyValue);
                         break;
-                    default:
-                        System.err.println("Unknown key type: " + keyType);
                 }
-            } else {
-                double savedVolume = dis.readDouble();
-                mediaPlayer.setVolume(savedVolume / 100.0);
-            }
-        }
+            }}
 
         // Initialize default keys if not found
         if (moveRight == null) moveRight = KeyCode.D;
@@ -619,16 +614,16 @@ private void loadData() {
         
         System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", Up=" + moveUp + ", Down=" + moveDown);
 
-    } catch (IOException | IllegalArgumentException e) {
-        System.err.println("Error loading data: " + e.getMessage());
-        e.printStackTrace();
-        // Set default keys on error
-        moveRight = KeyCode.D;
-        moveLeft = KeyCode.A;
-        moveUp = KeyCode.W;
-        moveDown = KeyCode.S;
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Error loading data: " + e.getMessage());
+            e.printStackTrace();
+            // Set default keys on error
+            moveRight = KeyCode.D;
+            moveLeft = KeyCode.A;
+            moveUp = KeyCode.W;
+            moveDown = KeyCode.S;
+        }
     }
-}
 
     
     private void handleMovement(KeyCode key) {
