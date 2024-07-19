@@ -24,7 +24,7 @@ public class SelectController implements Initializable {
     @FXML
     private ImageView mage;
     @FXML
-    private Rectangle knighShapet;
+    private Rectangle knighShape;
     @FXML
     private Rectangle mageShape;
     @FXML
@@ -49,7 +49,7 @@ public class SelectController implements Initializable {
         transition.setAutoReverse(true);
         transition.setCycleCount(TranslateTransition.INDEFINITE);
         transition.play();
-        imageTransition(knight, knighShapet);
+        imageTransition(knight, knighShape);
         imageTransition(assasin, assasinShape);
         imageTransition(mage, mageShape);
     }
