@@ -48,68 +48,55 @@ abstract class GeneralEnemy implements Enemy {
         this.mazes = new Maze[]{maze1, maze2, maze3};
     }
 
-    @Override
     public void setEnemyX(int[] i) {
         this.enemyX = i;
     }
 
-    @Override
     public void setEnemyX(int index, int value) {
         this.enemyX[index] = value;
     }
 
-    @Override
     public void setEnemyY(int[] i) {
         this.enemyY = i;
     }
 
-    @Override
     public void setEnemyY(int index, int value) {
         this.enemyY[index] = value;
     }
 
-    @Override
     public void setEnemyDx(int[] i) {
         this.enemyDx = i;
     }
 
-    @Override
     public void setEnemyDx(int index, int value) {
         this.enemyDx[index] = value;
     }
 
-    @Override
     public void setEnemyDy(int[] i) {
         this.enemyDy = i;
     }
 
-    @Override
     public void setEnemyDy(int index, int value) {
         this.enemyDy[index] = value;
     }
 
-    @Override
     public void setEnemySpeed(int[] i) {
         this.enemySpeed = i;
     }
 
-    @Override
     public void setEnemySpeed(int index, int value) {
         this.enemySpeed[index] = value;
     }
 
-    @Override
     public void setDx(int[] i) {
         this.dx = i;
     }
 
-    @Override
     public void setDy(int[] i) {
         this.dy = i;
     }
 
     //algorithm for moving the enemy randomly in four directions, and handles the events that will occur when it hits the player
-    @Override
     public void moveEnemy(GraphicsContext g2d) {
         int pos, count, BLOCK_SIZE = controller.getBlockSize(), level = controller.getCurrentLevel(), characterNo = controller.getCharacterNo();
 
@@ -207,7 +194,6 @@ class Spider extends GeneralEnemy {
     }
 
     //draws the enemy according to the x and y coordinates
-    @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.spiderImage, x, y);
     }
@@ -219,7 +205,6 @@ class Goblin extends GeneralEnemy {
     }
 
     //draws the enemy according to the x and y coordinates
-    @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.goblinImage, x, y);
     }
@@ -344,7 +329,6 @@ class Skeleton extends GeneralEnemy {
     }
 
     //draws the enemy according to the x and y coordinates
-    @Override
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.skeletonImage, x, y);
     }
