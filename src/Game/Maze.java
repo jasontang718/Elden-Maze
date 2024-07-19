@@ -93,19 +93,19 @@ abstract class GeneralMaze implements Maze {
                     g2d.strokeLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
 
-                if ((controller.screenData[i] & 16) != 0) {
+                if ((controller.getScreenData()[i] & 16) != 0) {
                     double coinX = x + BLOCK_SIZE / 2 - (controller.coin).getWidth() / 2;
                     double coinY = y + BLOCK_SIZE / 2 - (controller.coin).getHeight() / 2;
                     g2d.drawImage(controller.coin, coinX, coinY);
                 }
 
-                if ((controller.screenData[i] & 32) != 0) {
+                if ((controller.getScreenData()[i] & 32) != 0) {
                     double powerupX = x + BLOCK_SIZE / 2 - (controller.powerOrb).getWidth() / 2;
                     double powerupY = y + BLOCK_SIZE / 2 - (controller.powerOrb).getHeight() / 2;
                     g2d.drawImage(controller.powerOrb, powerupX, powerupY);
                 }
                 
-                if ((controller.screenData[i] & 64) != 0) {
+                if ((controller.getScreenData()[i] & 64) != 0) {
                     if(controller.getCurrentLevel() == 1){
                         double trapX = x + BLOCK_SIZE / 2 - (controller.fire).getWidth() / 2;
                         double trapY = y + BLOCK_SIZE / 2 - (controller.fire).getHeight() / 2;

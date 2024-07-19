@@ -56,23 +56,20 @@ public class Controller extends Application {
     private int currentLevel = 0;
     private Timeline timer;
     
-    public Image mazeFloor1, mazeWall1, mazeFloor2, mazeWall2, mazeFloor3, mazeWall3;
-
+    public Image mazeFloor1, mazeFloor2, mazeFloor3, mazeWall1, mazeWall2, mazeWall3;
     public Image heart, coin, powerOrb, blinded, frozen;
     public Image spiderImage, skeletonImage, goblinImage, phantomImage, fire, spike;
     public Image knightUp, knightDown, knightLeft, knightRight, powerKnightUp, powerKnightDown, powerKnightLeft, powerKnightRight, background, assassinImage;
     public Image assassinUp, assassinDown, assassinLeft, assassinRight, powerAssassinUp, powerAssassinDown, powerAssassinLeft, powerAssassinRight;
     public Image mageUp, mageDown, mageLeft, mageRight, powerMage;
 
-    
-    
     private int reqDx = 0;
     private int reqDy = 0;
    
-    Stage stage;
+    private Stage stage;
 
-    short[] screenData;
-    Scene gameScene;
+    private short[] screenData;
+    private Scene gameScene;
    
     private Scene introScene;
     
@@ -127,8 +124,7 @@ public class Controller extends Application {
         
         Button exitButton = new Button("Exit");
         exitButton.setFont(smallFont);
-         exitButton.setOnAction(e -> exitApplication());
-            
+        exitButton.setOnAction(e -> exitApplication());
 
         double width = 250;
         double height = 50;
@@ -137,7 +133,6 @@ public class Controller extends Application {
         settingsButton.setPrefSize(width, height);
         exitButton.setPrefSize(width, height);
 
-        
         Label title = new Label("Elden Maze");
         title.setStyle("-fx-font: normal bold 50px 'serif';" + "-fx-text-fill: maroon;");
 
@@ -163,10 +158,8 @@ public class Controller extends Application {
         gameScene.setOnKeyPressed((KeyEvent event) -> {
             KeyCode key = event.getCode();
 
-
             if (key == KeyCode.SPACE && !inGame) {
                     inGame = true;
-                    
                     if (currentLevel == 0){
                         initGame();
                     } else{
@@ -174,18 +167,18 @@ public class Controller extends Application {
                     }
                 }
 
-
             if (inGame) {
                 switch (key) {
                     case SHIFT:
                         characters[characterNo].setRunning(true);
                         System.out.println("Run: " + characters[characterNo].getRunning());
                         break;
-
+                        
                     case ESCAPE:
                         inGame = false;
                         loadScene("pauseScreen.fxml");
                         break;
+                        
                     default:
                         handleMovement(key);
                 }
@@ -194,7 +187,6 @@ public class Controller extends Application {
 
         gameScene.setOnKeyReleased((KeyEvent event) -> {
             KeyCode key = event.getCode();
-
             if (inGame && key == KeyCode.SHIFT) {
                 characters[characterNo].setRunning(false);
                 System.out.println("Run: " + characters[characterNo].getRunning());
@@ -215,29 +207,32 @@ public class Controller extends Application {
         loadScene("login.fxml");
     }
     
-    public void setCurrentLevel(int currentLevel){
-        this.currentLevel = currentLevel;
+    public Scene getGameScene() {
+        return gameScene;
+    }
+    
+    public Scene getintroScene() {
+        return introScene;
     }
     
     public void setInGame(boolean inGame){
         this.inGame = inGame;
     }
-    
-    public Scene getGameScene() {
-        return gameScene;
-    }
-    public Scene getintroScene() {
-        return introScene;
-    }
 
     public int getCharacterNo(){
         return characterNo;
     }
-     public void setCharacterNo(int characterNo){
+    
+    public void setCharacterNo(int characterNo){
         this.characterNo = characterNo;
     }
+    
     public int getCurrentLevel(){
         return currentLevel;
+    }
+    
+    public void setCurrentLevel(int currentLevel){
+        this.currentLevel = currentLevel;
     }
     
     public boolean getInGame(){
@@ -248,7 +243,7 @@ public class Controller extends Application {
         this.dying = dying;
     }
     
-    public void setshowScore(boolean showScore){
+    public void setShowScore(boolean showScore){
         this.showScore = showScore;
     }
     
@@ -477,7 +472,9 @@ public class Controller extends Application {
         characters[characterNo].setPlayerDy(0);
         reqDx = 0;
         reqDy = 0;
-        dying = false;        
+        dying = false;       
+        characters[characterNo].setPowerUp(false);
+        characters[characterNo].setSlowed(false);
     }
 
     //initializes the game
@@ -489,6 +486,8 @@ public class Controller extends Application {
     //initializes the level
     public void initLevel() {
         initVariables();
+        characters[characterNo].setPowerUp(false);
+        characters[characterNo].setSlowed(false);
         characters[characterNo].setScore(0);
         lives = characters[characterNo].getLives();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
