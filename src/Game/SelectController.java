@@ -35,7 +35,8 @@ public class SelectController implements Initializable {
     private boolean isZoomedIn = false;
     private ImageView currentlyZoomedImageView = null;
     private Rectangle currentlyZoomedShape = null;
-
+    
+    //Initialize controller class
     public void select(Controller controller) {
         this.controller = controller;
     }
@@ -54,12 +55,14 @@ public class SelectController implements Initializable {
     }
 
     @FXML
+    //Start game
     public void startGame() {
         controller.setCurrentLevel(0);
         Scene gameScene = controller.getGameScene();
         controller.setScene(gameScene);
     }
-
+    
+    //Image animation
     private void imageTransition(ImageView imageView, Rectangle shape) {
         double newYPosition = -10;
 

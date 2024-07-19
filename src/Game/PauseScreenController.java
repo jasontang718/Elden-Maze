@@ -40,6 +40,7 @@ public class PauseScreenController implements Initializable {
     }    
     
     @FXML
+    //Restart current level
     private void restart(ActionEvent event) {
      
      Scene gameScene = controller.getGameScene();
@@ -48,6 +49,7 @@ public class PauseScreenController implements Initializable {
       
     }
    @FXML
+   //Quit current level
     private void quit(ActionEvent event) {
         controller.setInGame(false);
         controller.setCurrentLevel(0);
