@@ -349,7 +349,7 @@ public class Controller extends Application {
     public void playSound(String soundFileName, boolean stopAudio) {
           URL soundURL = getClass().getResource("/sound/" + soundFileName);
           Media sound = new Media(soundURL.toString());
-          if (mediaPlayer != null) {
+          if (mediaPlayer != null && stopAudio) {
               mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
           }
           mediaPlayer = new MediaPlayer(sound);
