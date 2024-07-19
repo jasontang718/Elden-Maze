@@ -337,27 +337,6 @@ public class Controller extends Application {
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
     
-    //initialize the variables needed before starting the game
-    private void initVariables() {
-        screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
-        enemies[currentLevel].setEnemyX(new int[MAX_ENEMY]);
-        enemies[currentLevel].setEnemyDx(new int[MAX_ENEMY]);
-        enemies[currentLevel].setEnemyY(new int[MAX_ENEMY]);
-        enemies[currentLevel].setEnemyDy(new int[MAX_ENEMY]);
-        enemies[currentLevel].setEnemySpeed(new int[MAX_ENEMY]);
-        enemies[currentLevel].setDx(new int[4]);
-        enemies[currentLevel].setDy(new int[4]);
-        phantom.setEnemyX(new int[MAX_ENEMY]);
-        phantom.setEnemyDx(new int[MAX_ENEMY]);
-        phantom.setEnemyY(new int[MAX_ENEMY]);
-        phantom.setEnemyDy(new int[MAX_ENEMY]);
-        phantom.setEnemySpeed(new int[MAX_ENEMY]);
-        phantom.setDx(new int[4]);
-        phantom.setDy(new int[4]);
-        showScore = true;
-        finished = false;
-    }
-    
     //plays sound effects
     public void playSound(String soundFileName, boolean stopAudio) {
           URL soundURL = getClass().getResource("/sound/" + soundFileName);
@@ -393,6 +372,27 @@ public class Controller extends Application {
         lives = characters[characterNo].getLives();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
         continueLevel();
+    }
+    
+    //initialize the variables needed before starting the game
+    private void initVariables() {
+        screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
+        enemies[currentLevel].setEnemyX(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemyDx(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemyY(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemyDy(new int[MAX_ENEMY]);
+        enemies[currentLevel].setEnemySpeed(new int[MAX_ENEMY]);
+        enemies[currentLevel].setDx(new int[4]);
+        enemies[currentLevel].setDy(new int[4]);
+        phantom.setEnemyX(new int[MAX_ENEMY]);
+        phantom.setEnemyDx(new int[MAX_ENEMY]);
+        phantom.setEnemyY(new int[MAX_ENEMY]);
+        phantom.setEnemyDy(new int[MAX_ENEMY]);
+        phantom.setEnemySpeed(new int[MAX_ENEMY]);
+        phantom.setDx(new int[4]);
+        phantom.setDy(new int[4]);
+        showScore = true;
+        finished = false;
     }
 
     //can be a continuation of the initLevel method, or continues the level after the player dies, respawning the enemies and players back at their spawnpoints, as well as setting the speed for the enemies

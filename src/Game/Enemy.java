@@ -168,7 +168,7 @@ abstract class GeneralEnemy implements Enemy {
                     characters[characterNo].setSlowed(false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
-                    
+                    //unique mechanic for assassin and mage, as their powerups only make them invincible
                 }
                 else {
                     removeEnemy(i);
