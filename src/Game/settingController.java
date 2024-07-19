@@ -49,14 +49,9 @@ public class settingController implements Initializable {
     }
 
     private void loadData() {
-        String mediaUrl = getClass().getResource("/sound/countdown.mp3").toString();
-      
-        Media media = new Media(mediaUrl);
-        mediaPlayer = new MediaPlayer(media);
-
+       
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
-
-        // Construct the file path relative to the current working directory
+        // Get current working 
         String filePath = "./src/Game/data.bin";
         System.out.println("Loading data from: " + filePath);
 
@@ -83,7 +78,7 @@ public class settingController implements Initializable {
                 } else {
                     double savedVolume = dis.readDouble();
                     volume.setValue(savedVolume);
-                    mediaPlayer.setVolume(savedVolume / 100.0);
+                  
                 }
             }
 
@@ -121,7 +116,7 @@ public class settingController implements Initializable {
 
         // Limit key length and update button state
         for (TextField textField : keys) {
-            checkLength(textField, 1);
+            checkInput(textField, 1);
         }
 
         // Update media player volume based on slider
@@ -164,12 +159,12 @@ public class settingController implements Initializable {
     }
 
     @FXML
-    private void back(ActionEvent event) {
+    private void Back(ActionEvent event) {
         Scene scene = controller.getintroScene();
         controller.setScene(scene);
     }
 
-  private void checkLength(TextField textField, int maxLength) {
+  private void checkInput(TextField textField, int maxLength) {
     textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
         String character = event.getCharacter().toUpperCase(); // Convert to uppercase
         boolean isAlphabetic = character.matches("[a-zA-Z]");
@@ -189,8 +184,10 @@ public class settingController implements Initializable {
     });
 
     textField.textProperty().addListener((observable, oldValue, newValue) -> {
+        // Truncate and convert to uppercase
         if (newValue.length() > maxLength) {
-            textField.setText(newValue.substring(0, maxLength).toUpperCase()); // Truncate and convert to uppercase
+            textField.setText(newValue.substring(0, maxLength).toUpperCase()); 
+
         } else {
             textField.setText(newValue.toUpperCase()); // Convert to uppercase
         }

@@ -19,7 +19,7 @@
             <Font name="STFangsong" size="64.0" />
          </font>
       </Text>
-      <Button fx:id="restart" layoutX="218.0" layoutY="164.0" mnemonicParsing="false" onAction="#restart" prefHeight="47.0" prefWidth="165.0" text="Restart" />
-      <Button fx:id="quit" layoutX="218.0" layoutY="264.0" mnemonicParsing="false" onAction="#quit" prefHeight="47.0" prefWidth="165.0" text="Quit" />
+      <Button fx:id="restart" layoutX="218.0" layoutY="164.0" mnemonicParsing="false" onAction="#restartLevel" prefHeight="47.0" prefWidth="165.0" text="Restart" />
+      <Button fx:id="quit" layoutX="218.0" layoutY="264.0" mnemonicParsing="false" onAction="#Quit" prefHeight="47.0" prefWidth="165.0" text="Quit" />
    </children>
 </AnchorPane>

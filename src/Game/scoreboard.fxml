@@ -65,7 +65,7 @@
          </font>
       </Text>
       <Button fx:id="button" layoutX="176.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" text="Next Level" />
-      <Button layoutX="321.0" layoutY="285.0" mnemonicParsing="false" onAction="#quit" prefHeight="26.0" prefWidth="61.0" text="Exit" />
+      <Button layoutX="321.0" layoutY="285.0" mnemonicParsing="false" onAction="#Quit" prefHeight="26.0" prefWidth="61.0" text="Exit" />
       <Text fx:id="score" fill="WHITE" layoutX="287.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="XX">
          <font>
             <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
