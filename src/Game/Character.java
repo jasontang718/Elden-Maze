@@ -241,7 +241,6 @@ class Knight extends GeneralCharacter{
                 controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
                 controller.playSound("gold.mp3",false);        
-
             }
 
             if ((ch & 32) != 0) {
@@ -278,7 +277,6 @@ class Knight extends GeneralCharacter{
         }
         playerX += playerSpeed * playerDx;
         playerY += playerSpeed * playerDy;
-
     }
 
     //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
@@ -357,7 +355,6 @@ class Assassin extends GeneralCharacter{
                 controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
                 controller.playSound("gold.mp3",false);        
-
             }
 
             if ((ch & 32) != 0) {
@@ -394,7 +391,6 @@ class Assassin extends GeneralCharacter{
         }
         playerX += playerSpeed * playerDx;
         playerY += playerSpeed * playerDy;
-
     }
     
     public void checkPowerUp() {
@@ -495,7 +491,6 @@ class Mage extends GeneralCharacter{
                 controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
                 score++;
                 controller.playSound("gold.mp3",false);        
-
             }
 
             if ((ch & 32) != 0) {
@@ -531,7 +526,6 @@ class Mage extends GeneralCharacter{
         }
         playerX += playerSpeed * playerDx;
         playerY += playerSpeed * playerDy;
-
     }
     
     //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff

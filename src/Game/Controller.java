@@ -567,8 +567,8 @@ public class Controller extends Application {
 
         if (inGame) {
             playGame(g2d);
-            
-        } else {
+        }
+        else {
             showStartingText(g2d);
         }
     }
