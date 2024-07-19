@@ -376,7 +376,7 @@ public class Controller extends Application {
           } else {
               System.out.println("Sound file not found: " + soundFileName);
           }
-      }
+      } 
 
     //initializes the game
     public void initGame() {
@@ -614,6 +614,8 @@ public class Controller extends Application {
   
         if (scene == introScene) {
           playSound("lobby.mp3", true); // Assuming playSound method is defined
+        }else if(scene == gameScene){
+            mediaPlayer.dispose();
         }
           stage.show();
           stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
