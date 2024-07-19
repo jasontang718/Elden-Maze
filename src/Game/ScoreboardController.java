@@ -32,16 +32,16 @@ public class ScoreboardController implements Initializable {
     private Text title;
     @FXML
     private Button button;
-        public void scoreBoard(Controller controller) {
+    public void scoreBoard(Controller controller) {
         this.controller = controller;
-       updateText();
+        updateText();
         updateScore();
     }
 
    
-    /**
-     * Initializes the controller class.
-     */
+
+    //Initializes the controller class.
+     
    public int getCharacterNo(){
         return characterNo;
     }
@@ -56,6 +56,7 @@ public class ScoreboardController implements Initializable {
     }    
     
     @FXML
+    //Proceed to next level
     private void nextLevel(ActionEvent event) {
       controller.nextLevel();
       Scene gameScene = controller.getGameScene();
@@ -64,13 +65,14 @@ public class ScoreboardController implements Initializable {
     }
 
     @FXML
+    //Quit game
     private void quit(ActionEvent event) {
         controller.setInGame(false);
         controller.setCurrentLevel(0);
         Scene introScene = controller.getintroScene();
         controller.setScene(introScene);
     }
-    
+    //Change title if final level completed
     private void updateText(){
      int gameCompleted = controller.getCurrentLevel();
      if (gameCompleted == 2){
@@ -78,6 +80,7 @@ public class ScoreboardController implements Initializable {
        button.setDisable(true);
      }
     }
+    //Update score
     private void updateScore(){
         int readscore = controller.getScore();
         score.setText(Integer.toString(readscore));

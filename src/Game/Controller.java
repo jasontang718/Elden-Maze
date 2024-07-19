@@ -159,7 +159,7 @@ public class Controller extends Application {
 
         game.getChildren().add(canvas);
         gameScene = new Scene(game, screenHSize, screenVSize, Color.BLACK);
-       
+        //KeyCode actions
         gameScene.setOnKeyPressed((KeyEvent event) -> {
             KeyCode key = event.getCode();
 
@@ -578,6 +578,7 @@ public class Controller extends Application {
         }
     }
     @FXML
+    //Pass instance to different scene file
     public void loadScene(String file) {
         loadData();
         try {
@@ -600,6 +601,7 @@ public class Controller extends Application {
             } else if (file.equals("login.fxml")) {
                 LoginController controller = loader.getController();
                 controller.login(this);
+                playSound("login.mp3", false);
             }
 
         setScene(scene);
@@ -609,15 +611,20 @@ public class Controller extends Application {
             e.printStackTrace();
         }
      }
-    
+    //Load the scene
      public void setScene(Scene scene){
-         stage.setScene(scene);
-         stage.show();
-         stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
-         stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
-             centerStage();
-}
-
+        loadData();
+        stage.setScene(scene);
+  
+        if (scene == introScene) {
+          playSound("lobby.mp3", true); // Assuming playSound method is defined
+        }
+          stage.show();
+          stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
+          stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
+          centerStage();
+        }
+     //Centre the stage 
     private void centerStage() {
         // Get primary screen bounds
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -630,7 +637,7 @@ public class Controller extends Application {
         stage.setX(centerXPosition);
         stage.setY(centerYPosition);
     }
-
+    //Read data from file
     private void loadData() {
       
         String filePath = "./src/Game/data.bin";
@@ -679,7 +686,7 @@ public class Controller extends Application {
             moveDown = KeyCode.S;
         }
     }
-    
+    //Decide how fast the character move
     private void handleMovement(KeyCode key) {
         int speed = 2; // Default walking speed
 
@@ -704,6 +711,7 @@ public class Controller extends Application {
             reqDy = speed;
         }
     }
+    //Quit game
     public void exitApplication(){
         Platform.exit();
     }

@@ -28,12 +28,13 @@ public class LoginController implements Initializable {
     @FXML
     private PasswordField password;
     private Controller controller;
-    /**
-     * Initializes the controller class.
-     */
+  
+     // Initializes the controller class.
+     
      public void login(Controller controller) {
         this.controller = controller;
     }
+     //Automatically check login credential
      private void handleLogin() {
         Scene introScene = controller.getintroScene();
         String user = username.getText().trim();
@@ -46,6 +47,7 @@ public class LoginController implements Initializable {
             
         } 
     }
+     //Check login credentials with KeyCode Enter
     private void handleManualLogin() {
         String user = username.getText().trim();
         String pass = password.getText().trim();
@@ -72,13 +74,14 @@ public class LoginController implements Initializable {
         password.textProperty().addListener((observable, oldValue, newValue) -> {
             handleLogin(); // Call login check whenever password changes
         });
+        // Call login check whenever Enter is clicked
           username.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleManualLogin();
             }
         });
 
-        // Handle Enter key pressed in password field
+            // Call login check whenever Enter is clicked
         password.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleManualLogin();
