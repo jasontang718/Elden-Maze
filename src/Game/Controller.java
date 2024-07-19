@@ -46,15 +46,17 @@ public class Controller extends Application {
     private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
     private boolean inGame = false;
     private boolean dying = false;
+    private int lives;
     private boolean showScore = true; // Class-level variable
     private static final int BLOCK_SIZE = 40;
-
     private static final int MAX_ENEMY = 6;
     private static int validSpeed = 1;
+    
+    private Timeline timer;
+    private MediaPlayer mediaPlayer;
     private double volume = 0.5;
 
     private int currentLevel = 0;
-    private Timeline timer;
     
     public Image mazeFloor1, mazeFloor2, mazeFloor3, mazeWall1, mazeWall2, mazeWall3;
     public Image heart, coin, powerOrb, blinded, frozen;
@@ -73,33 +75,28 @@ public class Controller extends Application {
    
     private Scene introScene;
     
-    private MediaPlayer mediaPlayer;
     private boolean finished = true;
     private boolean trap;
     private Map<String, KeyCode> keyMap = new HashMap<>();
     private int characterNo; //THIS FOR CHARACTER SELECTION
     private  KeyCode moveRight,moveLeft,moveUp,moveDown;
+    
     private Knight knight = new Knight(this);
     private Assassin assassin = new Assassin(this);
     private Mage mage = new Mage(this);
-    
     private Character[] characters = new Character[]{knight, assassin, mage};
             
     private Maze1 maze1 = new Maze1(this);
     private Maze2 maze2 = new Maze2(this);
     private Maze3 maze3 = new Maze3(this);
-    
     private Maze[] mazes = new Maze[]{maze1,maze2,maze3};    
     
     private Spider spider = new Spider(this, characters);
     private Goblin goblin = new Goblin(this, characters);
-    private Phantom phantom = new Phantom(this, characters);
     private Skeleton skeleton = new Skeleton(this, characters);
-    
+    private Phantom phantom = new Phantom(this, characters);   
     private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
     
-    private int lives;
-
     private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
     private int screenSize = screenHSize*screenVSize;
@@ -340,49 +337,6 @@ public class Controller extends Application {
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
     
-    //plays sound effects
-    public void playSound(String soundFileName, boolean stopAudio) {
-          URL soundURL = getClass().getResource("/sound/" + soundFileName);
-          Media sound = new Media(soundURL.toString());
-          if (mediaPlayer != null && stopAudio) {
-              mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
-          }
-          mediaPlayer = new MediaPlayer(sound);
-          mediaPlayer.setVolume(volume);
-
-          if (soundURL != null) {
-              if (stopAudio) {
-                  mediaPlayer.stop();
-              }
-              mediaPlayer.play(); // Play the specified sound
-          } else {
-              System.out.println("Sound file not found: " + soundFileName);
-          }
-      }
-
-    //sets the timer for each interval of trap damage
-    public void startTrapTimer() {
-        timer = new Timeline(
-                new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event){
-                            trap = true;
-                            System.out.println("Active: " + trap);
-                        }
-                    }
-                ),
-                
-                new KeyFrame(Duration.seconds(4.8), new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event){
-                            trap = false;
-                            System.out.println("Active: " + trap);                            
-                        }
-                    }
-                )            
-        );
-        timer.setCycleCount(Animation.INDEFINITE);
-        timer.play();   
-    }
-
     //initialize the variables needed before starting the game
     private void initVariables() {
         screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
@@ -403,79 +357,26 @@ public class Controller extends Application {
         showScore = true;
         finished = false;
     }
+    
+    //plays sound effects
+    public void playSound(String soundFileName, boolean stopAudio) {
+          URL soundURL = getClass().getResource("/sound/" + soundFileName);
+          Media sound = new Media(soundURL.toString());
+          if (mediaPlayer != null && stopAudio) {
+              mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
+          }
+          mediaPlayer = new MediaPlayer(sound);
+          mediaPlayer.setVolume(volume);
 
-    //handles the methods that are needed during the game
-    private void playGame(GraphicsContext g2d) {
-        if (dying) {
-            death();
-        } else {
-            characters[characterNo].updateStamina();
-            characters[characterNo].movePlayer();
-            characters[characterNo].drawPlayer(g2d);
-            enemies[currentLevel].moveEnemy(g2d);
-            phantom.moveEnemy(g2d);
-            checkMaze();
-        }
-    }
-
-    //a start screen before a game to let the player to prepare
-    private void showStartingText(GraphicsContext g2d) {
-        String start = "Press SPACE to start";
-        g2d.setFill(Color.WHITESMOKE);
-        g2d.setFont(smallFont); 
-        
-        Text text = new Text(start);
-        text.setFont(smallFont);
-        double textWidth = text.getLayoutBounds().getWidth();
-        double textHeight = text.getLayoutBounds().getHeight();
-
-        // Calculate the coordinates to center the text
-        double textX = (screenHSize - textWidth) / 2;
-        double textY = (screenVSize + textHeight) / 2; // Adjust this to vertically center the text
-
-        g2d.fillText(start, textX, textY);
-    }
-
-    //draws the score, lives, and stamina bar
-    private void drawScore(GraphicsContext g2d) {
-        g2d.setFont(smallFont);
-        g2d.setFill(Color.GREEN);
-        String scoreText = "Score: " + characters[characterNo].getScore();
-        double textWidth = smallFont.getSize() * scoreText.length() / 2;
-        g2d.fillText(scoreText, screenHSize - textWidth - 10, screenVSize - 10);
-
-        for (int i = 0; i < lives; i++) {
-            g2d.drawImage(heart, i * 28 + 8, screenVSize - 30);
-        }
-        
-        g2d.setFill(Color.GREEN);
-        g2d.fillRect(170, screenVSize - 25, characters[characterNo].getStamina()/2, 10);
-        g2d.setStroke(Color.BLACK);
-        if (characters[characterNo] == characters[0] || characters[characterNo] == characters[2]){
-            g2d.strokeRect(170, screenVSize - 25, 300/2, 10);
-        }
-        else if (characters[characterNo] == characters[1]){
-            g2d.strokeRect(170, screenVSize - 25, 500/2, 10);
-        }
-    }
-
-    //handles the deaths of the player and respawn the player back at the spawn point
-    private void death() {
-        lives--;
-        if (lives == 0) {
-            inGame = false;
-            initGame();
-        }
-        characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
-        characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
-        characters[characterNo].setPlayerDx(0);
-        characters[characterNo].setPlayerDy(0);
-        reqDx = 0;
-        reqDy = 0;
-        dying = false;       
-        characters[characterNo].setPowerUp(false);
-        characters[characterNo].setSlowed(false);
-    }
+          if (soundURL != null) {
+              if (stopAudio) {
+                  mediaPlayer.stop();
+              }
+              mediaPlayer.play(); // Play the specified sound
+          } else {
+              System.out.println("Sound file not found: " + soundFileName);
+          }
+      }
 
     //initializes the game
     public void initGame() {
@@ -523,6 +424,20 @@ public class Controller extends Application {
         dying = false;
     }
     
+    //handles the methods that are needed during the game
+    private void playGame(GraphicsContext g2d) {
+        if (dying) {
+            death();
+        } else {
+            characters[characterNo].updateStamina();
+            characters[characterNo].movePlayer();
+            characters[characterNo].drawPlayer(g2d);
+            enemies[currentLevel].moveEnemy(g2d);
+            phantom.moveEnemy(g2d);
+            checkMaze();
+        }
+    }
+    
     //iterate through each tile of the maze to check for remaining coins, if none are present, the level is finished and the scoreboard is shown
     private void checkMaze() {
         // Iterate through screenData to check for remaining coins
@@ -534,7 +449,6 @@ public class Controller extends Application {
                 finished = true;
             }
         }
-
 
         // If no coins are left, the level is completed
         if (finished && showScore) {
@@ -552,6 +466,88 @@ public class Controller extends Application {
             currentLevel = 0; // Reset to first maze if there are no more levels
         }
         initLevel();
+    }
+    
+    //sets the timer for each interval of trap damage
+    public void startTrapTimer() {
+        timer = new Timeline(
+                new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
+                        public void handle(ActionEvent event){
+                            trap = true;
+                            System.out.println("Active: " + trap);
+                        }
+                    }
+                ),
+                
+                new KeyFrame(Duration.seconds(4.8), new EventHandler<ActionEvent>() {
+                        public void handle(ActionEvent event){
+                            trap = false;
+                            System.out.println("Active: " + trap);                            
+                        }
+                    }
+                )            
+        );
+        timer.setCycleCount(Animation.INDEFINITE);
+        timer.play();   
+    }
+    
+    //handles the deaths of the player and respawn the player back at the spawn point
+    private void death() {
+        lives--;
+        if (lives == 0) {
+            inGame = false;
+            initGame();
+        }
+        characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
+        characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
+        characters[characterNo].setPlayerDx(0);
+        characters[characterNo].setPlayerDy(0);
+        reqDx = 0;
+        reqDy = 0;
+        dying = false;       
+        characters[characterNo].setPowerUp(false);
+        characters[characterNo].setSlowed(false);
+    }
+    
+    //a start screen before a game to let the player to prepare
+    private void showStartingText(GraphicsContext g2d) {
+        String start = "Press SPACE to start";
+        g2d.setFill(Color.WHITESMOKE);
+        g2d.setFont(smallFont); 
+        
+        Text text = new Text(start);
+        text.setFont(smallFont);
+        double textWidth = text.getLayoutBounds().getWidth();
+        double textHeight = text.getLayoutBounds().getHeight();
+
+        // Calculate the coordinates to center the text
+        double textX = (screenHSize - textWidth) / 2;
+        double textY = (screenVSize + textHeight) / 2; // Adjust this to vertically center the text
+
+        g2d.fillText(start, textX, textY);
+    }
+
+    //draws the score, lives, and stamina bar
+    private void drawScore(GraphicsContext g2d) {
+        g2d.setFont(smallFont);
+        g2d.setFill(Color.GREEN);
+        String scoreText = "Score: " + characters[characterNo].getScore();
+        double textWidth = smallFont.getSize() * scoreText.length() / 2;
+        g2d.fillText(scoreText, screenHSize - textWidth - 10, screenVSize - 10);
+
+        for (int i = 0; i < lives; i++) {
+            g2d.drawImage(heart, i * 28 + 8, screenVSize - 30);
+        }
+        
+        g2d.setFill(Color.GREEN);
+        g2d.fillRect(170, screenVSize - 25, characters[characterNo].getStamina()/2, 10);
+        g2d.setStroke(Color.BLACK);
+        if (characters[characterNo] == characters[0] || characters[characterNo] == characters[2]){
+            g2d.strokeRect(170, screenVSize - 25, 300/2, 10);
+        }
+        else if (characters[characterNo] == characters[1]){
+            g2d.strokeRect(170, screenVSize - 25, 500/2, 10);
+        }
     }
     
     //draws the texture of the mazes, and other related graphical content
@@ -576,6 +572,7 @@ public class Controller extends Application {
             showStartingText(g2d);
         }
     }
+    
     @FXML
     //Pass instance to different scene file
     public void loadScene(String file) {

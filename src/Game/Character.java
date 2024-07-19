@@ -397,6 +397,27 @@ class Assassin extends GeneralCharacter{
 
     }
     
+    public void checkPowerUp() {
+        if (!powerUp) {
+            powerUp = true;
+            playerSpeed = 2;
+            startPowerUpTimer();
+        } else {
+            resetPowerUpTimer();
+        }
+    }
+    
+    public void startPowerUpTimer() {
+        powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                playerSpeed = 1;
+                powerUp = false;
+            }
+        }));
+        powerupTimer.play();   
+    }
+    
     //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
