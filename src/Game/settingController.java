@@ -88,7 +88,7 @@ public class settingController implements Initializable {
             }
              volume.valueProperty().addListener((observable, oldValue, newValue) -> {
                    mediaPlayer.setVolume(newValue.doubleValue() / 100.0); // Normalize to [0.0, 1.0]
-                 
+              
         });
             // If any key is empty, set default keys and save data
             boolean anyKeyEmpty = false;

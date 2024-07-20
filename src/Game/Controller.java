@@ -353,7 +353,8 @@ public class Controller extends Application {
               mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
           }
           mediaPlayer = new MediaPlayer(sound);
-          mediaPlayer.setVolume(volume);
+          System.out.println(volume);
+          mediaPlayer.setVolume(volume / 100);
           
           if (soundURL != null) {
               if (stopAudio) {
