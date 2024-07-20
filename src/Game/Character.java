@@ -9,7 +9,7 @@ import javafx.util.Duration;
 import javafx.scene.canvas.GraphicsContext;
 
 //interface for the character class to set up the common methods
-public interface Character {
+interface Character {
     int getScore();
     void setScore(int score);
 

@@ -3,7 +3,7 @@ package Game;
 import javafx.scene.canvas.GraphicsContext;
 
 //interface for the enemy class to set up the common methods
-public interface Enemy {
+interface Enemy {
     void moveEnemy(GraphicsContext g2d);
     void drawEnemy(GraphicsContext g2d, int x, int y);
 

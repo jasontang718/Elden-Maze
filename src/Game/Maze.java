@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 //interface for the maze class to set up the common methods
-public interface Maze {
+interface Maze {
     short[] getLevelData();
     
     int getEnemyCount();
