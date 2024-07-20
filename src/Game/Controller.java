@@ -43,7 +43,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Controller extends Application {
-    private final Font smallFont = Font.font("Times New Roman", FontWeight.BOLD,30);
+    private final Font smallFont = Font.font("STFangsong", FontWeight.BOLD,30);
     private boolean inGame = false;
     private boolean dying = false;
     private int lives;
@@ -131,7 +131,7 @@ public class Controller extends Application {
         exitButton.setPrefSize(width, height);
 
         Label title = new Label("Elden Maze");
-        title.setStyle("-fx-font: normal bold 50px 'serif';" + "-fx-text-fill: maroon;");
+        title.setStyle("-fx-font: normal bold 50px 'STFangsong';" + "-fx-text-fill: maroon;");
 
         VBox introLayout = new VBox(20);
         introLayout.setPrefSize(728, 403);
