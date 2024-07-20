@@ -605,7 +605,7 @@ public class Controller extends Application {
             } else if (file.equals("login.fxml")) {
                 LoginController controller = loader.getController();
                 controller.login(this);
-                playSound("login.mp3", true);
+                playSound("login.mp3", false);
             }
 
         setScene(scene);
@@ -621,7 +621,7 @@ public class Controller extends Application {
         stage.setScene(scene);
   
         if (scene == introScene) {
-          playSound("lobby.mp3", false); // Assuming playSound method is defined
+          playSound("lobby.mp3", true); // Assuming playSound method is defined
            
         }else if(scene == gameScene){
             mediaPlayer.dispose();
