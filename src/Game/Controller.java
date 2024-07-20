@@ -318,7 +318,7 @@ public class Controller extends Application {
         
         mazeFloor1 = new Image(getClass().getResourceAsStream("/images/maze/castlefloor.jpg"));        
         mazeFloor2 = new Image(getClass().getResourceAsStream("/images/maze/forestfloor.jpg"));
-        mazeFloor3 = new Image(getClass().getResourceAsStream("/images/maze/hellfloor.jpg"));
+        mazeFloor3 = new Image(getClass().getResourceAsStream("/images/maze/hellfloor.png"));
         
         mazeWall1 = new Image(getClass().getResourceAsStream("/images/maze/castlewall.png"));
         mazeWall2 = new Image(getClass().getResourceAsStream("/images/maze/mossyDirt.png"));
