@@ -106,7 +106,7 @@ abstract class GeneralMaze implements Maze {
                 }
                 
                 if ((controller.getScreenData()[i] & 64) != 0) {
-                    if(controller.getCurrentLevel() == 1){
+                    if(controller.getCurrentLevel() == 2){
                         double trapX = x + BLOCK_SIZE / 2 - (controller.fire).getWidth() / 2;
                         double trapY = y + BLOCK_SIZE / 2 - (controller.fire).getHeight() / 2;
                         g2d.drawImage(controller.fire, trapX, trapY);                    

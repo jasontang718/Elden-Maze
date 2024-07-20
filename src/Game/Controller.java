@@ -95,7 +95,7 @@ public class Controller extends Application {
     private Goblin goblin = new Goblin(this, characters);
     private Skeleton skeleton = new Skeleton(this, characters);
     private Phantom phantom = new Phantom(this, characters);   
-    private Enemy[] enemies = new Enemy[]{skeleton, goblin, spider};
+    private Enemy[] enemies = new Enemy[]{spider, goblin, skeleton};
     
     private int screenHSize = mazes[currentLevel].getHBlocks() * BLOCK_SIZE;
     private int screenVSize = mazes[currentLevel].getVBlocks() * BLOCK_SIZE;
@@ -316,13 +316,13 @@ public class Controller extends Application {
         mageRight = new Image(getClass().getResourceAsStream("/images/mage/mageRight.gif"));
         powerMage = new Image(getClass().getResourceAsStream("/images/mage/powerMage.gif"));
         
-        mazeFloor1 = new Image(getClass().getResourceAsStream("/images/maze/floor3.jpg"));        
-        mazeFloor2 = new Image(getClass().getResourceAsStream("/images/maze/dark-red.png"));
-        mazeFloor3 = new Image(getClass().getResourceAsStream("/images/maze/sand.jpg"));
+        mazeFloor1 = new Image(getClass().getResourceAsStream("/images/maze/castlefloor.jpg"));        
+        mazeFloor2 = new Image(getClass().getResourceAsStream("/images/maze/forestfloor.jpg"));
+        mazeFloor3 = new Image(getClass().getResourceAsStream("/images/maze/hellfloor.jpg"));
         
-        mazeWall1 = new Image(getClass().getResourceAsStream("/images/maze/floor2.jpg"));
-        mazeWall2 = new Image(getClass().getResourceAsStream("/images/maze/nether-brick.png"));
-        mazeWall3 = new Image(getClass().getResourceAsStream("/images/maze/mossyDirt.png"));
+        mazeWall1 = new Image(getClass().getResourceAsStream("/images/maze/castlewall.png"));
+        mazeWall2 = new Image(getClass().getResourceAsStream("/images/maze/mossyDirt.png"));
+        mazeWall3 = new Image(getClass().getResourceAsStream("/images/maze/hellwall.png"));
         
         heart = new Image(getClass().getResourceAsStream("/images/maze/heart.png"));
         coin = new Image(getClass().getResourceAsStream("/images/maze/coin.gif"));
