@@ -247,7 +247,14 @@ public class Controller extends Application {
     public void setFinished(boolean finished){
         this.finished = finished;
     }
-
+    
+    public MediaPlayer getmediaPlayer(){
+        return mediaPlayer;
+    }
+    
+    public void setMediaPlayer(MediaPlayer mediaplayer){
+        this.mediaPlayer = mediaplayer;
+    }
     public int getBlockSize(){
         return BLOCK_SIZE;
     }
@@ -341,12 +348,13 @@ public class Controller extends Application {
     public void playSound(String soundFileName, boolean stopAudio) {
           URL soundURL = getClass().getResource("/sound/" + soundFileName);
           Media sound = new Media(soundURL.toString());
+          System.out.println(mediaPlayer);
           if (mediaPlayer != null && stopAudio) {
               mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
           }
           mediaPlayer = new MediaPlayer(sound);
           mediaPlayer.setVolume(volume);
-
+          
           if (soundURL != null) {
               if (stopAudio) {
                   mediaPlayer.stop();
@@ -597,7 +605,7 @@ public class Controller extends Application {
             } else if (file.equals("login.fxml")) {
                 LoginController controller = loader.getController();
                 controller.login(this);
-                playSound("login.mp3", false);
+                playSound("login.mp3", true);
             }
 
         setScene(scene);
@@ -613,9 +621,11 @@ public class Controller extends Application {
         stage.setScene(scene);
   
         if (scene == introScene) {
-          playSound("lobby.mp3", true); // Assuming playSound method is defined
+          playSound("lobby.mp3", false); // Assuming playSound method is defined
+           
         }else if(scene == gameScene){
             mediaPlayer.dispose();
+            System.out.println(volume);
         }
           stage.show();
           stage.widthProperty().addListener((obs, oldVal, newVal) -> centreStage());

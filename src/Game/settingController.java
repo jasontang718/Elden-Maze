@@ -23,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javax.swing.text.html.parser.DTDConstants;
 
 public class settingController implements Initializable {
 
@@ -41,6 +42,8 @@ public class settingController implements Initializable {
 
     public void setting(Controller controller) {
         this.controller = controller;
+        this.mediaPlayer = controller.getmediaPlayer();
+        loadData();
     }
 
     @FXML
@@ -49,6 +52,7 @@ public class settingController implements Initializable {
     }
 
     private void loadData() {
+       
        
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
         // Get current working 
@@ -78,10 +82,14 @@ public class settingController implements Initializable {
                 } else {
                     double savedVolume = dis.readDouble();
                     volume.setValue(savedVolume);
-                  
+                    mediaPlayer.setVolume(savedVolume / 100);
+                    System.out.println(mediaPlayer);
                 }
             }
-
+             volume.valueProperty().addListener((observable, oldValue, newValue) -> {
+                   mediaPlayer.setVolume(newValue.doubleValue() / 100.0); // Normalize to [0.0, 1.0]
+                   System.out.println("zz" + newValue);
+        });
             // If any key is empty, set default keys and save data
             boolean anyKeyEmpty = false;
             for (TextField textField : keys) {
@@ -110,7 +118,7 @@ public class settingController implements Initializable {
             upKey.setText("W");
             downKey.setText("S");
             volume.setValue(50); // Default volume
-            mediaPlayer.setVolume(0.5); // Default volume
+      
             saveData(); // Save default keys and volume
         }
 
@@ -120,9 +128,7 @@ public class settingController implements Initializable {
         }
 
         // Update media player volume based on slider
-        volume.valueProperty().addListener((observable, oldValue, newValue) -> {
-            mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
-        });
+       
 
         // Initial button state update
         updateButtonState();
@@ -230,7 +236,8 @@ public class settingController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        loadData();
+        
+
         
     }
 }
