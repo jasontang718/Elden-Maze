@@ -166,6 +166,7 @@ abstract class GeneralEnemy implements Enemy {
                 if (!powerUp) {
                     controller.setDying(true);
                     characters[characterNo].setSlowed(false);
+                    controller.playSound("deathsound.wav", false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
                     //unique mechanic for assassin and mage, as their powerups only make them invincible
@@ -296,6 +297,7 @@ class Phantom extends GeneralEnemy{
                 if (!powerUp) {
                     characters[characterNo].checkSlowed(g2d);
                     removeEnemy(i);
+                    controller.playSound("phantomhit.wav", false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
                     

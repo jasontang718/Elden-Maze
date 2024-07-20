@@ -360,7 +360,7 @@ class Assassin extends GeneralCharacter{
             if ((ch & 32) != 0) {
                 controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
-                controller.playSound("powerup.mp3",false);
+                controller.playSound("assassinvanish.mp3",false);
                 checkPowerUp();
             }
             
