@@ -164,36 +164,47 @@ public class settingController implements Initializable {
         controller.setScene(scene);
     }
 
-  private void checkInput(TextField textField, int maxLength) {
-    textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
-        String character = event.getCharacter().toUpperCase(); // Convert to uppercase
-        boolean isAlphabetic = character.matches("[a-zA-Z]");
+    private void checkInput(TextField textField, int maxLength) {
+       textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+           String character = event.getCharacter().toUpperCase(); // Convert to uppercase
+           boolean isAlphabetic = character.matches("[a-zA-Z]");
 
-        String currentText = textField.getText();
-        String newText = currentText + character;
+           // Disallow non-alphabetic characters
+           if (!isAlphabetic) {
+               event.consume();
+               return;
+           }
 
-        if (newText.length() > maxLength || isDuplicateKey(newText, textField) || !isAlphabetic) {
-            event.consume();
-        } else {
-            textField.setText(newText); // Set text to uppercase
-            textField.positionCaret(newText.length()); // Move caret to the end
-            event.consume();
-        }
+           // Get current text and construct new text
+           String currentText = textField.getText();
+           if (currentText.length() >= maxLength) {
+               event.consume();
+           }
+       });
 
-        updateButtonState();
-    });
+       textField.textProperty().addListener((observable, oldValue, newValue) -> {
+           // Convert to uppercase and truncate if necessary
+           if (newValue.length() > maxLength) {
+               newValue = newValue.substring(0, maxLength);
+           }
 
-    textField.textProperty().addListener((observable, oldValue, newValue) -> {
-        // Truncate and convert to uppercase
-        if (newValue.length() > maxLength) {
-            textField.setText(newValue.substring(0, maxLength).toUpperCase()); 
+           // If newValue is not already uppercase, convert it and update text
+           if (!newValue.equals(newValue.toUpperCase())) {
+               textField.setText(newValue.toUpperCase());
+           }
 
-        } else {
-            textField.setText(newValue.toUpperCase()); // Convert to uppercase
-        }
-        updateButtonState();
-    });
-}
+           // Check for duplicate keys or other validation
+           if (isDuplicateKey(newValue, textField)) {
+               textField.setText(oldValue); // Revert to old value if invalid
+           }
+
+           // Move caret to the end
+           textField.positionCaret(newValue.length());
+
+           updateButtonState();
+       });
+   }
+
 
 
     private boolean isDuplicateKey(String newKey, TextField currentTextField) {

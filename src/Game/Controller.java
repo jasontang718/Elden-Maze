@@ -618,22 +618,22 @@ public class Controller extends Application {
             mediaPlayer.dispose();
         }
           stage.show();
-          stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
-          stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
-          centerStage();
+          stage.widthProperty().addListener((obs, oldVal, newVal) -> centreStage());
+          stage.heightProperty().addListener((obs, oldVal, newVal) -> centreStage());
+          centreStage();
         }
      //Centre the stage 
-    private void centerStage() {
+    private void centreStage() {
         // Get primary screen bounds
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
         // Compute the center position
-        double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
-        double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+        double centreXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
+        double centreYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
 
         // Set the position
-        stage.setX(centerXPosition);
-        stage.setY(centerYPosition);
+        stage.setX(centreXPosition);
+        stage.setY(centreYPosition);
     }
     //Read data from file
     private void loadData() {
