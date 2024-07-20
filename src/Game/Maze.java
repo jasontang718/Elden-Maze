@@ -6,17 +6,19 @@ import javafx.scene.paint.Color;
 //interface for the maze class to set up the common methods
 public interface Maze {
     short[] getLevelData();
+    
     int getEnemyCount();
     void setEnemyCount(int enemyCount);
+    
     int getHBlocks();
     int getVBlocks();
+    
     void drawMaze(GraphicsContext g2d);
 }
 
 //a parent class which implements the interface from the maze class, it contains the general variables and methods used by all subclasses
 abstract class GeneralMaze implements Maze {
     protected Controller controller;
-    protected Character player;
     protected final int H_BLOCKS = 25;
     protected final int V_BLOCKS = 24;
     protected static final int BLOCK_SIZE = 40;
@@ -55,7 +57,6 @@ abstract class GeneralMaze implements Maze {
     }
 
     //draws the maze such as the boundaries, coins, powerup orbs and traps
-    @Override
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
@@ -80,31 +81,25 @@ abstract class GeneralMaze implements Maze {
                 if ((levelData[i] & 1) != 0) {
                     g2d.strokeLine(x, y, x, y + BLOCK_SIZE - 1);
                 }
-
                 if ((levelData[i] & 2) != 0) {
                     g2d.strokeLine(x, y, x + BLOCK_SIZE - 1, y);
                 }
-
                 if ((levelData[i] & 4) != 0) {
                     g2d.strokeLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
-
                 if ((levelData[i] & 8) != 0) {
                     g2d.strokeLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
-
                 if ((controller.getScreenData()[i] & 16) != 0) {
                     double coinX = x + BLOCK_SIZE / 2 - (controller.coin).getWidth() / 2;
                     double coinY = y + BLOCK_SIZE / 2 - (controller.coin).getHeight() / 2;
                     g2d.drawImage(controller.coin, coinX, coinY);
                 }
-
                 if ((controller.getScreenData()[i] & 32) != 0) {
                     double powerupX = x + BLOCK_SIZE / 2 - (controller.powerOrb).getWidth() / 2;
                     double powerupY = y + BLOCK_SIZE / 2 - (controller.powerOrb).getHeight() / 2;
                     g2d.drawImage(controller.powerOrb, powerupX, powerupY);
                 }
-                
                 if ((controller.getScreenData()[i] & 64) != 0) {
                     if(controller.getCurrentLevel() == 2){
                         double trapX = x + BLOCK_SIZE / 2 - (controller.fire).getWidth() / 2;
@@ -117,7 +112,6 @@ abstract class GeneralMaze implements Maze {
                         g2d.drawImage(controller.spike, trapX, trapY);
                     }
                 }
-
                 i++;
             }
         }

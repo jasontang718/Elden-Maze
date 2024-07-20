@@ -485,7 +485,7 @@ public class Controller extends Application {
                 new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent event){
                             trap = true;
-                            System.out.println("Active: " + trap);
+                            System.out.println("Active: " + trap); //code for debugging
                         }
                     }
                 ),
@@ -493,7 +493,7 @@ public class Controller extends Application {
                 new KeyFrame(Duration.seconds(4.8), new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent event){
                             trap = false;
-                            System.out.println("Active: " + trap);                            
+                            System.out.println("Active: " + trap); //code for debugging          
                         }
                     }
                 )            

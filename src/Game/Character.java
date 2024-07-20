@@ -12,24 +12,34 @@ import javafx.scene.canvas.GraphicsContext;
 public interface Character {
     int getScore();
     void setScore(int score);
-    void movePlayer();
-    void drawPlayer(GraphicsContext g2d);
+
     int getLives();
+    
     boolean getSlowed();
     void setSlowed(boolean value);
-    void setRunning(boolean value);
+    
     boolean getRunning();
+    void setRunning(boolean value);
+    
     int getStamina();
+    
     int getPlayerX();
     int getPlayerY();
+    
     void setPlayerX(int x);
     void setPlayerY(int y);
+    
     void setPlayerDx(int dx);
     void setPlayerDy(int dy);
+    
     boolean getPowerUp();
     void setPowerUp(boolean value);
+    
     void setPlayerSpeed(int speed);
     int getPlayerSpeed();
+    
+    void movePlayer();
+    void drawPlayer(GraphicsContext g2d);
     void updateStamina();
     void checkSlowed(GraphicsContext g2d);
 }
@@ -131,7 +141,7 @@ abstract class GeneralCharacter implements Character {
     
     //starts the powerup timer
     public void startPowerUpTimer() {
-        powerupTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
+        powerupTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
                 powerUp = false;
@@ -160,7 +170,7 @@ abstract class GeneralCharacter implements Character {
     
     //starts the slowed timer for when a player receives a debuff
     public void startSlowedTimer() {
-        slowedTimer = new Timeline(new KeyFrame(Duration.millis(10000), new EventHandler<ActionEvent>() {
+        slowedTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
                 slowed = false;
@@ -238,7 +248,7 @@ class Knight extends GeneralCharacter{
 
             if ((ch & 16) != 0) {
                 // Pac-Man eats a dot
-                controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
+                controller.getScreenData()[pos] = (short) (ch & ~16); // Removes the dot
                 score++;
                 controller.playSound("gold.mp3",false);        
             }
@@ -305,11 +315,11 @@ class Knight extends GeneralCharacter{
             }        
         }
         if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
-            int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
-            int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
+            int imageWidth = (int) controller.blinded.getWidth();
+            int imageHeight = (int) controller.blinded.getHeight();
 
-            int drawX = playerX - (imageWidth / 2);  // Center horizontally
-            int drawY = playerY - (imageHeight / 2); // Center vertically
+            int drawX = playerX - (imageWidth / 2);
+            int drawY = playerY - (imageHeight / 2);
 
             g2d.drawImage(controller.blinded, drawX + 15, drawY + 20);
         }
