@@ -4,72 +4,58 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.ScoreboardController">
-   <children>
-      <ImageView fitHeight="406.0" fitWidth="607.0" layoutX="-4.0" layoutY="-2.0" opacity="0.6" pickOnBounds="true">
-         <image>
-            <Image url="@../images/maze/scoreBg.jpg" />
-         </image>
-      </ImageView>
-      <Text fx:id="title" layoutX="176.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard">
-         <font>
-            <Font name="STFangsong" size="50.0" />
-         </font>
-         <fill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="0.1247563362121582" green="0.5456010103225708" blue="0.6736842393875122" />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.010767160161507389">
-                     <color>
-                        <Color red="0.1247563362121582" green="0.5456010103225708" blue="0.6736842393875122" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="0.9894737005233765" green="0.9748758673667908" blue="0.11360623687505722" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </fill>
-         <stroke>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </stroke>
-      </Text>
-      <Text fill="WHITE" layoutX="195.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
-         <font>
-            <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
-         </font>
-      </Text>
-      <Button fx:id="button" layoutX="176.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" text="Next Level" />
-      <Button layoutX="321.0" layoutY="285.0" mnemonicParsing="false" onAction="#Quit" prefHeight="26.0" prefWidth="61.0" text="Exit" />
-      <Text fx:id="score" fill="WHITE" layoutX="287.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="XX">
-         <font>
-            <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
-         </font>
-      </Text>
-   </children>
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="0.0" layoutY="0.0" opacity="0.6" pickOnBounds="true">
+            <image>
+                <Image url="@../images/maze/scoreBg.jpg" />
+            </image>
+        </ImageView>
+        <Text fx:id="title" layoutX="189.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard" textAlignment="CENTER">
+            <font>
+                <Font name="STFangsong" size="50.0" />
+            </font>
+            <fill>
+                <LinearGradient endX="1.0" endY="1.0">
+                    <stops>
+                        <Stop color="#1e90ff" offset="0.0" />
+                        <Stop color="#ffeb3b" offset="1.0" />
+                    </stops>
+                </LinearGradient>
+            </fill>
+            <stroke>
+                <LinearGradient endX="1.0" endY="1.0">
+                    <stops>
+                        <Stop color="black" offset="0.0" />
+                        <Stop color="white" offset="1.0" />
+                    </stops>
+                </LinearGradient>
+            </stroke>
+        </Text>
+        <Text fill="WHITE" layoutX="195.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
+            <font>
+                <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
+            </font>
+        </Text>
+        <Text fx:id="score" fill="WHITE" layoutX="280.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="XX">
+            <font>
+                <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
+            </font>
+        </Text>
+        <Button fx:id="button" layoutX="136.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" prefHeight="35.0" prefWidth="140.0" text="Next Level">
+            <font>
+                <Font name="STFangsong" size="16.0" />
+            </font>
+        </Button>
+        <Button layoutX="320.0" layoutY="285.0" mnemonicParsing="false" onAction="#Quit" prefHeight="35.0" prefWidth="140.0" text="Exit">
+            <font>
+                <Font name="STFangsong" size="16.0" />
+            </font>
+        </Button>
+    </children>
 </AnchorPane>

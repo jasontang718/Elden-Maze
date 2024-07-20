@@ -40,7 +40,6 @@ public class PauseScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         addZoomEffect(restart);
-        
         addZoomEffect(quit);
     }    
     
@@ -71,13 +70,14 @@ public class PauseScreenController implements Initializable {
         zoomOut.setToX(1.0);
         zoomOut.setToY(1.0);
 
-      button.setOnMouseEntered(event -> {
+        button.setOnMouseEntered(event -> {
             zoomIn.playFromStart();
-            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #ff0000;");  // Keep background transparent and change text color to red
-        });
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #ff0000;");
+         });
+        
         button.setOnMouseExited(event -> {
             zoomOut.playFromStart(); 
-            button.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");  // Keep background transparent and revert text color to white
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");  
         });
     }
 }

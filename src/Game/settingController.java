@@ -165,7 +165,7 @@ public class settingController implements Initializable {
     }
 
     @FXML
-    private void back(ActionEvent event) {
+    private void Back(ActionEvent event) {
         Scene scene = controller.getintroScene();
         controller.setScene(scene);
     }
