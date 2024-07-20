@@ -362,10 +362,11 @@ public class Controller extends Application {
               if (stopAudio) {
                   mediaPlayer.stop();
               }
-              mediaPlayer.play(); // Play the specified sound
+          
           } else {
               System.out.println("Sound file not found: " + soundFileName);
           }
+          mediaPlayer.play();
       } 
 
     //initializes the game
@@ -629,9 +630,10 @@ public class Controller extends Application {
         stage.setScene(scene);
   
         if (scene == introScene) {
+           mediaPlayer.dispose();
           playSound("lobby.mp3", true); // Assuming playSound method is defined
         }else if(scene == gameScene){
-            mediaPlayer.dispose();
+           mediaPlayer.dispose();
             
         }
           stage.show();
