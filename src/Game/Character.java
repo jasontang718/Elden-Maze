@@ -15,8 +15,8 @@ interface Character {
 
     int getLives();
     
-    boolean getSlowed();
-    void setSlowed(boolean value);
+    boolean getDebuff();
+    void setDebuff(boolean value);
     
     boolean getRunning();
     void setRunning(boolean value);
@@ -41,7 +41,7 @@ interface Character {
     void movePlayer();
     void drawPlayer(GraphicsContext g2d);
     void updateStamina();
-    void checkSlowed(GraphicsContext g2d);
+    void checkDebuffed(GraphicsContext g2d);
 }
 
 //a parent class which implements the interface from the character class, it contains the general variables and methods used by all subclasses
@@ -58,9 +58,9 @@ abstract class GeneralCharacter implements Character {
     protected boolean running = false;
     protected int playerX, playerY, playerDx, playerDy;
     protected int playerSpeed = 1;
-    protected Timeline powerupTimer, slowedTimer;
+    protected Timeline powerupTimer, debuffedTimer;
     protected boolean powerUp = false;
-    protected boolean slowed = false;
+    protected boolean debuff = false;
     
     public int getScore(){
         return score;
@@ -74,16 +74,16 @@ abstract class GeneralCharacter implements Character {
         return stamina;
     }
     
-    public boolean getSlowed(){
-        return slowed;
+    public boolean getDebuff(){
+        return debuff;
     }
     
-    public void setSlowed(boolean value){
-        this.slowed = value;
+    public void setDebuff(boolean debuff){
+        this.debuff = debuff;
     }
     
-    public void setRunning(boolean value){
-        this.running = value;
+    public void setRunning(boolean debuff){
+        this.running = debuff;
     }
     public boolean getRunning(){
         return running;
@@ -117,8 +117,8 @@ abstract class GeneralCharacter implements Character {
         return powerUp;
     }
     
-    public void setPowerUp(boolean value){
-        this.powerUp = value;
+    public void setPowerUp(boolean powerUp){
+        this.powerUp = powerUp;
     }
     
     public void setPlayerSpeed(int speed){
@@ -158,33 +158,33 @@ abstract class GeneralCharacter implements Character {
         startPowerUpTimer();
     }
 
-    //checks whether a debuff is active and starts or resets the slowed timer
-    public void checkSlowed(GraphicsContext g2d){
-        if (!slowed) {
-            slowed = true;
-            startSlowedTimer();
+    //checks whether a debuff is active and starts or resets the debuff timer
+    public void checkDebuffed(GraphicsContext g2d){
+        if (!debuff) {
+            debuff = true;
+            startDebuffedTimer();
         } else {
-            resetSlowedTimer();
+            resetDebuffedTimer();
         }    
     }
     
     //starts the slowed timer for when a player receives a debuff
-    public void startSlowedTimer() {
-        slowedTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
+    public void startDebuffedTimer() {
+        debuffedTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                slowed = false;
+                debuff = false;
             }
         }));
-        slowedTimer.play();   
+        debuffedTimer.play();   
     }
         
     //restarts the slowed timer if a player gets debuffed again during a debuff
-    public void resetSlowedTimer() {
-        if (slowedTimer != null) {
-            slowedTimer.stop();
+    public void resetDebuffedTimer() {
+        if (debuffedTimer != null) {
+            debuffedTimer.stop();
         }
-        startSlowedTimer();
+        startDebuffedTimer();
     }
     
     //handles the stamina of the player by checking if the player is running or not running
@@ -314,7 +314,7 @@ class Knight extends GeneralCharacter{
                 g2d.drawImage(controller.powerKnightDown, playerX, playerY);
             }        
         }
-        if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
+        if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
             int imageWidth = (int) controller.blinded.getWidth();
             int imageHeight = (int) controller.blinded.getHeight();
 
@@ -374,7 +374,7 @@ class Assassin extends GeneralCharacter{
             
             if ((ch & 64) != 0 && controller.getActive()) {
                 controller.setDying(true);
-                slowed = false;
+                debuff = false;
             }
 
             // Check if the requested direction is valid
@@ -449,7 +449,7 @@ class Assassin extends GeneralCharacter{
                 g2d.drawImage(controller.powerAssassinDown, playerX, playerY);
             }        
         }
-        if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
+        if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
             int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
             int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
 
@@ -505,7 +505,7 @@ class Mage extends GeneralCharacter{
                 controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
                 controller.playSound("freeze.mp3",false);
-                slowed = false;
+                debuff = false;
                 checkPowerUp();
             }
             
@@ -573,7 +573,7 @@ class Mage extends GeneralCharacter{
                 }
             }
         }
-        if (slowed && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
+        if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
             int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
             int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
 

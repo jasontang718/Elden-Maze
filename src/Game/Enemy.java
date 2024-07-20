@@ -154,7 +154,7 @@ abstract class GeneralEnemy implements Enemy {
                 enemyY[i] += enemyDy[i] * enemySpeed[i];
             }
             
-            if (!characters[characterNo].getSlowed() || (characters[characterNo].getSlowed() && distance <= 100)) {
+            if (!characters[characterNo].getDebuff() || (characters[characterNo].getDebuff() && distance <= 100)) {
                 drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
             }
             
@@ -165,7 +165,7 @@ abstract class GeneralEnemy implements Enemy {
                     && characters[characterNo].getPlayerY() > (enemyY[i] - 12) && characters[characterNo].getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
                     controller.setDying(true);
-                    characters[characterNo].setSlowed(false);
+                    characters[characterNo].setDebuff(false);
                     controller.playSound("deathsound.wav", false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
@@ -282,10 +282,10 @@ class Phantom extends GeneralEnemy{
                 enemyY[i] += enemyDy[i] * enemySpeed[i];
             }
             
-            if (!characters[characterNo].getSlowed()){
+            if (!characters[characterNo].getDebuff()){
                 drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
             }
-            else if (characters[characterNo].getSlowed() && distance <= 100){
+            else if (characters[characterNo].getDebuff() && distance <= 100){
                 drawEnemy(g2d, enemyX[i] + 1, enemyY[i] + 1);
             }
 
@@ -295,7 +295,7 @@ class Phantom extends GeneralEnemy{
             if (characters[characterNo].getPlayerX() > (enemyX[i] - 12) && characters[characterNo].getPlayerX() < (enemyX[i] + 12)
                     && characters[characterNo].getPlayerY() > (enemyY[i] - 12) && characters[characterNo].getPlayerY() < (enemyY[i] + 12) && inGame) {
                 if (!powerUp) {
-                    characters[characterNo].checkSlowed(g2d);
+                    characters[characterNo].checkDebuffed(g2d);
                     removeEnemy(i);
                     controller.playSound("phantomhit.wav", false);
                 }

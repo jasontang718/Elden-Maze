@@ -379,7 +379,7 @@ public class Controller extends Application {
     public void initLevel() {
         initVariables();
         characters[characterNo].setPowerUp(false);
-        characters[characterNo].setSlowed(false);
+        characters[characterNo].setDebuff(false);
         characters[characterNo].setScore(0);
         lives = characters[characterNo].getLives();
         System.arraycopy(mazes[currentLevel].getLevelData(), 0, screenData, 0, mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks());
@@ -518,7 +518,7 @@ public class Controller extends Application {
         reqDy = 0;
         dying = false;       
         characters[characterNo].setPowerUp(false);
-        characters[characterNo].setSlowed(false);
+        characters[characterNo].setDebuff(false);
     }
     
     //a start screen before a game to let the player to prepare
@@ -711,7 +711,7 @@ public class Controller extends Application {
         if (characters[characterNo].getRunning()) {
             speed = 4; // Running speed
         }
-        if (characters[characterNo].getSlowed()) {
+        if (characters[characterNo].getDebuff()) {
             speed = 1; // Slowed speed
         }
 
