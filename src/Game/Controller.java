@@ -623,10 +623,9 @@ public class Controller extends Application {
   
         if (scene == introScene) {
           playSound("lobby.mp3", true); // Assuming playSound method is defined
-           
         }else if(scene == gameScene){
             mediaPlayer.dispose();
-            System.out.println(volume);
+            
         }
           stage.show();
           stage.widthProperty().addListener((obs, oldVal, newVal) -> centreStage());
@@ -683,7 +682,8 @@ public class Controller extends Application {
         if (moveUp == null) moveUp = KeyCode.W;
         if (moveDown == null) moveDown = KeyCode.S;
         
-        System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", Up=" + moveUp + ", Down=" + moveDown);
+        System.out.println("Loaded keys: Right=" + moveRight + ", Left=" + moveLeft + ", "
+                + "Up=" + moveUp + ", Down=" + moveDown);
 
         } catch (IOException | IllegalArgumentException e) {
             System.err.println("Error loading data: " + e.getMessage());
