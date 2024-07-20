@@ -324,11 +324,11 @@ public class Controller extends Application {
         powerMage = new Image(getClass().getResourceAsStream("/images/mage/powerMage.gif"));
         
         mazeFloor1 = new Image(getClass().getResourceAsStream("/images/maze/castlefloor.jpg"));        
-        mazeFloor2 = new Image(getClass().getResourceAsStream("/images/maze/forestfloor.jpg"));
+        mazeFloor2 = new Image(getClass().getResourceAsStream("/images/maze/forestfloor.png"));
         mazeFloor3 = new Image(getClass().getResourceAsStream("/images/maze/hellfloor.png"));
         
         mazeWall1 = new Image(getClass().getResourceAsStream("/images/maze/castlewall.png"));
-        mazeWall2 = new Image(getClass().getResourceAsStream("/images/maze/mossyDirt.png"));
+        mazeWall2 = new Image(getClass().getResourceAsStream("/images/maze/forestwall.png"));
         mazeWall3 = new Image(getClass().getResourceAsStream("/images/maze/hellwall.png"));
         
         heart = new Image(getClass().getResourceAsStream("/images/maze/heart.png"));
