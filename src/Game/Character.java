@@ -254,8 +254,7 @@ class Knight extends GeneralCharacter{
                 controller.setDying(true);
                 powerUp = false;
             }
-
-            // Check if the requested direction is valid
+            // Checks if the requested direction is valid
             if (reqDx != 0 || reqDy != 0) {
                 if (!((reqDx <= -1 && reqDy == 0 && (ch & 1) != 0)
                         || (reqDx >= 1 && reqDy == 0 && (ch & 4) != 0)
@@ -265,8 +264,7 @@ class Knight extends GeneralCharacter{
                     playerDy = reqDy;
                 }
             }
-
-            // Check for collisions with walls
+            // Checks for collisions with walls
             if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
                     || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
                     || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)

@@ -110,7 +110,7 @@ public class Controller extends Application {
         // Set the stage
         primaryStage.setTitle("Elden Maze");
 
-        // Create the intro scene
+        //Create the intro scene
         Button startButton = new Button("Start Game");
         startButton.setFont(smallFont);
         startButton.setOnAction(event -> loadScene("select.fxml"));  
@@ -123,19 +123,20 @@ public class Controller extends Application {
         exitButton.setFont(smallFont);
         exitButton.setOnAction(e -> exitApplication());
 
-        double width = 250;
-        double height = 50;
+        double buttonWidth = 250;
+        double buttonHeight = 50;
         
-        startButton.setPrefSize(width, height);
-        settingsButton.setPrefSize(width, height);
-        exitButton.setPrefSize(width, height);
+        startButton.setPrefSize(buttonWidth, buttonHeight);
+        settingsButton.setPrefSize(buttonWidth, buttonHeight);
+        exitButton.setPrefSize(buttonWidth, buttonHeight);
 
         Label title = new Label("Elden Maze");
         title.setStyle("-fx-font: normal bold 50px 'STFangsong';" + "-fx-text-fill: maroon;");
 
         VBox introLayout = new VBox(20);
         introLayout.setPrefSize(728, 403);
-        introLayout.setStyle("-fx-background-image: url('/images/maze/background.jpg');" + "-fx-background-size: cover;" + "-fx-background-repeat: stretch;" + "-fx-background-position: center center;");
+        introLayout.setStyle("-fx-background-image: url('/images/maze/background.jpg');" + "-fx-background-size: cover;" 
+                             + "-fx-background-repeat: stretch;" + "-fx-background-position: center center;");
         introLayout.setAlignment(Pos.CENTER);
         introLayout.getChildren().add(title);
         introLayout.getChildren().add(startButton);
@@ -255,6 +256,7 @@ public class Controller extends Application {
     public void setMediaPlayer(MediaPlayer mediaplayer){
         this.mediaPlayer = mediaplayer;
     }
+    
     public int getBlockSize(){
         return BLOCK_SIZE;
     }
@@ -407,8 +409,8 @@ public class Controller extends Application {
     //can be a continuation of the initLevel method, or continues the level after the player dies, respawning the enemies and players back at their spawnpoints, as well as setting the speed for the enemies
     private void continueLevel() {
         int dx = 1;
-
         for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
+            //sets the spawn point of enemies
             enemies[currentLevel].setEnemyY(i, 1 * BLOCK_SIZE);
             enemies[currentLevel].setEnemyX(i, 1 * BLOCK_SIZE);
             enemies[currentLevel].setEnemyDy(i,0);
@@ -423,7 +425,7 @@ public class Controller extends Application {
             enemies[currentLevel].setEnemySpeed(i, validSpeed);
             phantom.setEnemySpeed(i, validSpeed);
         }
-
+        //sets the spawn point of the player
         characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
         characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
@@ -458,10 +460,8 @@ public class Controller extends Application {
                 finished = true;
             }
         }
-
         // If no coins are left, the level is completed
         if (finished && showScore) {
-
             loadScene("scoreboard.fxml");
             showScore = false;
         }
@@ -480,6 +480,7 @@ public class Controller extends Application {
     //sets the timer for each interval of trap damage
     public void startTrapTimer() {
         timer = new Timeline(
+                //sets trap to active
                 new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent event){
                             trap = true;
@@ -487,7 +488,7 @@ public class Controller extends Application {
                         }
                     }
                 ),
-                
+                //resets trap to inactive
                 new KeyFrame(Duration.seconds(4.8), new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent event){
                             trap = false;
@@ -507,6 +508,7 @@ public class Controller extends Application {
             inGame = false;
             initGame();
         }
+        //respawns the player at spawn point and resets all statuses
         characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
         characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
@@ -529,25 +531,28 @@ public class Controller extends Application {
         double textWidth = text.getLayoutBounds().getWidth();
         double textHeight = text.getLayoutBounds().getHeight();
 
-        // Calculate the coordinates to center the text
+        // Calculate the screen size to center the text
         double textX = (screenHSize - textWidth) / 2;
-        double textY = (screenVSize + textHeight) / 2; // Adjust this to vertically center the text
+        double textY = (screenVSize + textHeight) / 2;
 
         g2d.fillText(start, textX, textY);
     }
 
     //draws the score, lives, and stamina bar
     private void drawScore(GraphicsContext g2d) {
+        //draws the score
         g2d.setFont(smallFont);
         g2d.setFill(Color.GREEN);
         String scoreText = "Score: " + characters[characterNo].getScore();
         double textWidth = smallFont.getSize() * scoreText.length() / 2;
         g2d.fillText(scoreText, screenHSize - textWidth - 10, screenVSize - 10);
 
+        //draws the lives
         for (int i = 0; i < lives; i++) {
             g2d.drawImage(heart, i * 28 + 8, screenVSize - 30);
         }
         
+        //draws the stamina bar
         g2d.setFill(Color.GREEN);
         g2d.fillRect(170, screenVSize - 25, characters[characterNo].getStamina()/2, 10);
         g2d.setStroke(Color.BLACK);
@@ -561,6 +566,7 @@ public class Controller extends Application {
     
     //draws the texture of the mazes, and other related graphical content
     private void draw(GraphicsContext g2d) {
+        //draws the backgrounds of different levels
         if (currentLevel == 0){
             g2d.drawImage(mazeFloor1, 0, 0, screenHSize, screenVSize);            
         }
@@ -571,6 +577,7 @@ public class Controller extends Application {
             g2d.drawImage(mazeFloor3, 0, 0, screenHSize, screenVSize);                    
         }
         
+        //draws the maze layout
         mazes[currentLevel].drawMaze(g2d);
         drawScore(g2d);
 
