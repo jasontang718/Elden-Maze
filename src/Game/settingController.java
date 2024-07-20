@@ -51,8 +51,8 @@ public class settingController implements Initializable {
         saveData();
     }
 
+    //Read and set volume and keybinds 
     private void loadData() {
-       
        
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
         // Get current working 
@@ -83,7 +83,7 @@ public class settingController implements Initializable {
                     double savedVolume = dis.readDouble();
                     volume.setValue(savedVolume);
                     mediaPlayer.setVolume(savedVolume / 100);
-                    System.out.println(mediaPlayer);
+                   
                 }
             }
              volume.valueProperty().addListener((observable, oldValue, newValue) -> {
