@@ -4,22 +4,54 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.PauseScreenController">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" opacity="0.7" pickOnBounds="true">
+      <ImageView fitHeight="400.0" fitWidth="600.0" opacity="0.6" pickOnBounds="true">
          <image>
             <Image url="@../images/maze/scoreBg.jpg" />
          </image>
       </ImageView>
-      <Text fill="#c61b1b" layoutX="217.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paused" wrappingWidth="186.4000015258789">
+      <Text fill="#0e188d" layoutX="84.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Paused" wrappingWidth="198.4000015258789">
          <font>
             <Font name="STFangsong" size="64.0" />
          </font>
       </Text>
-      <Button fx:id="restart" layoutX="218.0" layoutY="164.0" mnemonicParsing="false" onAction="#restartLevel" prefHeight="47.0" prefWidth="165.0" text="Restart" />
-      <Button fx:id="quit" layoutX="218.0" layoutY="264.0" mnemonicParsing="false" onAction="#Quit" prefHeight="47.0" prefWidth="165.0" text="Quit" />
+      <Button fx:id="restart" blendMode="SRC_ATOP" cache="true" layoutX="352.0" layoutY="145.0" mnemonicParsing="false" onAction="#restartLevel" prefHeight="73.0" prefWidth="198.0" style="-fx-background-color: transparent;" text="Restart">
+         <font>
+            <Font name="STFangsong" size="40.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006711409395973154">
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.1831018477678299" green="0.18421052396297455" blue="0.1731237769126892" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill></Button>
+      <Button fx:id="quit" layoutX="352.0" layoutY="223.0" mnemonicParsing="false" onAction="#Quit" prefHeight="73.0" prefWidth="198.0" style="-fx-background-color: transparent;" text="Quit">
+         <font>
+            <Font name="STFangsong" size="40.0" />
+         </font></Button>
+      <Line endX="51.5" endY="138.0" layoutX="249.0" layoutY="192.0" startX="51.5" startY="-76.0" />
    </children>
 </AnchorPane>

@@ -6,11 +6,13 @@ package Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -37,6 +39,9 @@ public class PauseScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        addZoomEffect(restart);
+        
+        addZoomEffect(quit);
     }    
     
     @FXML
@@ -55,5 +60,24 @@ public class PauseScreenController implements Initializable {
         controller.setCurrentLevel(0);
         Scene introScene = controller.getintroScene();
         controller.setScene(introScene);
+    }
+    @FXML
+       private void addZoomEffect(Button button) {
+        ScaleTransition zoomIn = new ScaleTransition(Duration.millis(200), button);
+        zoomIn.setToX(1.4);
+        zoomIn.setToY(1.4);
+        
+        ScaleTransition zoomOut = new ScaleTransition(Duration.millis(200), button);
+        zoomOut.setToX(1.0);
+        zoomOut.setToY(1.0);
+
+      button.setOnMouseEntered(event -> {
+            zoomIn.playFromStart();
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #ff0000;");  // Keep background transparent and change text color to red
+        });
+        button.setOnMouseExited(event -> {
+            zoomOut.playFromStart(); 
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: black;");  // Keep background transparent and revert text color to white
+        });
     }
 }
