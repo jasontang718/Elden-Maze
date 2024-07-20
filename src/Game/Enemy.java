@@ -304,6 +304,7 @@ class Phantom extends GeneralEnemy{
                 }
                 else {
                     removeEnemy(i);
+                    controller.playSound("kill.mp3",false);
                 }
             }
         }
@@ -316,7 +317,6 @@ class Phantom extends GeneralEnemy{
         enemyDx[i] = 0;
         enemyDy[i] = 0;
         enemySpeed[i] = 0;
-        controller.playSound("kill.mp3",false);
     }
     
     //draws the enemy according to the x and y coordinates

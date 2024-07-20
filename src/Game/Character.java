@@ -497,6 +497,7 @@ class Mage extends GeneralCharacter{
                 controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
                 score += 50;
                 controller.playSound("freeze.mp3",false);
+                slowed = false;
                 checkPowerUp();
             }
             
