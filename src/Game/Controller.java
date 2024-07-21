@@ -639,22 +639,22 @@ public class Controller extends Application {
             
         }
           stage.show();
-          stage.widthProperty().addListener((obs, oldVal, newVal) -> centreStage());
-          stage.heightProperty().addListener((obs, oldVal, newVal) -> centreStage());
-          centreStage();
+          stage.widthProperty().addListener((obs, oldVal, newVal) -> centerStage());
+          stage.heightProperty().addListener((obs, oldVal, newVal) -> centerStage());
+          centerStage();
         }
      //Centre the stage 
-    private void centreStage() {
+    private void centerStage() {
         // Get primary screen bounds
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
         // Compute the center position
-        double centreXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
-        double centreYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
+        double centerXPosition = primaryScreenBounds.getMinX() + (primaryScreenBounds.getWidth() - stage.getWidth()) / 2;
+        double centerYPosition = primaryScreenBounds.getMinY() + (primaryScreenBounds.getHeight() - stage.getHeight()) / 2;
 
         // Set the position
-        stage.setX(centreXPosition);
-        stage.setY(centreYPosition);
+        stage.setX(centerXPosition);
+        stage.setY(centerYPosition);
     }
     //Read data from file
     private void loadData() {

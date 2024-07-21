@@ -24,9 +24,7 @@ import javafx.util.Duration;
 public class ScoreboardController implements Initializable {
 
     private Controller controller;
-    
-  
-     private int characterNo;
+    private int characterNo;
 
     @FXML
     private Text score;
@@ -72,7 +70,7 @@ public class ScoreboardController implements Initializable {
 
     @FXML
     //Quit game
-    private void Quit(ActionEvent event) {
+    private void quit(ActionEvent event) {
         controller.setInGame(false);
         controller.setCurrentLevel(0);
         Scene introScene = controller.getintroScene();
