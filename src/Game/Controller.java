@@ -78,7 +78,7 @@ public class Controller extends Application {
     private boolean finished = true;
     private boolean trap;
     private Map<String, KeyCode> keyMap = new HashMap<>();
-    private int characterNo; //THIS FOR CHARACTER SELECTION
+    private int characterNo;
     private  KeyCode moveRight,moveLeft,moveUp,moveDown;
     
     private Knight knight = new Knight(this);
