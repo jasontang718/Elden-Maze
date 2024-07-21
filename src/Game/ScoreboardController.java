@@ -91,7 +91,8 @@ public class ScoreboardController implements Initializable {
         int readscore = controller.getScore();
         score.setText(Integer.toString(readscore));
     }
-       private void addZoomEffect(Button button) {
+    
+    private void addZoomEffect(Button button) {
         ScaleTransition zoomIn = new ScaleTransition(Duration.millis(200), button);
         zoomIn.setToX(1.4);
         zoomIn.setToY(1.4);

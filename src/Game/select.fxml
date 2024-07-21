@@ -17,7 +17,7 @@
          <image>
             <Image url="@../images/maze/background.jpg" />
          </image></ImageView>
-      <Rectangle fx:id="knighShape" arcHeight="5.0" arcWidth="5.0" height="61.0" layoutX="142.0" layoutY="132.0" stroke="BLACK" strokeType="INSIDE" width="54.0">
+      <Rectangle fx:id="knighShape" arcHeight="5.0" arcWidth="5.0" height="61.0" layoutX="140.0" layoutY="117.0" stroke="BLACK" strokeType="INSIDE" width="54.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -38,7 +38,7 @@
          <font>
             <Font size="38.0" />
          </font></Text>
-      <Rectangle fx:id="mageShape" arcHeight="5.0" arcWidth="5.0" height="61.0" layoutX="420.0" layoutY="132.0" stroke="BLACK" strokeType="INSIDE" width="54.0">
+      <Rectangle fx:id="mageShape" arcHeight="5.0" arcWidth="5.0" height="61.0" layoutX="419.0" layoutY="117.0" stroke="BLACK" strokeType="INSIDE" width="54.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -55,7 +55,7 @@
                </stops>
             </LinearGradient>
          </fill></Rectangle>
-      <Rectangle fx:id="assasinShape" arcHeight="5.0" arcWidth="5.0" height="61.0" layoutX="286.0" layoutY="132.0" stroke="BLACK" strokeType="INSIDE" width="54.0">
+      <Rectangle fx:id="assasinShape" arcHeight="5.0" arcWidth="5.0" height="61.0" layoutX="286.0" layoutY="117.0" stroke="BLACK" strokeType="INSIDE" width="54.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -85,16 +85,16 @@
          <font>
             <Font size="16.0" />
          </font></Text>
-      <ImageView fx:id="knight" fitHeight="61.0" fitWidth="54.0" layoutX="142.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="knight" fitHeight="61.0" fitWidth="54.0" layoutX="142.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/knight/knightLeft.gif" />
          </image></ImageView>
-      <ImageView fx:id="assasin" fitHeight="54.0" fitWidth="33.0" layoutX="297.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="assasin" fitHeight="54.0" fitWidth="33.0" layoutX="297.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/assasin/assassinRight.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="mage" fitHeight="61.0" fitWidth="54.0" layoutX="420.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="mage" fitHeight="61.0" fitWidth="54.0" layoutX="420.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/mage/mageRight.gif" />
          </image>

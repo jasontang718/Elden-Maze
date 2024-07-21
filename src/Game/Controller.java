@@ -373,6 +373,7 @@ public class Controller extends Application {
 
     //initializes the game
     public void initGame() {
+      
         currentLevel = 0;
         initLevel();
     }
