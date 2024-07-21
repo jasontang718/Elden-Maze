@@ -348,26 +348,28 @@ public class Controller extends Application {
     
     //plays sound effects
     public void playSound(String soundFileName, boolean stopAudio) {
-          URL soundURL = getClass().getResource("/sound/" + soundFileName);
-          Media sound = new Media(soundURL.toString());
-          System.out.println(mediaPlayer);
-          if (mediaPlayer != null && stopAudio) {
-              mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
-          }
-          mediaPlayer = new MediaPlayer(sound);
-          System.out.println(volume);
-          mediaPlayer.setVolume(volume / 100);
-          
-          if (soundURL != null) {
-              if (stopAudio) {
-                  mediaPlayer.stop();
-              }
-          
-          } else {
-              System.out.println("Sound file not found: " + soundFileName);
-          }
-          mediaPlayer.play();
-      } 
+       URL soundURL = getClass().getResource("/sound/" + soundFileName);
+       if (soundURL == null) {
+           System.out.println("Sound file not found: " + soundFileName);
+           return;
+       }
+
+       Media sound = new Media(soundURL.toString());
+
+       if (mediaPlayer != null && stopAudio) {
+           mediaPlayer.stop();
+           mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
+       }
+
+       mediaPlayer = new MediaPlayer(sound);
+       mediaPlayer.setVolume(volume / 100.0);
+
+       mediaPlayer.setOnError(() -> {
+           System.out.println("Error occurred while playing sound: " + mediaPlayer.getError());
+       });
+
+       mediaPlayer.play();
+   }
 
     //initializes the game
     public void initGame() {
