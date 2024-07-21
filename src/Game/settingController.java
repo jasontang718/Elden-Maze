@@ -157,7 +157,7 @@ public class settingController implements Initializable {
             alert.setTitle("Data Saved");
             alert.setHeaderText(null);
             alert.setContentText("Setting has been saved successfully!");
-              alert.showAndWait();
+            alert.showAndWait();
         } catch (IOException e) {
             System.err.println("Error saving data: " + e.getMessage());
             e.printStackTrace();
