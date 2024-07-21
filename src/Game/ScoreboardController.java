@@ -6,12 +6,14 @@ package Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -30,8 +32,11 @@ public class ScoreboardController implements Initializable {
     private Text score;
     @FXML
     private Text title;
-    @FXML
     private Button button;
+    @FXML
+    private Button next;
+    @FXML
+    private Button exit;
     public void scoreBoard(Controller controller) {
         this.controller = controller;
         updateText();
@@ -51,7 +56,8 @@ public class ScoreboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-       
+        addZoomEffect(next);
+        addZoomEffect(exit);
     
     }    
     
@@ -84,5 +90,24 @@ public class ScoreboardController implements Initializable {
     private void updateScore(){
         int readscore = controller.getScore();
         score.setText(Integer.toString(readscore));
+    }
+       private void addZoomEffect(Button button) {
+        ScaleTransition zoomIn = new ScaleTransition(Duration.millis(200), button);
+        zoomIn.setToX(1.4);
+        zoomIn.setToY(1.4);
+        
+        ScaleTransition zoomOut = new ScaleTransition(Duration.millis(200), button);
+        zoomOut.setToX(1.0);
+        zoomOut.setToY(1.0);
+
+        button.setOnMouseEntered(event -> {
+            zoomIn.playFromStart();
+        
+         });
+        
+        button.setOnMouseExited(event -> {
+            zoomOut.playFromStart(); 
+
+        });
     }
 }

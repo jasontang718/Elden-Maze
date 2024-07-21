@@ -464,7 +464,7 @@ public class Controller extends Application {
             }
         }
         // If no coins are left, the level is completed
-        if (finished && showScore) {
+        if (!finished && showScore) {
             loadScene("scoreboard.fxml");
             showScore = false;
         }

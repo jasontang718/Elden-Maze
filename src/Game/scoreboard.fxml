@@ -4,27 +4,40 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.ScoreboardController">
     <children>
-        <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="0.0" layoutY="0.0" opacity="0.6" pickOnBounds="true">
+        <ImageView fitHeight="400.0" fitWidth="600.0" opacity="0.55" pickOnBounds="true">
             <image>
                 <Image url="@../images/maze/scoreBg.jpg" />
             </image>
         </ImageView>
-        <Text fx:id="title" layoutX="189.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard" textAlignment="CENTER">
+        <Text fx:id="title" layoutX="189.0" layoutY="102.0" strokeType="OUTSIDE" text="Scoreboard" textAlignment="CENTER">
             <font>
                 <Font name="STFangsong" size="50.0" />
             </font>
             <fill>
-                <LinearGradient endX="1.0" endY="1.0">
+                <LinearGradient endX="0.7624703087885986" endY="0.44418052256532065" startX="0.23752969121140144">
                     <stops>
-                        <Stop color="#1e90ff" offset="0.0" />
-                        <Stop color="#ffeb3b" offset="1.0" />
+                        <Stop>
+                     <color>
+                        <Color red="1.0" green="0.841907799243927" blue="0.11999999731779099" />
+                     </color></Stop>
+                        <Stop offset="0.006711409395973154">
+                     <color>
+                        <Color red="1.0" green="0.843137264251709" blue="0.12156862765550613" />
+                     </color></Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.4588235318660736" green="0.14509804546833038" blue="0.14509804546833038" />
+                     </color>
+                  </Stop>
                     </stops>
                 </LinearGradient>
             </fill>
@@ -37,25 +50,69 @@
                 </LinearGradient>
             </stroke>
         </Text>
-        <Text fill="WHITE" layoutX="195.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
+        <Text fill="WHITE" layoutX="215.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
             <font>
-                <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
+                <Font name="STFangsong" size="33.0" />
             </font>
         </Text>
-        <Text fx:id="score" fill="WHITE" layoutX="280.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="XX">
+        <Text fx:id="score" fill="WHITE" layoutX="316.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="XX">
             <font>
-                <Font name="Tsukushi A Round Gothic Bold" size="23.0" />
+                <Font name="STFangsong" size="28.0" />
             </font>
         </Text>
-        <Button fx:id="button" layoutX="136.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" prefHeight="35.0" prefWidth="140.0" text="Next Level">
+        <Button fx:id="next" layoutX="124.0" layoutY="285.0" mnemonicParsing="false" onAction="#nextLevel" prefHeight="50.0" prefWidth="169.0" style="-fx-background-color: transparent;" text="Next Level" textFill="#752525">
             <font>
-                <Font name="STFangsong" size="16.0" />
+                <Font name="STFangsong" size="28.0" />
             </font>
         </Button>
-        <Button layoutX="320.0" layoutY="285.0" mnemonicParsing="false" onAction="#Quit" prefHeight="35.0" prefWidth="140.0" text="Exit">
+        <Button fx:id="exit" layoutX="342.0" layoutY="286.0" mnemonicParsing="false" onAction="#Quit" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: transparent;" text="Exit" textFill="#752525">
             <font>
-                <Font name="STFangsong" size="16.0" />
+                <Font name="STFangsong" size="28.0" />
             </font>
         </Button>
+      <Line endX="100.0" layoutX="300.0" layoutY="109.0" startX="-100.0">
+         <fill>
+            <LinearGradient endX="0.7624703087885986" endY="0.44418052256532065" startX="0.23752969121140144">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.841907799243927" blue="0.11999999731779099" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006711409395973154">
+                     <color>
+                        <Color red="1.0" green="0.843137264251709" blue="0.12156862765550613" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.4588235318660736" green="0.14509804546833038" blue="0.14509804546833038" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+         <stroke>
+            <LinearGradient endX="0.7624703087885986" endY="0.44418052256532065" startX="0.23752969121140144">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.4588235318660736" green="0.14509804546833038" blue="0.14509804546833038" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006711409395973154">
+                     <color>
+                        <Color red="0.4588235318660736" green="0.14509804546833038" blue="0.14509804546833038" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.843137264251709" blue="0.12156862765550613" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Line>
     </children>
 </AnchorPane>

@@ -175,13 +175,13 @@ public class settingController implements Initializable {
            String character = event.getCharacter().toUpperCase(); // Convert to uppercase
            boolean isAlphabetic = character.matches("[a-zA-Z]");
 
-           // Disallow non-alphabetic characters
+           // Only alphabet is allowed
            if (!isAlphabetic) {
                event.consume();
                return;
            }
 
-           // Get current text and construct new text
+          
            String currentText = textField.getText();
            if (currentText.length() >= maxLength) {
                event.consume();
@@ -194,12 +194,12 @@ public class settingController implements Initializable {
                newValue = newValue.substring(0, maxLength);
            }
 
-           // If newValue is not already uppercase, convert it and update text
+          
            if (!newValue.equals(newValue.toUpperCase())) {
                textField.setText(newValue.toUpperCase());
            }
 
-           // Check for duplicate keys or other validation
+           // Check for input validation
            if (isDuplicateKey(newValue, textField)) {
                textField.setText(oldValue); // Revert to old value if invalid
            }
