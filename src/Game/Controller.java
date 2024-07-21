@@ -276,6 +276,7 @@ public class Controller extends Application {
     public int getScreenSize() {
         return screenSize;
     }
+    
     public int getScore() {
         return characters[characterNo].getScore();
     }
