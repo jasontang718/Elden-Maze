@@ -70,7 +70,7 @@ public class ScoreboardController implements Initializable {
 
     @FXML
     //Quit game
-    private void quit(ActionEvent event) {
+    private void Quit(ActionEvent event) {
         controller.setInGame(false);
         controller.setCurrentLevel(0);
         Scene introScene = controller.getintroScene();
@@ -81,7 +81,7 @@ public class ScoreboardController implements Initializable {
      int gameCompleted = controller.getCurrentLevel();
      if (gameCompleted == 2){
       title.setText("Congratulation");
-       button.setDisable(true);
+       next.setDisable(true);
      }
     }
     //Update score
