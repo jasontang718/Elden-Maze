@@ -3,7 +3,7 @@ package Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-//interface for the maze class to set up the common methods
+//Interface for the Maze class to set up the common methods
 interface Maze {
     short[] getLevelData();
     
@@ -16,7 +16,7 @@ interface Maze {
     void drawMaze(GraphicsContext g2d);
 }
 
-//a parent class which implements the interface from the maze class, it contains the general variables and methods used by all subclasses
+//A parent class which implements the interface from the Maze class, it contains the general variables and methods used by all subclasses
 abstract class GeneralMaze implements Maze {
     protected Controller controller;
     protected final int H_BLOCKS = 25;
@@ -25,38 +25,34 @@ abstract class GeneralMaze implements Maze {
     protected int enemyCount;
     protected short[] levelData;
     
+    //Constructor for Maze class
     public GeneralMaze(Controller controller, int enemyCount, short[] levelData) {
         this.controller = controller;
         this.enemyCount = enemyCount;
         this.levelData = levelData;
     }
 
-    @Override
     public short[] getLevelData() {
         return levelData;
     }
 
-    @Override
     public int getEnemyCount() {
         return enemyCount;
     }
 
-    @Override
     public void setEnemyCount(int enemyCount) {
         this.enemyCount = enemyCount;
     }
 
-    @Override
     public int getHBlocks() {
         return H_BLOCKS;
     }
 
-    @Override
     public int getVBlocks() {
         return V_BLOCKS;
     }
 
-    //draws the maze such as the boundaries, coins, powerup orbs and traps
+    //Draws the maze such as the boundaries, coins, powerup orbs and traps
     public void drawMaze(GraphicsContext g2d) {
         short i = 0;
         int x, y;
@@ -66,6 +62,7 @@ abstract class GeneralMaze implements Maze {
                 g2d.setStroke(Color.GREY);
                 g2d.setLineWidth(5);
 
+                //Draws the wall tiles for different mazes
                 if (levelData[i] == 0) {
                     if(controller.getCurrentLevel() == 0){
                         g2d.drawImage(controller.mazeWall1, x, y);                    
@@ -78,28 +75,41 @@ abstract class GeneralMaze implements Maze {
                     }
                 }
 
+                //Draws a right border
                 if ((levelData[i] & 1) != 0) {
                     g2d.strokeLine(x, y, x, y + BLOCK_SIZE - 1);
                 }
+                
+                //Draws a top border
                 if ((levelData[i] & 2) != 0) {
                     g2d.strokeLine(x, y, x + BLOCK_SIZE - 1, y);
                 }
+                
+                //Draws a right border
                 if ((levelData[i] & 4) != 0) {
                     g2d.strokeLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
+                
+                //Draws a bottom border
                 if ((levelData[i] & 8) != 0) {
                     g2d.strokeLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
+                
+                //Draws a coin
                 if ((controller.getScreenData()[i] & 16) != 0) {
                     double coinX = x + BLOCK_SIZE / 2 - (controller.coin).getWidth() / 2;
                     double coinY = y + BLOCK_SIZE / 2 - (controller.coin).getHeight() / 2;
                     g2d.drawImage(controller.coin, coinX, coinY);
                 }
+                
+                //Draws a powerup orb
                 if ((controller.getScreenData()[i] & 32) != 0) {
                     double powerupX = x + BLOCK_SIZE / 2 - (controller.powerOrb).getWidth() / 2;
                     double powerupY = y + BLOCK_SIZE / 2 - (controller.powerOrb).getHeight() / 2;
                     g2d.drawImage(controller.powerOrb, powerupX, powerupY);
                 }
+                
+                //Draws a trap
                 if ((controller.getScreenData()[i] & 64) != 0) {
                     if(controller.getCurrentLevel() == 2){
                         double trapX = x + BLOCK_SIZE / 2 - (controller.fire).getWidth() / 2;
@@ -119,7 +129,7 @@ abstract class GeneralMaze implements Maze {
 }
 
 class Maze1 extends GeneralMaze {
-    //the array for the maze design
+    //The array for the maze design
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,26,26,26,26,26,26,18,26,26,26,26,26,18,26,26,26,26,26,26,26,22,0,
@@ -147,13 +157,14 @@ class Maze1 extends GeneralMaze {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
 
+    //Constructor for Maze1 subclass
     public Maze1(Controller model) {
         super(model, 2, LEVEL_DATA);
     }
 }
 
 class Maze2 extends GeneralMaze {
-    //the array for the maze design
+    //Array for the maze design
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,19,26,26,26,18,26,26,26,18,26,26,18,26,26,18,26,26,26,18,26,26,26,22,0,
@@ -181,13 +192,14 @@ class Maze2 extends GeneralMaze {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     };
 
+    //Constructor for Maze2 subclass
     public Maze2(Controller model) {
         super(model, 4, LEVEL_DATA);
     }
 }
 
 class Maze3 extends GeneralMaze {
-    //the array for the maze design
+    //Array for the maze design
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,35,74,74,26,26,18,26,26,18,26,26,18,26,26,18,26,26,18,26,26,74,74,22,0,
@@ -215,6 +227,7 @@ class Maze3 extends GeneralMaze {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
 
+    //Constructor for Maze3 subclass
     public Maze3(Controller model) {
         super(model, 6, LEVEL_DATA);
     }

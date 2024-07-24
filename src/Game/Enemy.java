@@ -2,7 +2,7 @@ package Game;
 
 import javafx.scene.canvas.GraphicsContext;
 
-//interface for the enemy class to set up the common methods
+//Interface for the Enemy class to set up the common methods
 interface Enemy {
     void moveEnemy(GraphicsContext g2d);
     void drawEnemy(GraphicsContext g2d, int x, int y);
@@ -26,7 +26,7 @@ interface Enemy {
     void setDy(int[] i);
 }
 
-//a parent class which implements the interface from the enemy class, it contains the general variables and methods used by all subclasses
+//A parent class which implements the interface from the Enemy class, it contains the general variables and methods used by all subclasses
 abstract class GeneralEnemy implements Enemy {
     protected Controller controller;
     protected Character[] characters;
@@ -38,7 +38,7 @@ abstract class GeneralEnemy implements Enemy {
     protected int[] enemyX, enemyY, enemyDx, enemyDy, enemySpeed;
     protected int[] dx, dy;
 
-    // Constructor to receive Controller instance
+    //Constructor for Enemy class
     public GeneralEnemy(Controller controller, Character[] characters) {
         this.controller = controller;
         this.characters = characters;
@@ -96,7 +96,7 @@ abstract class GeneralEnemy implements Enemy {
         this.dy = i;
     }
 
-    //algorithm for moving the enemy randomly in four directions, and handles the events that will occur when it hits the player
+    //Algorithm for moving the enemy randomly in different directions, and handles the events that will occur when it hits the player
     public void moveEnemy(GraphicsContext g2d) {
         int pos, count, BLOCK_SIZE = controller.getBlockSize(), level = controller.getCurrentLevel(), characterNo = controller.getCharacterNo();
 
@@ -169,7 +169,7 @@ abstract class GeneralEnemy implements Enemy {
                     controller.playSound("deathsound.wav", false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
-                    //unique mechanic for assassin and mage, as their powerups only make them invincible
+                    //Unique mechanic for assassin and mage, as their powerups only make them invulnerable
                 }
                 else {
                     removeEnemy(i);
@@ -178,7 +178,7 @@ abstract class GeneralEnemy implements Enemy {
         }
     }
 
-    //removes the enemy when killed, moving it out of bounds
+    //Removes the enemy when killed, moving it out of bounds
     protected void removeEnemy(int i) {
         enemyX[i] = -100;
         enemyY[i] = -100;
@@ -190,33 +190,36 @@ abstract class GeneralEnemy implements Enemy {
 }
 
 class Spider extends GeneralEnemy {
+    //Constructor for Spider subclass
     public Spider(Controller model, Character[] characters) {
         super(model, characters);
     }
 
-    //draws the enemy according to the x and y coordinates
+    //Draws each enemy according to their X and Y coordinates
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.spiderImage, x, y);
     }
 }
 
 class Goblin extends GeneralEnemy {
+    //Constructor for Goblin subclass
     public Goblin(Controller model, Character[] characters) {
         super(model, characters);
     }
 
-    //draws the enemy according to the x and y coordinates
+    //Draws each enemy according to their X and Y coordinates
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.goblinImage, x, y);
     }
 }
 
 class Phantom extends GeneralEnemy{
+    //Constructor for Phantom subclass
     public Phantom(Controller model, Character[] characters) {
         super(model, characters);
     }
 
-    //phantom has its unique moveEnemy method as it has different events that occur when it hits the player
+    //Phantom has its own implementation of moveEnemy method as it has different events that occur when it hits the player
     public void moveEnemy(GraphicsContext g2d) {
         int pos;
         int count;
@@ -300,7 +303,7 @@ class Phantom extends GeneralEnemy{
                     controller.playSound("phantomhit.wav", false);
                 }
                 else if (powerUp && (characters[characterNo] == characters[1] || characters[characterNo] == characters[2])){
-                    
+                    //Unique mechanic for assassin and mage, as their powerups only make them invulnerable
                 }
                 else {
                     removeEnemy(i);
@@ -310,7 +313,7 @@ class Phantom extends GeneralEnemy{
         }
     }
     
-    //removes the phantom when killed by moving it out of bounds
+    //Removes the phantom when killed by moving it out of bounds
     public void removeEnemy(int i) {
         enemyX[i] = -100;
         enemyY[i] = -100;
@@ -319,18 +322,19 @@ class Phantom extends GeneralEnemy{
         enemySpeed[i] = 0;
     }
     
-    //draws the enemy according to the x and y coordinates
+    //Draws each enemy according to their X and Y coordinates
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.phantomImage, x, y);
     }
 }
 
 class Skeleton extends GeneralEnemy {
+    //Constructor for Skeleton subclass
     public Skeleton(Controller model, Character[] characters) {
         super(model, characters);
     }
 
-    //draws the enemy according to the x and y coordinates
+    //Draws each enemy according to their X and Y coordinates
     public void drawEnemy(GraphicsContext g2d, int x, int y) {
         g2d.drawImage(controller.skeletonImage, x, y);
     }

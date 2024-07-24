@@ -79,11 +79,11 @@ public class ScoreboardController implements Initializable {
     
     //Change title if final level completed
     private void updateText(){
-     int gameCompleted = controller.getCurrentLevel();
-     if (gameCompleted == 2){
-       title.setText("Congratulation");
-       button.setDisable(true);
-     }
+        int gameCompleted = controller.getCurrentLevel();
+        if (gameCompleted == 2){
+           title.setText("Congratulations!");
+           next.setDisable(true);
+        }
     }
     //Update score
     private void updateScore(){

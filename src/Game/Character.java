@@ -8,7 +8,7 @@ import javafx.util.Duration;
 
 import javafx.scene.canvas.GraphicsContext;
 
-//interface for the character class to set up the common methods
+//Interface for the Character class to set up the common methods
 interface Character {
     int getScore();
     void setScore(int score);
@@ -44,7 +44,7 @@ interface Character {
     void checkDebuffed(GraphicsContext g2d);
 }
 
-//a parent class which implements the interface from the character class, it contains the general variables and methods used by all subclasses
+//A parent class which implements the interface from the Character class, it contains the general variables and methods used by all subclasses
 abstract class GeneralCharacter implements Character {
     protected Controller controller;
     protected Maze1 maze1;
@@ -129,7 +129,7 @@ abstract class GeneralCharacter implements Character {
         return playerSpeed;
     }
     
-    //checks whether a powerup is active and starts or resets the powerup timer
+    //Checks whether a powerup is active and starts or resets the powerup timer
     public void checkPowerUp() {
         if (!powerUp) {
             powerUp = true;
@@ -139,7 +139,7 @@ abstract class GeneralCharacter implements Character {
         }
     }
     
-    //starts the powerup timer
+    //Starts the powerup timer
     public void startPowerUpTimer() {
         powerupTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
@@ -150,7 +150,7 @@ abstract class GeneralCharacter implements Character {
         powerupTimer.play();   
     }
     
-    //restarts the powerup timer
+    //Restarts the powerup timer
     public void resetPowerUpTimer() {
         if (powerupTimer != null) {
             powerupTimer.stop();
@@ -158,7 +158,7 @@ abstract class GeneralCharacter implements Character {
         startPowerUpTimer();
     }
 
-    //checks whether a debuff is active and starts or resets the debuff timer
+    //Checks whether a debuff is active and starts or resets the debuff timer
     public void checkDebuffed(GraphicsContext g2d){
         if (!debuff) {
             debuff = true;
@@ -168,7 +168,7 @@ abstract class GeneralCharacter implements Character {
         }    
     }
     
-    //starts the slowed timer for when a player receives a debuff
+    //Starts the slowed timer for when a player receives a debuff
     public void startDebuffedTimer() {
         debuffedTimer = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
             @Override
@@ -179,7 +179,7 @@ abstract class GeneralCharacter implements Character {
         debuffedTimer.play();   
     }
         
-    //restarts the slowed timer if a player gets debuffed again during a debuff
+    //Restarts the slowed timer if a player gets debuffed again during a debuff
     public void resetDebuffedTimer() {
         if (debuffedTimer != null) {
             debuffedTimer.stop();
@@ -187,7 +187,7 @@ abstract class GeneralCharacter implements Character {
         startDebuffedTimer();
     }
     
-    //handles the stamina of the player by checking if the player is running or not running
+    //Handles the stamina of the player by checking if the player is running or not running
     public void updateStamina() {
         if (running) {
             if (stamina > 0) {
@@ -201,11 +201,14 @@ abstract class GeneralCharacter implements Character {
             running = false;
             int characterNo = controller.getCharacterNo();
             
+            //Amount of stamina for Knight and Mage
             if (characterNo == 0 || characterNo == 2){
                 if (stamina < 300) {
                     stamina++;
                 }
             }
+            
+            //Amount of stamina for Assassin
             else if (characterNo == 1){
                 if (stamina < 500) {
                     stamina++;
@@ -220,6 +223,7 @@ class Knight extends GeneralCharacter{
     int lives = 5;
     int stamina = 300;
     
+    //Constructor for Knight subclass
     public Knight(Controller controller) {
         this.controller = controller;
         this.maze1 = new Maze1(controller);
@@ -233,7 +237,7 @@ class Knight extends GeneralCharacter{
         return lives;
     }
 
-    //code for moving the player, and handles the collectibles such as coins and powerups and death to traps
+    //Code for moving the player, and handles interactions with coins and powerups, and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -245,16 +249,17 @@ class Knight extends GeneralCharacter{
         if (playerX % BLOCK_SIZE == 0 && playerY % BLOCK_SIZE == 0) {
             pos = playerX / BLOCK_SIZE + mazes[level].getHBlocks() * (playerY / BLOCK_SIZE);
             ch = controller.getScreenData()[pos];
-
+            
+            //Removes the coin
             if ((ch & 16) != 0) {
-                // Pac-Man eats a dot
-                controller.getScreenData()[pos] = (short) (ch & ~16); // Removes the dot
+                controller.getScreenData()[pos] = (short) (ch & ~16); 
                 score++;
                 controller.playSound("gold.mp3",false);        
             }
-
+            
+            //Removes the powerup orb
             if ((ch & 32) != 0) {
-                controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
+                controller.getScreenData()[pos] = (short) (ch & 15); 
                 score += 50;
                 controller.playSound("powerup.mp3",false);
                 checkPowerUp();
@@ -264,7 +269,8 @@ class Knight extends GeneralCharacter{
                 controller.setDying(true);
                 powerUp = false;
             }
-            // Checks if the requested direction is valid
+            
+            //Checks if the requested direction is valid
             if (reqDx != 0 || reqDy != 0) {
                 if (!((reqDx <= -1 && reqDy == 0 && (ch & 1) != 0)
                         || (reqDx >= 1 && reqDy == 0 && (ch & 4) != 0)
@@ -274,7 +280,7 @@ class Knight extends GeneralCharacter{
                     playerDy = reqDy;
                 }
             }
-            // Checks for collisions with walls
+            //Checks for collisions with walls
             if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
                     || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
                     || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)
@@ -287,11 +293,12 @@ class Knight extends GeneralCharacter{
         playerY += playerSpeed * playerDy;
     }
 
-    //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
+    //Draws the character when they are moving in different directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
         
+        //Normal state
         if (!powerUp) {
             if (reqDx <= -1) {
                 g2d.drawImage(controller.knightLeft, playerX, playerY);
@@ -303,6 +310,8 @@ class Knight extends GeneralCharacter{
                 g2d.drawImage(controller.knightDown, playerX, playerY);
             }
         }
+        
+        //PowerUp state
         else {
             if (reqDx <= -1) {
                 g2d.drawImage(controller.powerKnightLeft, playerX, playerY);
@@ -314,6 +323,8 @@ class Knight extends GeneralCharacter{
                 g2d.drawImage(controller.powerKnightDown, playerX, playerY);
             }        
         }
+        
+        //Debuffed state
         if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
             int imageWidth = (int) controller.blinded.getWidth();
             int imageHeight = (int) controller.blinded.getHeight();
@@ -331,7 +342,7 @@ class Assassin extends GeneralCharacter{
     int lives = 3;
     int stamina = 500;
 
-    // Constructor to receive Controller instance
+    //Constructor for Assassin subclass
     public Assassin(Controller controller) {
         this.controller = controller;
         this.maze1 = new Maze1(controller);
@@ -345,7 +356,7 @@ class Assassin extends GeneralCharacter{
         return lives;
     }
 
-    //code for moving the player, and handles the collectibles such as coins and powerups and death to traps
+    //Code for moving the player, and handles the collectibles such as coins and powerups and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -358,15 +369,16 @@ class Assassin extends GeneralCharacter{
             pos = playerX / BLOCK_SIZE + mazes[level].getHBlocks() * (playerY / BLOCK_SIZE);
             ch = controller.getScreenData()[pos];
 
+            //Removes the coin
             if ((ch & 16) != 0) {
-                // Pac-Man eats a dot
-                controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
+                controller.getScreenData()[pos] = (short) (ch & ~16);
                 score++;
                 controller.playSound("gold.mp3",false);        
             }
 
+            //Removes the powerup orb
             if ((ch & 32) != 0) {
-                controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
+                controller.getScreenData()[pos] = (short) (ch & 15);
                 score += 50;
                 controller.playSound("assassinvanish.mp3",false);
                 checkPowerUp();
@@ -377,7 +389,7 @@ class Assassin extends GeneralCharacter{
                 debuff = false;
             }
 
-            // Check if the requested direction is valid
+            //Check if the requested direction is valid
             if (reqDx != 0 || reqDy != 0) {
                 if (!((reqDx <= -1 && reqDy == 0 && (ch & 1) != 0)
                         || (reqDx >= 1 && reqDy == 0 && (ch & 4) != 0)
@@ -388,7 +400,7 @@ class Assassin extends GeneralCharacter{
                 }
             }
 
-            // Check for collisions with walls
+            //Check for collisions with walls
             if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
                     || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
                     || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)
@@ -401,6 +413,7 @@ class Assassin extends GeneralCharacter{
         playerY += playerSpeed * playerDy;
     }
     
+    //Checks if a powerup is active
     public void checkPowerUp() {
         if (!powerUp) {
             powerUp = true;
@@ -422,11 +435,12 @@ class Assassin extends GeneralCharacter{
         powerupTimer.play();   
     }
     
-    //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
+    //Draws the character when they are moving in different directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
         
+        //Normal state
         if (!powerUp) {
             if (reqDx <= -1) {
                 g2d.drawImage(controller.assassinLeft, playerX, playerY);
@@ -438,6 +452,8 @@ class Assassin extends GeneralCharacter{
                 g2d.drawImage(controller.assassinDown, playerX, playerY);
             }
         }
+        
+        //Powerup state
         else {
             if (reqDx <= -1) {
                 g2d.drawImage(controller.powerAssassinLeft, playerX, playerY);
@@ -449,12 +465,14 @@ class Assassin extends GeneralCharacter{
                 g2d.drawImage(controller.powerAssassinDown, playerX, playerY);
             }        
         }
+        
+        //Debuffed state
         if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
-            int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
-            int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
+            int imageWidth = (int) controller.blinded.getWidth();
+            int imageHeight = (int) controller.blinded.getHeight();
 
-            int drawX = playerX - (imageWidth / 2);  // Center horizontally
-            int drawY = playerY - (imageHeight / 2); // Center vertically
+            int drawX = playerX - (imageWidth / 2);
+            int drawY = playerY - (imageHeight / 2);
 
             g2d.drawImage(controller.blinded, drawX + 15, drawY + 20);
         }
@@ -468,6 +486,7 @@ class Mage extends GeneralCharacter{
     int lives = 3;
     int stamina = 300;
     
+    //Constructor for Mage subclass
     public Mage(Controller controller) {
         this.controller = controller;
         this.maze1 = new Maze1(controller);
@@ -481,7 +500,7 @@ class Mage extends GeneralCharacter{
         return lives;
     }
  
-    //code for moving the player, and handles the collectibles such as coins and powerups and death to traps
+    //Code for moving the player, and handles interactions with coins and powerups, and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -494,15 +513,16 @@ class Mage extends GeneralCharacter{
             pos = playerX / BLOCK_SIZE + mazes[level].getHBlocks() * (playerY / BLOCK_SIZE);
             ch = controller.getScreenData()[pos];
 
+            //Removes the coin
             if ((ch & 16) != 0) {
-                // Pac-Man eats a dot
-                controller.getScreenData()[pos] = (short) (ch & ~16); // Remove the dot
+                controller.getScreenData()[pos] = (short) (ch & ~16);
                 score++;
                 controller.playSound("gold.mp3",false);        
             }
 
+            //Removes the powerup orb
             if ((ch & 32) != 0) {
-                controller.getScreenData()[pos] = (short) (ch & 15); // Remove the powerup orb
+                controller.getScreenData()[pos] = (short) (ch & 15);
                 score += 50;
                 controller.playSound("freeze.mp3",false);
                 debuff = false;
@@ -513,7 +533,7 @@ class Mage extends GeneralCharacter{
                 controller.setDying(true);
             }
 
-            // Check if the requested direction is valid
+            //Check if the requested direction is valid
             if (reqDx != 0 || reqDy != 0) {
                 if (!((reqDx <= -1 && reqDy == 0 && (ch & 1) != 0)
                         || (reqDx >= 1 && reqDy == 0 && (ch & 4) != 0)
@@ -524,7 +544,7 @@ class Mage extends GeneralCharacter{
                 }
             }
 
-            // Check for collisions with walls
+            //Check for collisions with walls
             if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
                     || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
                     || (playerDx == 0 && playerDy <= -1 && (ch & 2) != 0 && (ch & 0) == 0)
@@ -537,11 +557,12 @@ class Mage extends GeneralCharacter{
         playerY += playerSpeed * playerDy;
     }
     
-    //draws the characters when they are moving in the 4 directions in both normal state and powerup state, as well as drawing the debuff
+    //Draws the character when they are moving in different directions in both normal state and powerup state, as well as drawing the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
         
+        //Normal state
         if (!powerUp) {
             if (reqDx <= -1) {
                 g2d.drawImage(controller.mageLeft, playerX, playerY);
@@ -553,6 +574,8 @@ class Mage extends GeneralCharacter{
                 g2d.drawImage(controller.mageDown, playerX, playerY);
             }
         }
+        
+        //Powerup state
         else {
             g2d.drawImage(controller.frozen, 0, 0);
             
@@ -573,6 +596,8 @@ class Mage extends GeneralCharacter{
                 }
             }
         }
+        
+        //Debuffed state
         if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
             int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
             int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
@@ -584,7 +609,7 @@ class Mage extends GeneralCharacter{
         }
     }
 
-    //mage has its unique checkPowerUp method as the tranformation only happens one time, therefore it needs a separate timer for the animation
+    //Mage has its unique checkPowerUp method as the tranformation only happens one time, therefore it needs a separate timer for the animation
     public void checkPowerUp() {
         if (!powerUp) {
             powerUp = true;
@@ -600,6 +625,7 @@ class Mage extends GeneralCharacter{
         }
     }
     
+    //Timer for the animation
     public void startAnimationTimer() {
         powerupAnimationTimer = new Timeline(new KeyFrame(Duration.seconds(1.4), new EventHandler<ActionEvent>() {
             @Override

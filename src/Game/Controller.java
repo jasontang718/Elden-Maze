@@ -297,7 +297,7 @@ public class Controller extends Application {
         this.trap = value;
     }
     
-    //preloads the images to reduce buffering when the game runs and prevents lag
+    //Preloads the images to reduce buffering when the game runs and prevents lag
     public void loadImages() {
         blinded = new Image(getClass().getResourceAsStream("/images/maze/blinded.png"),4000,2247,false,false);    
         frozen = new Image(getClass().getResourceAsStream("/images/maze/frozen.png"),screenHSize,screenVSize,false,false);    
@@ -347,7 +347,7 @@ public class Controller extends Application {
         spike = new Image(getClass().getResourceAsStream("/images/maze/spike.gif"));
     }
     
-    //plays sound effects
+    //Plays the music and sound effects
     public void playSound(String soundFileName, boolean stopAudio) {
        URL soundURL = getClass().getResource("/sound/" + soundFileName);
        if (soundURL == null) {
@@ -372,14 +372,14 @@ public class Controller extends Application {
        mediaPlayer.play();
    }
 
-    //initializes the game
+    //Initializes the game
     public void initGame() {
       
         currentLevel = 0;
         initLevel();
     }
 
-    //initializes the level
+    //Initializes the level
     public void initLevel() {
         initVariables();
         characters[characterNo].setPowerUp(false);
@@ -390,7 +390,7 @@ public class Controller extends Application {
         continueLevel();
     }
     
-    //initialize the variables needed before starting the game
+    //Initialize the variables needed before starting the game
     private void initVariables() {
         screenData = new short[mazes[currentLevel].getHBlocks() * mazes[currentLevel].getVBlocks()];
         enemies[currentLevel].setEnemyX(new int[MAX_ENEMY]);
@@ -411,11 +411,11 @@ public class Controller extends Application {
         finished = false;
     }
 
-    //can be a continuation of the initLevel method, or continues the level after the player dies, respawning the enemies and players back at their spawnpoints, as well as setting the speed for the enemies
+    //Can be a continuation of the initLevel method, or continues the level after the player dies, respawning the enemies and players back at their spawnpoints, as well as setting the speed for the enemies
     private void continueLevel() {
         int dx = 1;
         for (int i = 0; i < mazes[currentLevel].getEnemyCount(); i++) {
-            //sets the spawn point of enemies
+            //Sets the spawn point of enemies
             enemies[currentLevel].setEnemyY(i, 1 * BLOCK_SIZE);
             enemies[currentLevel].setEnemyX(i, 1 * BLOCK_SIZE);
             enemies[currentLevel].setEnemyDy(i,0);
@@ -430,7 +430,7 @@ public class Controller extends Application {
             enemies[currentLevel].setEnemySpeed(i, validSpeed);
             phantom.setEnemySpeed(i, validSpeed);
         }
-        //sets the spawn point of the player
+        //Sets the spawn point of the player
         characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
         characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
@@ -440,7 +440,7 @@ public class Controller extends Application {
         dying = false;
     }
     
-    //handles the methods that are needed during the game
+    //Handles the methods that are needed during the game
     private void playGame(GraphicsContext g2d) {
         if (dying) {
             death();
@@ -454,7 +454,7 @@ public class Controller extends Application {
         }
     }
     
-    //iterate through each tile of the maze to check for remaining coins, if none are present, the level is finished and the scoreboard is shown
+    //Iterate through each tile of the maze to check for remaining coins, if none are present, the level is finished and the scoreboard is shown
     private void checkMaze() {
         // Iterate through screenData to check for remaining coins
         for (int i = 0; i < screenData.length; i++) {
@@ -466,13 +466,13 @@ public class Controller extends Application {
             }
         }
         // If no coins are left, the level is completed
-        if (finished && showScore) {
+        if (!finished && showScore) {
             loadScene("scoreboard.fxml");
             showScore = false;
         }
     }
 
-    //changes the current level after a level is cleared
+    //Changes the current level after a level is cleared
     public void nextLevel(){
         currentLevel ++;
         
@@ -482,10 +482,10 @@ public class Controller extends Application {
         initLevel();
     }
     
-    //sets the timer for each interval of trap damage
+    //Sets the timer for each interval of trap damage
     public void startTrapTimer() {
         timer = new Timeline(
-                //sets trap to active
+                //Sets trap to active
                 new KeyFrame(Duration.seconds(3.84), new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent event){
                             trap = true;
@@ -493,7 +493,7 @@ public class Controller extends Application {
                         }
                     }
                 ),
-                //resets trap to inactive
+                //Resets trap to inactive
                 new KeyFrame(Duration.seconds(4.8), new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent event){
                             trap = false;
@@ -506,14 +506,14 @@ public class Controller extends Application {
         timer.play();   
     }
     
-    //handles the deaths of the player and respawn the player back at the spawn point
+    //Handles the deaths of the player and respawn the player back at the spawn point
     private void death() {
         lives--;
         if (lives == 0) {
             inGame = false;
             initGame();
         }
-        //respawns the player at spawn point and resets all statuses
+        //Respawns the player at spawn point and resets all statuses
         characters[characterNo].setPlayerX(12 * BLOCK_SIZE);
         characters[characterNo].setPlayerY(14 * BLOCK_SIZE);
         characters[characterNo].setPlayerDx(0);
@@ -525,7 +525,7 @@ public class Controller extends Application {
         characters[characterNo].setDebuff(false);
     }
     
-    //a start screen before a game to let the player to prepare
+    //Shows a starting text before a game starts to let the player to prepare
     private void showStartingText(GraphicsContext g2d) {
         String start = "Press SPACE to start";
         g2d.setFill(Color.WHITESMOKE);
@@ -543,21 +543,21 @@ public class Controller extends Application {
         g2d.fillText(start, textX, textY);
     }
 
-    //draws the score, lives, and stamina bar
+    //Draws the score, lives, and stamina bar at the bottom of the maze
     private void drawScore(GraphicsContext g2d) {
-        //draws the score
+        //Draws the score
         g2d.setFont(smallFont);
         g2d.setFill(Color.GREEN);
         String scoreText = "Score: " + characters[characterNo].getScore();
         double textWidth = smallFont.getSize() * scoreText.length() / 2;
         g2d.fillText(scoreText, screenHSize - textWidth - 10, screenVSize - 10);
 
-        //draws the lives
+        //Draws the lives
         for (int i = 0; i < lives; i++) {
             g2d.drawImage(heart, i * 28 + 8, screenVSize - 30);
         }
         
-        //draws the stamina bar
+        //Draws the stamina bar
         g2d.setFill(Color.GREEN);
         g2d.fillRect(170, screenVSize - 25, characters[characterNo].getStamina()/2, 10);
         g2d.setStroke(Color.BLACK);
@@ -569,7 +569,7 @@ public class Controller extends Application {
         }
     }
     
-    //draws the texture of the mazes, and other related graphical content
+    //Draws the texture of the mazes, and other related graphical content
     private void draw(GraphicsContext g2d) {
         //draws the backgrounds of different levels
         if (currentLevel == 0){
@@ -627,9 +627,9 @@ public class Controller extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-     }
+    }
     //Load the scene
-     public void setScene(Scene scene){
+    public void setScene(Scene scene){
         loadData();
         stage.setScene(scene);
   
