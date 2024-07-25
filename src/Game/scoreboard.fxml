@@ -65,7 +65,7 @@
                 <Font name="STFangsong" size="28.0" />
             </font>
         </Button>
-        <Button fx:id="exit" layoutX="342.0" layoutY="286.0" mnemonicParsing="false" onAction="#Quit" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: transparent;" text="Exit" textFill="#752525">
+        <Button fx:id="exit" layoutX="342.0" layoutY="286.0" mnemonicParsing="false" onAction="#quit" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: transparent;" text="Exit" textFill="#752525">
             <font>
                 <Font name="STFangsong" size="28.0" />
             </font>

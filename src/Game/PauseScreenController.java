@@ -46,7 +46,7 @@ public class PauseScreenController implements Initializable {
     @FXML
     //Restart current level
     private void restartLevel(ActionEvent event) {
-     
+     //Set to game scene
      Scene gameScene = controller.getGameScene();
       controller.setScene(gameScene);
       controller.initLevel();
@@ -62,14 +62,17 @@ public class PauseScreenController implements Initializable {
     }
     @FXML
        private void addZoomEffect(Button button) {
+           
+        //Zoom In effect
         ScaleTransition zoomIn = new ScaleTransition(Duration.millis(200), button);
         zoomIn.setToX(1.4);
         zoomIn.setToY(1.4);
-        
+        //Zoom Out effect
         ScaleTransition zoomOut = new ScaleTransition(Duration.millis(200), button);
         zoomOut.setToX(1.0);
         zoomOut.setToY(1.0);
-
+        
+        //Mouse hover event listener
         button.setOnMouseEntered(event -> {
             zoomIn.playFromStart();
             button.setStyle("-fx-background-color: transparent; -fx-text-fill: #ff0000;");

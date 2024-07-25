@@ -37,6 +37,7 @@ public class LoginController implements Initializable {
      //Automatically check login credential
      private void handleLogin() {
         Scene introScene = controller.getintroScene();
+        //Remove white space
         String user = username.getText().trim();
         String pass = password.getText().trim();
         
@@ -49,6 +50,7 @@ public class LoginController implements Initializable {
     }
      //Check login credentials with KeyCode Enter
     private void handleManualLogin() {
+         //Remove white space
         String user = username.getText().trim();
         String pass = password.getText().trim();
         if ("admin".equals(user) && "password".equals(pass)) {
