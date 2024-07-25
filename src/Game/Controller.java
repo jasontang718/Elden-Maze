@@ -360,10 +360,10 @@ public class Controller extends Application {
        Media sound = new Media(soundURL.toString());
 
        if (mediaPlayer != null && stopAudio) {
-          
+           mediaPlayer.stop();
            mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
        }
-
+       //Set volume
        mediaPlayer = new MediaPlayer(sound);
        mediaPlayer.setVolume(volume / 100.0);
 
@@ -634,7 +634,7 @@ public class Controller extends Application {
     public void setScene(Scene scene){
         loadData();
         stage.setScene(scene);
-  
+        //Dispose previous audio
         if (scene == introScene) {
            mediaPlayer.dispose();
            playSound("lobby.mp3", true); // Play sound
@@ -673,7 +673,7 @@ public class Controller extends Application {
                 if (keyType.equals("volume")) {
                 volume = dis.readDouble(); // Read and set the volume
             } else {
-                    //Read and set keybind
+                //Read and set keybind
                 String keyValue = dis.readUTF();
                 switch (keyType) {
                     case "rightKey":
@@ -720,7 +720,7 @@ public class Controller extends Application {
         if (characters[characterNo].getDebuff()) {
             speed = 1; // Slowed speed
         }
-
+        //Set movement direction
         if (key.equals(moveRight)) {
             reqDx = speed;
             reqDy = 0;
