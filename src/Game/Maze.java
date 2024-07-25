@@ -199,7 +199,7 @@ class Maze2 extends GeneralMaze {
 }
 
 class Maze3 extends GeneralMaze {
-    //Array for the maze design
+    //Array for the maze design, Maze 3 design is supposed to be hard to see for the player to increase its difficulty, apart from adding more enemies
     private static final short[] LEVEL_DATA = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,35,74,74,26,26,18,26,26,18,26,26,18,26,26,18,26,26,18,26,26,74,74,22,0,
