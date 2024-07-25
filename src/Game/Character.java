@@ -280,6 +280,7 @@ class Knight extends GeneralCharacter{
                     playerDy = reqDy;
                 }
             }
+            
             //Checks for collisions with walls
             if ((playerDx <= -1 && playerDy == 0 && (ch & 1) != 0 && (ch & 0) == 0)
                     || (playerDx >= 1 && playerDy == 0 && (ch & 4) != 0 && (ch & 0) == 0)
@@ -293,7 +294,7 @@ class Knight extends GeneralCharacter{
         playerY += playerSpeed * playerDy;
     }
 
-    //Draws the character when they are moving in different directions in both normal state and powerup state, as well as drawing the debuff
+    //Draws the character when they are moving in different directions in both normal state and powerup state, and draws the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
@@ -356,7 +357,7 @@ class Assassin extends GeneralCharacter{
         return lives;
     }
 
-    //Code for moving the player, and handles the collectibles such as coins and powerups and death to traps
+    //Code for moving the player, and handles interactions with coins and powerups, and death to traps
     public void movePlayer() {
         int pos;
         short ch;
@@ -413,7 +414,7 @@ class Assassin extends GeneralCharacter{
         playerY += playerSpeed * playerDy;
     }
     
-    //Checks if a powerup is active
+    //Assasssin has its own implementation of checkPowerUp method as it changes the speed instead of allowing it to kill enemies
     public void checkPowerUp() {
         if (!powerUp) {
             powerUp = true;
@@ -435,7 +436,7 @@ class Assassin extends GeneralCharacter{
         powerupTimer.play();   
     }
     
-    //Draws the character when they are moving in different directions in both normal state and powerup state, as well as drawing the debuff
+    //Draws the character when they are moving in different directions in both normal state and powerup state, and draws the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
@@ -557,7 +558,7 @@ class Mage extends GeneralCharacter{
         playerY += playerSpeed * playerDy;
     }
     
-    //Draws the character when they are moving in different directions in both normal state and powerup state, as well as drawing the debuff
+    //Draws the character when they are moving in different directions in both normal state and powerup state, and draws the debuff
     public void drawPlayer(GraphicsContext g2d) {
         int reqDx = controller.getReqDx();
         int reqDy = controller.getReqDy();
@@ -599,11 +600,11 @@ class Mage extends GeneralCharacter{
         
         //Debuffed state
         if (debuff && (reqDx <= -1 || reqDx >= 1 || reqDy <= -1 || reqDy >= 1)) {
-            int imageWidth = (int) controller.blinded.getWidth();  // Assuming getWidth() gives the width of the image
-            int imageHeight = (int) controller.blinded.getHeight(); // Assuming getHeight() gives the height of the image
+            int imageWidth = (int) controller.blinded.getWidth();
+            int imageHeight = (int) controller.blinded.getHeight();
 
-            int drawX = playerX - (imageWidth / 2);  // Center horizontally
-            int drawY = playerY - (imageHeight / 2); // Center vertically
+            int drawX = playerX - (imageWidth / 2);
+            int drawY = playerY - (imageHeight / 2);
 
             g2d.drawImage(controller.blinded, drawX + 15, drawY + 20);
         }

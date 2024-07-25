@@ -139,7 +139,7 @@ public class settingController implements Initializable {
 
         // Initial button state update
         updateButtonState();
-}
+    }
 
     private void saveData() {
         double value = volume.getValue();
@@ -218,7 +218,7 @@ public class settingController implements Initializable {
 
            updateButtonState();
        });
-   }
+    }
 
 
     //Ensure keybinds are not duplicated

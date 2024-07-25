@@ -141,7 +141,8 @@ abstract class GeneralEnemy implements Enemy {
                         enemyDx[i] = -enemyDx[i];
                         enemyDy[i] = -enemyDy[i];
                     }
-                } else {
+                } 
+                else {
                     count = (int) (Math.random() * count);
                     if (count > 3) count = 3;
                     enemyDx[i] = dx[count];
