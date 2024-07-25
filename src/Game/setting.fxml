@@ -21,7 +21,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccd5dd" height="24.0" layoutX="223.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="140.0" />
         <Button fx:id="button" layoutX="110.0" layoutY="327.0" onAction="#applyChanges" text="Apply changes" />
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Button layoutX="293.0" layoutY="327.0" mnemonicParsing="false" onAction="#Back" text="Exit" />
+      <Button layoutX="293.0" layoutY="327.0" mnemonicParsing="false" onAction="#back" text="Exit" />
       <Slider fx:id="volume" layoutX="226.0" layoutY="54.0" value="50.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7db7ee" height="24.0" layoutX="122.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="78.0" />
       <Text layoutX="140.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Volume" />

@@ -70,10 +70,10 @@ public class ScoreboardController implements Initializable {
 
     @FXML
     //Quit game
-    private void Quit(ActionEvent event) {
+    private void quit(ActionEvent event) {
         controller.setInGame(false);
         controller.setCurrentLevel(0);
-        Scene introScene = controller.getintroScene();
+        Scene introScene = controller.getintroScene();//Back to game lobby
         controller.setScene(introScene);
     }
     
@@ -81,8 +81,8 @@ public class ScoreboardController implements Initializable {
     private void updateText(){
         int gameCompleted = controller.getCurrentLevel();
         if (gameCompleted == 2){
-           title.setText("Congratulations!");
-           next.setDisable(true);
+           title.setText("Congratulations!");//Change scoreboard title
+           next.setDisable(true);//Disabled next level button
         }
     }
     //Update score
@@ -92,14 +92,16 @@ public class ScoreboardController implements Initializable {
     }
     
     private void addZoomEffect(Button button) {
+        //Zoom in effect
         ScaleTransition zoomIn = new ScaleTransition(Duration.millis(200), button);
         zoomIn.setToX(1.4);
         zoomIn.setToY(1.4);
-        
+        //Zoom Out effect
         ScaleTransition zoomOut = new ScaleTransition(Duration.millis(200), button);
         zoomOut.setToX(1.0);
         zoomOut.setToY(1.0);
-
+        
+        //Mouse hover event listener
         button.setOnMouseEntered(event -> {
             zoomIn.playFromStart();
         

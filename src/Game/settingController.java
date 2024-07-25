@@ -21,9 +21,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javax.swing.text.html.parser.DTDConstants;
+
 
 public class settingController implements Initializable {
 
@@ -47,6 +46,8 @@ public class settingController implements Initializable {
     }
 
     @FXML
+    
+    //Apply changes button
     private void applyChanges(ActionEvent event) {
         saveData();
     }
@@ -55,13 +56,17 @@ public class settingController implements Initializable {
     private void loadData() {
        
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
-        // Get current working 
+        
+        // Get current working directory
         String filePath = "./src/Game/data.bin";
         System.out.println("Loading data from: " + filePath);
-
+        
+        //Read binary file
         try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))) {
             while (dis.available() > 0) {
                 String keyType = dis.readUTF();
+                
+                //Read keybinds
                 if (!keyType.equals("volume")) {
                     String keyValue = dis.readUTF();
                     keyMap.put(keyType, KeyCode.valueOf(keyValue));
@@ -80,14 +85,16 @@ public class settingController implements Initializable {
                             break;
                     }
                 } else {
+                    //Read volume
                     double savedVolume = dis.readDouble();
                     volume.setValue(savedVolume);
                     mediaPlayer.setVolume(savedVolume / 100);
                    
                 }
             }
+            //Set volume
              volume.valueProperty().addListener((observable, oldValue, newValue) -> {
-                   mediaPlayer.setVolume(newValue.doubleValue() / 100.0); // Normalize to [0.0, 1.0]
+                   mediaPlayer.setVolume(newValue.doubleValue() / 100.0); 
               
         });
             // If any key is empty, set default keys and save data
@@ -141,7 +148,7 @@ public class settingController implements Initializable {
         // Construct the file path relative to the current working directory
         String filePath = "./src/Game/data.bin";
        
-
+        //Write data into binary file
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePath))) {
             for (TextField key : keys) {
                 String keyType = key.getId();
@@ -153,7 +160,9 @@ public class settingController implements Initializable {
             dos.writeUTF("volume");
             dos.writeDouble(value); // Write the volume value
             System.out.println("Writing volume: " + value);
-         Alert alert = new Alert(AlertType.INFORMATION);
+            
+            //Data saving notification
+            Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Data Saved");
             alert.setHeaderText(null);
             alert.setContentText("Setting has been saved successfully!");
@@ -165,7 +174,7 @@ public class settingController implements Initializable {
     }
 
     @FXML
-    private void Back(ActionEvent event) {
+    private void back(ActionEvent event) {
         Scene scene = controller.getintroScene();
         controller.setScene(scene);
     }
@@ -173,7 +182,7 @@ public class settingController implements Initializable {
     private void checkInput(TextField textField, int maxLength) {
        textField.addEventHandler(KeyEvent.KEY_TYPED, event -> {
            String character = event.getCharacter().toUpperCase(); // Convert to uppercase
-           boolean isAlphabetic = character.matches("[a-zA-Z]");
+           boolean isAlphabetic = character.matches("[a-zA-Z]");//Receive a-z and A-Z input
 
            // Only alphabet is allowed
            if (!isAlphabetic) {
@@ -181,7 +190,7 @@ public class settingController implements Initializable {
                return;
            }
 
-          
+          //Remove text if exceed the max length
            String currentText = textField.getText();
            if (currentText.length() >= maxLength) {
                event.consume();
@@ -212,7 +221,7 @@ public class settingController implements Initializable {
    }
 
 
-
+    //Ensure keybinds are not duplicated
     private boolean isDuplicateKey(String newKey, TextField currentTextField) {
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
         for (TextField key : keys) {
@@ -222,10 +231,12 @@ public class settingController implements Initializable {
         }
         return false;
     }
-
+    
+    //Enable or disable the button
     private void updateButtonState() {
         TextField[] keys = {rightKey, leftKey, upKey, downKey};
         for (TextField key : keys) {
+            //if any key is empty,button is disabled
             if (key.getText().isEmpty()) {
                 button.setDisable(true);
                 return;

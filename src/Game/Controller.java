@@ -102,7 +102,9 @@ public class Controller extends Application {
     private int screenSize = screenHSize*screenVSize;
     
     
-    //loads the game (pages, gameplay etc)
+    //Create the game lobby and in game scene (pages, gameplay etc)
+    //Call login scene
+    
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
@@ -358,7 +360,7 @@ public class Controller extends Application {
        Media sound = new Media(soundURL.toString());
 
        if (mediaPlayer != null && stopAudio) {
-           mediaPlayer.stop();
+          
            mediaPlayer.dispose(); // Dispose of the previous MediaPlayer
        }
 
@@ -635,7 +637,7 @@ public class Controller extends Application {
   
         if (scene == introScene) {
            mediaPlayer.dispose();
-           playSound("lobby.mp3", true); // Assuming playSound method is defined
+           playSound("lobby.mp3", true); // Play sound
         }else if(scene == gameScene){
            mediaPlayer.dispose();
             
@@ -665,7 +667,7 @@ public class Controller extends Application {
         System.out.println("Loading data from: " + filePath);
           //Load file from directory
         try (DataInputStream dis = new DataInputStream(new FileInputStream(filePath))){
-            //read file
+            //read binary file
             while (dis.available() > 0) {
                 String keyType = dis.readUTF();
                 if (keyType.equals("volume")) {

@@ -65,7 +65,8 @@ public class SelectController implements Initializable {
     //Image animation
     private void imageTransition(ImageView imageView, Rectangle shape) {
         double newYPosition = -10;
-
+        
+        //Mouse hover event listener
         imageView.setOnMouseEntered(event -> {
             imageView.setTranslateY(newYPosition);
             shape.setTranslateY(newYPosition);
@@ -75,23 +76,28 @@ public class SelectController implements Initializable {
             imageView.setTranslateY(0);
             shape.setTranslateY(0);
         });
-
+        
+        //Zoom In effect
         ScaleTransition zoomIn = new ScaleTransition(Duration.millis(200), imageView);
         zoomIn.setToX(1.5);
         zoomIn.setToY(1.5);
-
+        
+        //Zoom Out effect
         ScaleTransition zoomOut = new ScaleTransition(Duration.millis(200), imageView);
         zoomOut.setToX(1.0);
         zoomOut.setToY(1.0);
-
+        
+        //Zoom In effect
         ScaleTransition zoomInShape = new ScaleTransition(Duration.millis(200), shape);
         zoomInShape.setToX(1.5);
         zoomInShape.setToY(1.5);
-
+        
+        //Zoom Out effect
         ScaleTransition zoomOutShape = new ScaleTransition(Duration.millis(200), shape);
         zoomOutShape.setToX(1.0);
         zoomOutShape.setToY(1.0);
-
+        
+        //Mouse clicked (select) event listener
         imageView.setOnMouseClicked(event -> {
             if (currentlyZoomedImageView != null && currentlyZoomedImageView != imageView) {
                 // Zoom out the currently zoomed in ImageView and Shape
@@ -105,7 +111,8 @@ public class SelectController implements Initializable {
                 zoomOutCurrentShape.setToY(1.0);
                 zoomOutCurrentShape.playFromStart();
             }
-
+            
+            //Make sure only one item is clicked
             if (!isZoomedIn || currentlyZoomedImageView != imageView) {
                 // Zoom in the clicked ImageView and Shape
                 zoomIn.playFromStart();
@@ -121,6 +128,7 @@ public class SelectController implements Initializable {
                 currentlyZoomedShape = null;
                 isZoomedIn = false;
             }
+            
             String selectCharacter = currentlyZoomedImageView.getId();
             if (selectCharacter.equals("knight")){
              controller.setCharacterNo(0);
