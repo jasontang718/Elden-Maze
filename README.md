@@ -8,7 +8,7 @@ A 2D game built in JavaFX
 
 •	Ong Zheng He https://github.com/zhong617
 
-•	Ho Hoong Khuan
+•	Ho Hoong Khuan https://github.com/zyllux
 
 •	Chan Jian Jern
 
